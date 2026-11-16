@@ -145,6 +145,21 @@ header #ib{margin-left:0}.sp{flex:1}
 .lk2{border:0;background:none;color:#1877f2;font-weight:600;font-size:15px;padding:0;cursor:pointer;text-align:left}
 .fl{display:block;font-size:13px;font-weight:600;color:#65676b;margin:10px 0 3px 2px}
 .bt{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+
+/* ---- chat popup (list + conversation) ---- */
+.cpl{min-height:0}
+.cpb.rm{top:calc(12px + env(safe-area-inset-top,0px));bottom:12px;max-height:none;max-width:480px}
+.cph .bk{border:0;background:#e4e6eb;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:#050505;flex:none}.cph .bk .ic{width:20px;height:20px}
+.rm .cph .nm b{font-size:16px}
+.rm .ms{flex:1;overflow:auto;min-height:0;padding:10px 12px;background:#fff}
+.m .sn{font-weight:700;color:#1877f2;opacity:1;font-size:12px}.m .tm{text-align:right;margin-top:2px}
+.mimg{max-width:100%;max-height:260px;border-radius:8px;display:block;margin:2px 0 4px}
+.cin{display:flex;align-items:center;gap:8px;padding:8px 10px;border-top:1px solid #e4e6eb;background:#fff}
+.cin #mi{flex:1;border-radius:20px;padding:10px 14px}
+.ib2{width:40px;height:40px;border-radius:50%;background:#e4e6eb;display:grid;place-items:center;cursor:pointer;flex:none;color:#050505}
+.snd{width:40px;height:40px;border-radius:50%;border:0;background:#1877f2;color:#fff;display:grid;place-items:center;cursor:pointer;flex:none}
+.cs{padding:8px 12px 4px}.cs input{border-radius:20px;padding:9px 14px}
+.cpr .tt{color:#65676b;font-size:12px;white-space:nowrap;align-self:flex-start;margin-top:4px}
 </style>
 </head>
 <body>
@@ -269,6 +284,9 @@ const IC={
  grad:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/>',
  brief:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>',
  edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+ back:'<path d="M15 5l-7 7 7 7"/>',
+ camera:'<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/>',
+ send:'<path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/>',
  out:'<path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4"/><path d="M16 8l4 4-4 4M20 12H9"/>'
 };
 const ic=(n,c='')=>`<svg class="ic ${c}" viewBox="0 0 24 24" aria-hidden="true">${IC[n]}</svg>`;
@@ -333,22 +351,47 @@ function startPresence(){stopPresence();beat();hbT=setInterval(beat,90000);tkT=s
  document.addEventListener('visibilitychange',beat);
  pu=db.collection('users').onSnapshot(s=>{AU=s.docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.approved);upd()},()=>{})}
 function stopPresence(){clearInterval(hbT);clearInterval(tkT);document.removeEventListener('visibilitychange',beat);if(pu)pu();pu=null;AU=[];$('#cbn')&&($('#cbn').textContent='')}
-function upd(){const n=AU.filter(onl).length;const b=$('#cbn');if(b)b.textContent=n||'';renderCP()}
+function upd(){const n=AU.filter(onl).length;const b=$('#cbn');if(b)b.textContent=n||'';const o=$('#ocn');if(o)o.textContent=n+' online';listCP()}
 const lastSeen=u=>u.lastSeen?'Active '+ago(u.lastSeen):'Offline';
-function renderCP(){if(cpm!='chat'||$('#cp').classList.contains('hide'))return;
- const on=AU.filter(onl).length,oth=AU.filter(u=>u.id!=me.id).sort((a,b)=>onl(b)-onl(a)||String(a.name).localeCompare(String(b.name)));
- $('#cp .cpb').innerHTML=`<div class=cph><b>Chats</b><span class=on><i class=dot2></i>${on} online</span><button class=x onclick="closeCP()">${ic('x')}</button></div>
- <div class=cpl><button class=cpr onclick="room='all';closeCP();go('chat')"><span class=grp>${ic('users')}</span><span class=nm><b>Everyone</b><small>${AU.length} members | ${on} online</small></span></button>
- ${oth.map(u=>`<button class=cpr onclick="chatWith('${u.id}')">${avs(u)}<span class=nm><b>${esc(u.name)}</b><small>${onl(u)?'Active now':lastSeen(u)}</small></span></button>`).join('')||'<div class=empty>No other batchmates yet.</div>'}</div>`}
-function openCP(){cpm='chat';$('#cp').classList.remove('hide');renderCP()}
-function closeCP(){$('#cp').classList.add('hide')}
-function chatWith(id){room=[me.id,id].sort().join('_');closeCP();go('chat')}
+let cq='',lmL={},lmD={},rmUn=null;
+const tf=t=>{if(!t)return'';const d=t.toDate?t.toDate():t;return d.toDateString()==new Date().toDateString()?d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):d.toLocaleDateString([],{day:'numeric',month:'short'})};
+const rid=u=>[me.id,u].sort().join('_');
+function ensureLM(){['all',...AU.filter(u=>u.id!=me.id).map(u=>rid(u.id))].forEach(r=>{if(lmL[r])return;
+ lmL[r]=db.collection('rooms/'+r+'/m').orderBy('createdAt','desc').limit(1).onSnapshot(s=>{const d=s.docs[0];lmD[r]=d?d.data({serverTimestamps:'estimate'}):null;listCP()},()=>{})})}
+function stopLM(){Object.values(lmL).forEach(f=>f());lmL={};lmD={}}
+function stopRoom(){if(rmUn)rmUn();rmUn=null}
+function listCP(){const L=$('#cpl');if(cpm!='chat'||!L||$('#cp').classList.contains('hide'))return;ensureLM();
+ const q=cq.trim().toLowerCase(),ms=m=>m&&m.createdAt?m.createdAt.toMillis():0;
+ const items=[{id:'all',r:'all',name:'Everyone',g:1},...AU.filter(u=>u.id!=me.id).map(u=>({id:u.id,r:rid(u.id),name:u.name||'',u}))]
+  .filter(i=>!q||i.name.toLowerCase().includes(q)).map(i=>({...i,m:lmD[i.r]||null}));
+ items.sort((a,b)=>ms(b.m)-ms(a.m)||(b.g?1:0)-(a.g?1:0)||(b.u&&onl(b.u)?1:0)-(a.u&&onl(a.u)?1:0)||a.name.localeCompare(b.name));
+ L.innerHTML=items.map(i=>{const m=i.m,pv=m?((m.uid==me.id?'You: ':i.g?esc(m.name)+': ':'')+(m.img&&!m.text?'Photo':esc(m.text||''))):(i.u?(onl(i.u)?'Active now':lastSeen(i.u)):AU.length+' members');
+  return `<button class=cpr onclick="openRoom('${i.id}')">${i.g?`<span class=grp>${ic('users')}</span>`:avs(i.u)}<span class=nm><b>${esc(i.name)}</b><small>${pv}</small></span><span class=tt>${m?tf(m.createdAt):''}</span></button>`}).join('')||'<div class=empty>No chats found.</div>'}
+function renderCP(){cpm='chat';const bx=$('#cp .cpb');bx.classList.remove('rm');
+ bx.innerHTML=`<div class=cph><b>Chats</b><span class=on><i class=dot2></i><span id=ocn>${AU.filter(onl).length} online</span></span><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=cs><input placeholder="Search chats" value="${esc(cq)}" oninput="cq=this.value;listCP()"></div><div class=cpl id=cpl></div>`;listCP()}
+function openCP(){stopRoom();$('#cp').classList.remove('hide');renderCP()}
+function closeCP(){stopRoom();stopLM();cq='';$('#cp').classList.add('hide');$('#cp .cpb').classList.remove('rm')}
+const chatWith=id=>openRoom(id);
+function openRoom(id){cpm='room';room=id=='all'?'all':rid(id);stopRoom();
+ const u=id=='all'?null:AU.find(x=>x.id==id),on=AU.filter(onl).length,bx=$('#cp .cpb');bx.classList.add('rm');
+ bx.innerHTML=`<div class=cph><button class=bk onclick="openCP()" aria-label="Back">${ic('back')}</button>${u?avs(u):`<span class=grp>${ic('users')}</span>`}<span class=nm><b>${u?esc(u.name):'Everyone'}</b><small>${u?(onl(u)?'Active now':lastSeen(u)):AU.length+' members | '+on+' online'}</small></span><button class=x onclick="closeCP()">${ic('x')}</button></div>
+ <div class=ms id=ms></div>
+ <form class=cin onsubmit="return sm(event)"><label class=ib2>${ic('camera')}<input type=file accept="image/*" hidden onchange="sendImg(this)"></label><input id=mi placeholder="Type a message..." required autocomplete=off><button class=snd aria-label="Send">${ic('send')}</button></form>`;
+ $('#cp').classList.remove('hide');
+ rmUn=db.collection('rooms/'+room+'/m').orderBy('createdAt').limitToLast(80).onSnapshot(s=>{const b=$('#ms');if(!b)return;
+  b.innerHTML=s.docs.map(d=>{const m=d.data({serverTimestamps:'estimate'}),mine=m.uid==me.id,t=m.createdAt?m.createdAt.toDate():null;
+   return `<div class="m ${mine?'me':''}">${!mine&&room=='all'?`<small class=sn>${esc(m.name)}</small>`:''}${m.img?`<img class=mimg src="${esc(m.img)}" alt="">`:''}${m.text?esc(m.text):''}<small class=tm>${t?t.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+' | '+t.toLocaleDateString([],{day:'numeric',month:'short'}):''}</small></div>`}).join('')||'<div class=empty>No messages yet. Say hello.</div>';
+  b.scrollTop=b.scrollHeight},()=>{})}
+async function sm(e){e.preventDefault();const i=$('#mi'),t=i.value.trim();if(!t)return false;i.value='';
+ try{await db.collection('rooms/'+room+'/m').add({uid:me.id,name:me.name,text:t,createdAt:ts()})}catch(err){console.error(err);toast('Could not send')}return false}
+async function sendImg(inp){const f=inp.files[0];if(!f)return;
+ try{const im=await img(f,640);await db.collection('rooms/'+room+'/m').add({uid:me.id,name:me.name,text:'',img:im,createdAt:ts()})}catch(err){console.error(err);toast('Could not send photo')}inp.value=''}
 $('#cb').innerHTML=ic('chat')+'<em id="cbn" class="bdg"></em>';
 $('#cb').onclick=openCP;$('#cp').onclick=e=>{if(e.target.id=='cp')closeCP()};
 
 // ---------- Navigation ----------
 const TABS=[['feed',ic('home'),'Feed'],['events',ic('cal'),'Events'],['fund',ic('wallet'),'Funds'],['me',ic('user'),'Profile']];
-function go(t){tab=t;clean();$('#nav').innerHTML=TABS.map(([k,i,l])=>`<button class="${k==t?'on':''}" onclick="go('${k}')"><b>${i}</b>${l}</button>`).join('');({feed,events,fund,chat,me:profile})[t]()}
+function go(t){tab=t;clean();$('#nav').innerHTML=TABS.map(([k,i,l])=>`<button class="${k==t?'on':''}" onclick="go('${k}')"><b>${i}</b>${l}</button>`).join('');({feed,events,fund,me:profile})[t]()}
 
 // ---------- Feed ----------
 function feed(){
@@ -402,16 +445,6 @@ function fund(){
   $('#sm').innerHTML=`<div>Total in<b class=in>৳${i}</b></div><div>Total out<b class=out>৳${o}</b></div><div>Balance<b>৳${i-o}</b></div>`}))}
 async function addL(e){e.preventDefault();await db.collection('ledger').add({type:$('#lt').value,amount:+$('#la').value,note:$('#ln').value,createdAt:ts()});e.target.reset();return false}
 
-// ---------- Chat ----------
-async function chat(){
- const us=(await db.collection('users').where('approved','==',true).get()).docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.id!=me.id);
- const rid=u=>[me.id,u].sort().join('_');
- $('#main').innerHTML=`<div class=ch><button class="${room=='all'?'on':''}" onclick="room='all';chat()">${ic('users','sm')} Everyone</button>${us.map(u=>`<button class="${room==rid(u.id)?'on':''}" onclick="room='${rid(u.id)}';chat()">${esc(u.name)}</button>`).join('')}</div><div class=ms id=ms></div>
- <form class="bar row" onsubmit="return sm(event)"><input id=mi placeholder="Type a message..." required autocomplete=off><button class=btn>Send</button></form>`;
- unsubs.push(db.collection('rooms/'+room+'/m').orderBy('createdAt').limitToLast(80).onSnapshot(s=>{const b=$('#ms');if(!b)return;
-  b.innerHTML=s.docs.map(d=>{const m=d.data();return `<div class="m ${m.uid==me.id?'me':''}">${m.uid!=me.id?`<small>${esc(m.name)}</small>`:''}${esc(m.text)}</div>`}).join('')||'<div class=empty>No messages yet. Say hello.</div>';b.lastElementChild&&b.lastElementChild.scrollIntoView()}))}
-async function sm(e){e.preventDefault();const i=$('#mi'),t=i.value.trim();if(!t)return false;i.value='';await db.collection('rooms/'+room+'/m').add({uid:me.id,name:me.name,text:t,createdAt:ts()});return false}
-
 // ---------- Profile ----------
 const INF=[['edu','grad','Education','Add education','School, college or university'],['work','brief','Work','Add work / profession','Your job or business'],['addr','pin','Current address','Add address','Village, upazila, district'],['home','home','Hometown','Add hometown','Your permanent home']];
 const rowsOf=(u,self)=>{let h=INF.map(([k,i,l,a])=>u[k]?`<div class=ir>${ic(i)}<div><small>${l}</small><b>${esc(u[k])}</b></div></div>`:self?`<div class=ir>${ic(i)}<div><button class=lk2 onclick="profile('${k}')">+ ${a}</button></div></div>`:'').join('');
@@ -436,7 +469,7 @@ function profile(ed){
  unsubs.push(db.collection('users').onSnapshot(s=>{const U=s.docs.map(d=>({id:d.id,...d.data()}));
   const mb=$('#mb');if(mb)mb.innerHTML=U.filter(u=>u.approved).map(u=>`<div class=hd style="cursor:pointer" onclick="viewU('${u.id}')">${avs(u)}<div><b>${esc(u.name)}</b><small>${esc(u.edu||u.bio||'')}</small></div></div>`).join('');
   const pe=$('#pe');if(pe)pe.innerHTML=U.filter(u=>!u.approved).map(u=>`<div class=li><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${esc(u.email||'')} ${u.phone?'| '+esc(u.phone):''}</small></span><span><button class="btn g s" onclick="db.doc('users/${u.id}').update({approved:true})">Approve</button> <button class="btn r s" onclick="db.doc('users/${u.id}').delete()">Reject</button></span></div>`).join('')||'<div class=empty>No one is waiting.</div>'}))}
-function viewU(id){const u=AU.find(x=>x.id==id);if(!u)return;cpm='user';
+function viewU(id){const u=AU.find(x=>x.id==id);if(!u)return;cpm='user';$('#cp .cpb').classList.remove('rm');
  $('#cp .cpb').innerHTML=`<div class=cph><b>Profile</b><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=cpl><div style="padding:16px 16px 4px;text-align:center"><span class=pav>${avs(u)}</span><h3>${esc(u.name)}</h3><small style="color:var(--mute)">${onl(u)?'Active now':lastSeen(u)}</small>${u.bio?`<p style="margin-top:4px">${esc(u.bio)}</p>`:''}</div><div style="padding:4px 16px 16px">${rowsOf(u,false)}${u.id!=me.id?`<button class="btn" style="width:100%;margin-top:10px" onclick="chatWith('${u.id}')">${ic('chat')} Message</button>`:''}</div></div>`;
  $('#cp').classList.remove('hide')}
 async function saveP(){const f=$('#pp').files[0],u={name:$('#pn').value.trim()||me.name,phone:$('#pph').value.trim(),bio:$('#pb').value.trim()};
