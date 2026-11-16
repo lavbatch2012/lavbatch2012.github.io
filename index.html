@@ -229,7 +229,7 @@ function mode(r){reg=r;$('#an').classList.toggle('hide',!r);$('#aph').classList.
  $('#ah').textContent=r?'Create a new account':'Log in';$('#as').textContent=r?"It's quick and easy.":'to continue to LAV Batch 2012';
  $('#fp').classList.toggle('hide',r);$('#nw').classList.toggle('hide',r);$('#bk').classList.toggle('hide',!r);er('')}
 $('#nw').onclick=()=>mode(true);$('#bk').onclick=()=>mode(false);
-const msg=e=>({'auth/invalid-credential':'Wrong email or password.','auth/wrong-password':'Wrong email or password.','auth/user-not-found':'No account found with this email.','auth/invalid-email':'Please enter a valid email address.','auth/email-already-in-use':'This email already has an account. Try logging in.','auth/weak-password':'Password must be at least 6 characters.','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/unauthorized-domain':'This website domain is not authorised in Firebase yet.','auth/too-many-requests':'Too many attempts. Please wait a bit and try again.','auth/network-request-failed':'Network problem. Check your internet and try again.','auth/credential-already-in-use':'This email already has a password account.','auth/provider-already-linked':'A password is already set for this account.','auth/requires-recent-login':'Please sign out, sign in with Google again, then retry.'}[e.code]??'Something went wrong. Please try again.');
+const msg=e=>({'auth/invalid-credential':'Wrong email or password.','auth/wrong-password':'Wrong email or password.','auth/user-not-found':'No account found with this email.','auth/invalid-email':'Please enter a valid email address.','auth/email-already-in-use':'This email already has an account. Try logging in.','auth/weak-password':'Password must be at least 6 characters.','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/unauthorized-domain':'This website domain is not authorised in Firebase yet.','auth/too-many-requests':'Too many attempts. Please wait a bit and try again.','auth/network-request-failed':'Network problem. Check your internet and try again.','auth/credential-already-in-use':'This email already has a password account.','auth/provider-already-linked':'A password is already set for this account.','auth/requires-recent-login':'Please sign out, sign in with Google again, then retry.','auth/operation-not-allowed':'Email/Password sign-in is not enabled in Firebase (Authentication > Sign-in method).','permission-denied':'Firestore rules blocked saving your profile (permission-denied).','not-found':'Your profile record was not found. Sign out and sign in again.'}[e.code]??('Something went wrong ('+(e.code||e.message||'unknown')+').'));
 $('#gb').onclick=async()=>{er('');try{await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())}catch(e){er(msg(e))}};
 $('#fp').onclick=async()=>{const m=$('#ae').value.trim();if(!m)return er('Type your email above first.');
  try{await auth.sendPasswordResetEmail(m);er('Password reset link sent. Check your email.',true)}catch(e){er(msg(e))}};
@@ -249,10 +249,11 @@ $('#sf').onsubmit=async e=>{e.preventDefault();se('');const u=auth.currentUser,b
  if(!/^\+?\d{7,15}$/.test(ph))return se('Please enter a valid phone number.');
  b.disabled=true;
  try{
-  if(!hasPw(u))await u.linkWithCredential(firebase.auth.EmailAuthProvider.credential(u.email,pw));
+  if(!hasPw(u)){try{await u.linkWithCredential(firebase.auth.EmailAuthProvider.credential(u.email,pw))}catch(err){console.error('link',err);return se('Password step: '+msg(err)),b.disabled=false}}
   const up={name:n,phone:ph,email:u.email,done:true};
-  await db.doc('users/'+u.uid).update(up);Object.assign(me,up);finish()
- }catch(err){se(msg(err))}
+  try{await db.doc('users/'+u.uid).set(up,{merge:true})}catch(err){console.error('save',err);return se('Save step: '+msg(err)),b.disabled=false}
+  Object.assign(me,up);finish()
+ }catch(err){console.error(err);se(msg(err))}
  b.disabled=false};
 function finish(){if(!me.approved)return show('#wait');show('#app');go(tab)}
 auth.onAuthStateChanged(async u=>{clean();
