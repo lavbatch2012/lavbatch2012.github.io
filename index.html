@@ -179,6 +179,7 @@ rules_version='2';service cloud.firestore{match /databases/{d}/documents{
     <button class="btn" id="sb">Save &amp; continue</button>
    </form>
    <p id="se2" class="er"></p>
+   <button class="lnk" id="sk" type="button">Skip for now</button>
    <button class="lnk" type="button" onclick="auth.signOut()">Sign out</button>
   </div>
  </div>
@@ -255,15 +256,18 @@ $('#sf').onsubmit=async e=>{e.preventDefault();se('');const u=auth.currentUser,b
   Object.assign(me,up);finish()
  }catch(err){console.error(err);se(msg(err))}
  b.disabled=false};
+$('#sk').onclick=async()=>{me.done=true;try{await db.doc('users/'+me.id).set({done:true},{merge:true})}catch(e){console.error(e)}finish()};
 function finish(){if(!me.approved)return show('#wait');show('#app');go(tab)}
 auth.onAuthStateChanged(async u=>{clean();
   if(!u){me=null;mode(false);return show('#auth')}
+  try{
   const ref=db.collection('users').doc(u.uid);let d=await ref.get();
   if(!d.exists){const a=u.email===ADMIN_EMAIL;
    await ref.set({name:regName||u.displayName||u.email.split('@')[0],email:u.email,bio:'',phone:regPhone,photo:u.photoURL||'',role:a?'admin':'member',approved:a,done:!isG(u),createdAt:ts()});regName=regPhone='';d=await ref.get()}
   me={id:u.uid,...d.data()};
   if(isG(u)&&!hasPw(u)&&me.done!==true)return setup(u);
-  finish()});
+  finish()
+  }catch(err){console.error(err);show('#auth');er('Login problem: '+msg(err))}});
  
 // ---------- Navigation ----------
 const TABS=[['feed','📝','Feed'],['events','🎉','Events'],['fund','💰','Funds'],['chat','💬','Chat'],['me','🙂','Me']];
