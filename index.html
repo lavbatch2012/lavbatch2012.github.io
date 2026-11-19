@@ -207,6 +207,37 @@ nav button.on .ic{filter:drop-shadow(0 0 7px rgba(245,197,66,.6))}
 .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:12px}.gal img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px}.gal .empty{grid-column:1/-1}
 #lb{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.92);display:grid;place-items:center}#lb img{max-width:100%;max-height:100%}
 .srch{margin-bottom:8px}.bld{background:rgba(228,35,63,.18);color:#ff8fa1;border:1px solid rgba(228,35,63,.4);border-radius:10px;padding:2px 9px;font:700 13px var(--disp)}
+
+/* ===== v3: Instagram-style dark ===== */
+:root{--bg:#000;--panel:#121212;--ink:#f5f5f5;--mute:#a8a8a8;--line:#262626;--cy:#4cb5ff;--ok:#3ddc97;--ball:#ff4d67;
+ --sig:linear-gradient(135deg,#0095f6,#6a5cff);--holo:conic-gradient(from 200deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5,#feda75)}
+body{background:#000}
+.pg{margin:0;padding:14px 16px;filter:none;border-bottom:1px solid var(--line)}
+.pg:before{display:none}.pg:after{inset:0;border-radius:0;background:#000}
+.card{background:#121212;border:1px solid #262626;border-radius:22px;filter:none}.card:before,.card:after{display:none}
+header{background:rgba(0,0,0,.88);border-bottom:1px solid var(--line)}
+header h1{font:800 22px/1.1 var(--disp)}
+nav{left:0;right:0;bottom:0;border-radius:0;border:0;border-top:1px solid var(--line);background:#000;box-shadow:none;padding:4px 8px calc(4px + env(safe-area-inset-bottom,0px))}
+nav button{font-size:10.5px}nav button.on{background:none}nav button.on .ic{color:#fff;stroke-width:2.3;filter:none}
+#main{padding-bottom:84px}
+#auth,#wait,#setup,#boot{background-image:radial-gradient(90% 50% at 50% -10%,rgba(214,41,118,.25),transparent 60%),radial-gradient(70% 40% at 100% 100%,rgba(79,91,213,.2),transparent 60%)}
+.btn,.m.me,.snd{color:#fff}.btn.g{color:#04170f}
+.pi{border-radius:0;border:0;width:calc(100% + 32px);margin-inline:-16px;max-height:560px}
+.ac button,.rx>button{background:none}
+.hero{margin:0;border-radius:0;border:0;border-bottom:1px solid var(--line);box-shadow:none;background:linear-gradient(135deg,#1a1030,#000 70%)}
+.tray{display:flex;gap:14px;overflow-x:auto;margin:-6px -4px 14px;padding:4px;scrollbar-width:none}
+.tray button{border:0;background:none;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:4px;flex:none;width:62px}
+.tray .av{width:56px;height:56px;border-width:3px}.tray small{font-size:11px;color:var(--mute);max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.seg{display:flex;gap:6px;margin:12px 16px;overflow-x:auto}.seg button{flex:none;border:1px solid var(--line);background:#121212;color:var(--ink);border-radius:20px;padding:6px 14px;font-weight:600;font-size:13.5px}.seg button.on{background:#fff;color:#000}
+.ev{display:flex;gap:14px;align-items:flex-start}.dt{width:60px;flex:none;border-radius:14px;overflow:hidden;text-align:center;border:1px solid var(--line)}
+.dt i{display:block;font:700 11px/1.8 var(--disp);font-style:normal;text-transform:uppercase;background:linear-gradient(135deg,#d62976,#fa7e1e)}.dt b{display:block;font:800 26px/1.4 var(--disp)}
+.cd{display:inline-block;margin-top:6px;border-radius:12px;padding:2px 10px;font:700 12px var(--disp);background:rgba(214,41,118,.18);color:#ff7bb0}
+.stk{display:flex;align-items:center;margin-top:12px}.stk .av{width:28px;height:28px;font-size:12px;margin-right:-8px;border-width:2px}.stk small{margin-left:16px;color:var(--mute)}
+.ac button.sel{background:#fff;color:#000}
+.bal{margin:14px 12px;padding:22px;border-radius:24px;color:#fff;background:linear-gradient(135deg,#833ab4,#fd1d1d 60%,#fcb045)}
+.bal small{opacity:.85}.bal>b{display:block;font:800 40px/1.2 var(--disp)}.mini{display:flex;gap:8px;margin:10px 0}.mini span{background:rgba(0,0,0,.25);border-radius:14px;padding:4px 12px;font:700 13px var(--disp)}
+.bar{height:8px;border-radius:5px;background:rgba(255,255,255,.28);margin:12px 0 6px}.bar i{display:block;height:100%;border-radius:5px;background:#fff}
+.tp{display:flex;align-items:center;gap:10px;padding:7px 0}.tp .bar{flex:1;margin:0;background:#262626}.tp .bar i{background:var(--sig)}
 </style>
 </head>
 <body>
@@ -491,23 +522,31 @@ function oc(id){const b=$('#c'+id);if(!b)return;cu[id]&&cu[id]();
 async function sc(e,id){e.preventDefault();const i=e.target.querySelector('input'),t=i.value.trim();if(!t)return false;i.value='';
  await db.collection('posts/'+id+'/c').add({uid:me.id,name:me.name,text:t,createdAt:ts()});db.doc('posts/'+id).update({cc:FV.increment(1)});return false}
 
-// ---------- Events (cricket, picnic) ----------
-function events(){
- $('#main').innerHTML=`<h2>Events &amp; Plans</h2>${me.role=='admin'?`<form class=pg onsubmit="return addE(event)"><input id=et placeholder="Event name (e.g. Annual Cricket 2026)" required style="margin-bottom:6px"><div style="display:flex;gap:6px;margin-bottom:6px"><input id=ed type=date required><input id=ep placeholder="Place" required></div><button class="btn g">Add event</button></form>`:''}<div id=el></div>`;
- unsubs.push(db.collection('events').orderBy('date','desc').onSnapshot(s=>{$('#el').innerHTML=s.docs.map(d=>{const e=d.data(),g=e.going||{},k=Object.keys(g);
-  return `<div class=pg><div class=hd><div><b>${esc(e.title)}</b><small>${ic('cal','sm')} ${esc(e.date)} &nbsp;${ic('pin','sm')} ${esc(e.place)}</small></div>${me.role=='admin'?`<button class=x onclick="db.doc('events/${d.id}').delete()">${ic('x')}</button>`:''}</div>
-  <p>${k.length?'Going ('+k.length+'): '+k.map(i=>esc(g[i])).join(', '):'No one has confirmed yet'}</p>
-  <button class="btn ${g[me.id]?'':'g'} s" style="margin-top:6px" onclick="rsvp('${d.id}',${!!g[me.id]})">${g[me.id]?"I can't go":"I'm going "+ic('check','sm')}</button></div>`}).join('')||'<div class=empty>No events yet. The admin can add one.</div>'}))}
-async function addE(e){e.preventDefault();await db.collection('events').add({title:$('#et').value,date:$('#ed').value,place:$('#ep').value,going:{}});e.target.reset();return false}
-const rsvp=(id,on)=>db.doc('events/'+id).update({['going.'+me.id]:on?FV.delete():me.name});
+// ---------- Events ----------
+let evF='up',fcat='all';const CATS=['Donation','Picnic','Cricket','Other'];
+function events(){const adm=me.role=='admin';
+ $('#main').innerHTML=`<h2>Events</h2><div class=seg><button class="${evF=='up'?'on':''}" onclick="evF='up';events()">Upcoming</button><button class="${evF=='past'?'on':''}" onclick="evF='past';events()">Past</button></div>${adm?`<form class=pg onsubmit="return addE(event)"><input id=et placeholder="Event name" required style="margin-bottom:6px"><div style="display:flex;gap:6px;margin-bottom:6px"><input id=ed type=date required><input id=etm type=time></div><input id=ep placeholder="Place" required style="margin-bottom:6px"><textarea id=eds rows=2 placeholder="Details (plan, what to bring)" style="margin-bottom:6px"></textarea><button class=btn>Add event</button></form>`:''}<div id=el></div>`;
+ unsubs.push(db.collection('events').orderBy('date',evF=='up'?'asc':'desc').onSnapshot(s=>{const t=new Date().toISOString().slice(0,10),L=s.docs.filter(d=>(d.data().date>=t)==(evF=='up'));
+  $('#el').innerHTML=L.map(d=>{const e=d.data(),g=e.going||{},m=e.maybe||{},k=Object.keys(g),dt=new Date(e.date+'T00:00'),dd=Math.round((dt-new Date(t+'T00:00'))/864e5),mine=g[me.id]?'g':m[me.id]?'m':'';
+   return `<div class=pg><div class=ev><div class=dt><i>${dt.toLocaleDateString([],{month:'short'})}</i><b>${dt.getDate()}</b></div><div class=nm><b style="font:700 18px var(--disp)">${esc(e.title)}</b><small>${ic('pin','sm')} <a href="https://maps.google.com/?q=${encodeURIComponent(e.place)}" target=_blank rel=noopener style="color:var(--cy)">${esc(e.place)}</a>${e.time?' | '+esc(e.time):''}</small>${evF=='up'?`<span class=cd>${dd<=0?'Today':dd+(dd>1?' days':' day')+' left'}</span>`:''}</div>${adm?`<button class=x onclick="delE('${d.id}')">${ic('x')}</button>`:''}</div>
+   ${e.desc?`<p style="margin-top:10px">${esc(e.desc)}</p>`:''}
+   <div class=stk>${k.slice(0,6).map(i=>`<span class=av>${esc((g[i]||'?')[0])}</span>`).join('')}<small>${k.length} going${Object.keys(m).length?' | '+Object.keys(m).length+' maybe':''}</small></div>
+   ${evF=='up'?`<div class=ac><button class="${mine=='g'?'sel':''}" onclick="rsvp('${d.id}','g')">${ic('check')} Going</button><button class="${mine=='m'?'sel':''}" onclick="rsvp('${d.id}','m')">Maybe</button><button onclick="rsvp('${d.id}','')">Can't go</button></div>`:''}
+   ${k.length?`<small style="color:var(--mute);display:block;margin-top:8px">${k.map(i=>esc(g[i])).join(', ')}</small>`:''}</div>`}).join('')||`<div class=empty>${evF=='up'?'No upcoming events.':'No past events.'}</div>`}))}
+async function addE(e){e.preventDefault();await db.collection('events').add({title:$('#et').value,date:$('#ed').value,time:$('#etm').value,place:$('#ep').value,desc:$('#eds').value.trim(),going:{},maybe:{}});e.target.reset();toast('Event added');return false}
+const delE=id=>confirm('Delete this event?')&&db.doc('events/'+id).delete();
+const rsvp=(id,v)=>db.doc('events/'+id).update({['going.'+me.id]:v=='g'?me.name:FV.delete(),['maybe.'+me.id]:v=='m'?me.name:FV.delete()});
 
 // ---------- Funds ----------
-function fund(){
- $('#main').innerHTML=`<h2>Funds &amp; Accounts</h2><div class=sum id=sm></div>${me.role=='admin'?`<form class=pg onsubmit="return addL(event)"><div style="display:flex;gap:6px;margin-bottom:6px"><select id=lt style="width:auto"><option value=in>Income (donation)</option><option value=out>Expense</option></select><input id=la type=number min=1 placeholder="Amount" required></div><input id=ln placeholder="From whom / what for" required style="margin-bottom:6px"><button class="btn g">Add entry</button></form>`:''}<div class=pg id=ll></div>`;
- unsubs.push(db.collection('ledger').orderBy('createdAt','desc').onSnapshot(s=>{let i=0,o=0;
-  $('#ll').innerHTML=s.docs.map(d=>{const l=d.data();l.type=='in'?i+=l.amount:o+=l.amount;return `<div class=li><span>${esc(l.note)}<br><small style="color:var(--mute)">${ago(l.createdAt)}</small></span><b class="${l.type}">${l.type=='in'?'+':'-'}৳${l.amount} ${me.role=='admin'?`<button class=x onclick="db.doc('ledger/${d.id}').delete()">${ic('x')}</button>`:''}</b></div>`}).join('')||'<div class=empty>No entries yet.</div>';
-  $('#sm').innerHTML=`<div>Total in<b class=in>৳${i}</b></div><div>Total out<b class=out>৳${o}</b></div><div>Balance<b>৳${i-o}</b></div>`}))}
-async function addL(e){e.preventDefault();await db.collection('ledger').add({type:$('#lt').value,amount:+$('#la').value,note:$('#ln').value,createdAt:ts()});e.target.reset();return false}
+function fund(){const adm=me.role=='admin';
+ $('#main').innerHTML=`<div class=bal id=bal></div>${adm?`<form class=pg onsubmit="return addL(event)"><div style="display:flex;gap:6px;margin-bottom:6px"><select id=lt style="width:auto"><option value=in>Income</option><option value=out>Expense</option><option value=goal>Set goal</option></select><input id=la type=number min=1 placeholder="Amount" required></div><div style="display:flex;gap:6px;margin-bottom:6px"><select id=lc>${CATS.map(c=>`<option>${c}</option>`).join('')}</select><input id=lw placeholder="Who (optional)"></div><input id=ln placeholder="What for / note" required style="margin-bottom:6px"><button class=btn>Add entry</button></form>`:''}<div class=pg id=tp></div><div class=seg>${['all',...CATS].map(c=>`<button class="${fcat==c?'on':''}" onclick="fcat='${c}';fund()">${c=='all'?'All':c}</button>`).join('')}</div><div id=ll></div>`;
+ unsubs.push(db.collection('ledger').orderBy('createdAt','desc').onSnapshot(s=>{const A=s.docs.map(d=>({id:d.id,...d.data()})),E=A.filter(x=>x.type!='goal'),gl=A.find(x=>x.type=='goal'),W={};let i=0,o=0;
+  E.forEach(l=>{l.type=='in'?i+=l.amount:o+=l.amount;if(l.type=='in'&&l.who)W[l.who]=(W[l.who]||0)+l.amount});const b=i-o,top=Object.entries(W).sort((x,y)=>y[1]-x[1]).slice(0,5);
+  $('#bal').innerHTML=`<small>Batch fund balance</small><b>৳${b}</b><div class=mini><span>In ৳${i}</span><span>Out ৳${o}</span></div>${gl?`<div class=bar><i style="width:${Math.max(0,Math.min(100,b/gl.amount*100))}%"></i></div><small>${esc(gl.note)}: ৳${b} of ৳${gl.amount} ${adm?`<button class=x onclick="delL('${gl.id}')">${ic('x')}</button>`:''}</small>`:''}`;
+  $('#tp').innerHTML=top.length?`<h4>Top contributors</h4>${top.map(([n,v])=>`<div class=tp><b style="width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(n)}</b><div class=bar><i style="width:${v/top[0][1]*100}%"></i></div><span>৳${v}</span></div>`).join('')}`:'';
+  $('#ll').innerHTML=E.filter(l=>fcat=='all'||l.cat==fcat).map(l=>`<div class="pg li"><span><b>${esc(l.note)}</b><br><small style="color:var(--mute)">${l.cat?esc(l.cat)+' | ':''}${l.who?esc(l.who)+' | ':''}${ago(l.createdAt)}</small></span><b class="${l.type}">${l.type=='in'?'+':'-'}৳${l.amount} ${adm?`<button class=x onclick="delL('${l.id}')">${ic('x')}</button>`:''}</b></div>`).join('')||'<div class=empty>No entries yet.</div>'}))}
+async function addL(e){e.preventDefault();await db.collection('ledger').add({type:$('#lt').value,amount:+$('#la').value,note:$('#ln').value,cat:$('#lc').value,who:$('#lw').value.trim(),createdAt:ts()});e.target.reset();return false}
+const delL=id=>confirm('Delete this entry?')&&db.doc('ledger/'+id).delete();
 
 // ---------- Profile ----------
 const INF=[['edu','grad','Education','Add education','School, college or university'],['work','brief','Work','Add work / profession','Your job or business'],['addr','pin','Current address','Add address','Village, upazila, district'],['home','home','Hometown','Add hometown','Your permanent home'],['dob','cal','Birthday','Add birthday','YYYY-MM-DD (e.g. 1997-03-25)'],['blood','drop','Blood group','Add blood group','e.g. B+']];
@@ -549,7 +588,7 @@ function heroR(){const h=$('#hero');if(!h||!me)return;const t=new Date(),t0=new 
  g=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening',on=AU.filter(onl).length,
  bd=AU.filter(u=>/^\d{4}-\d{2}-\d{2}$/.test(u.dob||'')).map(u=>{const[,m,d]=u.dob.split('-').map(Number);let n=new Date(t.getFullYear(),m-1,d);if(n<t0)n=new Date(t.getFullYear()+1,m-1,d);return{u,k:Math.round((n-t0)/864e5)}}).sort((a,b)=>a.k-b.k)[0],
  ev=NE?Math.round((new Date(NE.date)-t0)/864e5):0;
- h.innerHTML=`<small>${g}</small><h3>${esc((me.name||'').split(' ')[0])}</h3><div class=chips><span><b>${AU.length}</b> batchmates</span><span><i class=dot2></i><b>${on}</b> online</span></div>
+ h.innerHTML=`<div class=tray>${[...AU].filter(u=>u.id!=me.id).sort((x,y)=>onl(y)-onl(x)).slice(0,14).map(u=>`<button onclick="openRoom('${u.id}')">${avs(u)}<small>${esc((u.name||'').split(' ')[0])}</small></button>`).join('')}</div><small>${g}</small><h3>${esc((me.name||'').split(' ')[0])}</h3><div class=chips><span><b>${AU.length}</b> batchmates</span><span><i class=dot2></i><b>${on}</b> online</span></div>
  ${bd?`<p>🎂 ${bd.k==0?esc(bd.u.name)+"'s birthday is today!":esc(bd.u.name)+"'s birthday in "+bd.k+(bd.k>1?' days':' day')}</p>`:''}
  ${NE?`<p>${ic('cal','sm')} ${esc(NE.title)}: ${ev<=0?'today':'in '+ev+(ev>1?' days':' day')}</p>`:''}`}
 function mem(){$('#main').innerHTML=`<h2>Photos</h2><div class=gal id=gl></div>`;
