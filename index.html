@@ -301,23 +301,11 @@ rules_version='2';service cloud.firestore{match /databases/{d}/documents{
    <p>Stay connected with your friends from Lakshmipasha Adarsha Bidyalaya.<span>লক্ষ্মীপাশা আদর্শ বিদ্যালয় ব্যাচ ২০১২</span></p>
   </div>
   <div class="card">
-   <h1 id="ah">Log in</h1>
+   <h1 id="ah">Sign in</h1>
    <div class="sub" id="as">to continue to LAV Batch 2012</div>
-   <form id="af">
-    <input id="an" class="hide" placeholder="Full name" autocomplete="name">
-    <input id="aph" class="hide" type="tel" placeholder="Phone number" autocomplete="tel">
-    <input id="ae" type="email" placeholder="Email address" required autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false">
-    <div class="pw"><input id="ap" type="password" placeholder="Password" required minlength="6" autocomplete="current-password"><button type="button" id="lpt">Show</button></div>
-    <button class="btn" id="ab">Log in</button>
-   </form>
    <p id="ae2" class="er"></p>
    <p id="iab" class="er hide"></p>
-   <button class="lnk" id="fp" type="button">Forgotten password?</button>
-   <div class="or">or</div>
-   <button class="gbtn" id="gb" type="button"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.5-4.1 7-10.2 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.4-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.5 0 20.1 0 24s.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>Continue with Google</button>
-   <hr class="ln">
-   <button class="btn g" id="nw" type="button">Create new account</button>
-   <button class="lnk hide" id="bk" type="button">Already have an account? Log in</button>
+   <button class="gbtn" id="gb" type="button"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.5-4.1 7-10.2 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.4-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.5 0 20.1 0 24s.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>Sign in with Google</button>
   </div>
  </div>
 </div>
@@ -326,14 +314,12 @@ rules_version='2';service cloud.firestore{match /databases/{d}/documents{
   <div class="card">
    <div class="who"><span id="sw"></span><small id="sm2"></small></div>
    <h1>Complete your account</h1>
-   <div class="sub">You signed in with Google. Add your details so friends can find you, and so you can also log in with email &amp; password.</div>
+   <div class="sub">You signed in with Google. Add your details so friends can find you.</div>
    <form id="sf">
     <label for="sn">Full name</label>
     <input id="sn" required autocomplete="name" placeholder="Your name">
     <label for="se">Email</label>
     <input id="se" type="email" readonly>
-    <label for="spw">Password</label>
-    <div class="pw"><input id="spw" type="password" required minlength="6" autocomplete="new-password" placeholder="At least 6 characters"><button type="button" id="sps">Show</button></div>
     <label for="sp">Phone number</label>
     <input id="sp" type="tel" required autocomplete="tel" placeholder="01XXXXXXXXX">
     <button class="btn" id="sb">Save &amp; continue</button>
@@ -372,7 +358,8 @@ const CFG={apiKey:"AIzaSyDqepmd4MjXKQRHghR6o7h4k7JUmTbrZ-k",authDomain:"batch-20
 const ADMIN_EMAIL="shironamhinantor@gmail.com";
 
 firebase.initializeApp(CFG);
-const auth=firebase.auth(),db=firebase.firestore(),FV=firebase.firestore.FieldValue,ts=()=>FV.serverTimestamp();
+const auth=firebase.auth(),db=firebase.firestore();try{db.settings({experimentalAutoDetectLongPolling:true,merge:true})}catch(e){}
+const FV=firebase.firestore.FieldValue,ts=()=>FV.serverTimestamp();
 const $=s=>document.querySelector(s),
 esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),
 ago=t=>{if(!t)return'just now';const s=(Date.now()-t.toMillis())/1e3,p=(n,u)=>n+' '+u+(n>1?'s':'')+' ago';return s<60?'just now':s<3600?p(Math.floor(s/60),'minute'):s<86400?p(Math.floor(s/3600),'hour'):p(Math.floor(s/86400),'day')},
@@ -414,37 +401,29 @@ const clean=()=>{unsubs.forEach(f=>f());unsubs=[];Object.values(cu).forEach(f=>f
 // ---------- Auth ----------
 document.querySelectorAll('img.lgx').forEach(i=>i.src=document.querySelector('header .lg').src);
 const er=(t,ok)=>{const p=$('#ae2');p.textContent=t||'';p.className=ok?'er ok':'er'};
-function mode(r){reg=r;$('#an').classList.toggle('hide',!r);$('#aph').classList.toggle('hide',!r);$('#an').required=r;$('#aph').required=r;
- $('#ap').autocomplete=r?'new-password':'current-password';$('#ab').textContent=r?'Sign up':'Log in';
- $('#ah').textContent=r?'Create a new account':'Log in';$('#as').textContent=r?"It's quick and easy.":'to continue to LAV Batch 2012';
- $('#fp').classList.toggle('hide',r);$('#nw').classList.toggle('hide',r);$('#bk').classList.toggle('hide',!r);er('')}
-$('#nw').onclick=()=>mode(true);$('#bk').onclick=()=>mode(false);
-const msg=e=>({'auth/popup-blocked':'Popup was blocked. Allow popups for this site and try again.','auth/web-storage-unsupported':'Your browser blocks storage. Turn off private mode or allow cookies.','auth/internal-error':'Login service error. Please try again.','auth/invalid-credential':'Wrong email or password. If you joined with Google, tap Continue with Google, or use Forgotten password? to set a password.','auth/wrong-password':'Wrong email or password. If you joined with Google, tap Continue with Google, or use Forgotten password? to set a password.','auth/user-not-found':'No account found with this email.','auth/invalid-email':'Please enter a valid email address.','auth/email-already-in-use':'This email already has an account. Try logging in.','auth/weak-password':'Password must be at least 6 characters.','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/unauthorized-domain':'This website domain is not authorised in Firebase yet.','auth/too-many-requests':'Too many attempts. Please wait a bit and try again.','auth/network-request-failed':'Network problem. Check your internet and try again.','auth/credential-already-in-use':'This email already has a password account.','auth/provider-already-linked':'A password is already set for this account.','auth/requires-recent-login':'Please sign out, sign in with Google again, then retry.','auth/operation-not-allowed':'Email/Password sign-in is not enabled in Firebase (Authentication > Sign-in method).','permission-denied':'Firestore rules blocked saving your profile (permission-denied).','not-found':'Your profile record was not found. Sign out and sign in again.'}[e.code]??('Something went wrong ('+(e.code||e.message||'unknown')+').'));
-$('#gb').onclick=async()=>{er('');const p=new firebase.auth.GoogleAuthProvider();p.setCustomParameters({prompt:'select_account'});
- try{if(SA)await auth.signInWithRedirect(p);else await auth.signInWithPopup(p)}
- catch(e){if(e.code=='auth/popup-blocked'||e.code=='auth/operation-not-supported-in-this-environment'){try{await auth.signInWithRedirect(p)}catch(x){er(msg(x))}}else er(msg(e))}};
+const mode=()=>er('');
+const msg=e=>({'auth/popup-blocked':'Popup was blocked. Allow popups for this site and try again.','auth/web-storage-unsupported':'Your browser blocks storage. Turn off private mode or allow cookies.','auth/internal-error':'Login service error. Please try again.','auth/invalid-credential':'Wrong email or password. If you joined with Google, tap Continue with Google, or use Forgotten password? to set a password.','auth/wrong-password':'Wrong email or password. If you joined with Google, tap Continue with Google, or use Forgotten password? to set a password.','auth/user-not-found':'No account found with this email.','auth/invalid-email':'Please enter a valid email address.','auth/email-already-in-use':'This email already has an account. Try logging in.','auth/weak-password':'Password must be at least 6 characters.','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/unauthorized-domain':'This website domain is not authorised in Firebase yet (Authentication > Settings > Authorized domains).','auth/too-many-requests':'Too many attempts. Please wait a bit and try again.','auth/network-request-failed':'Network problem. Check your internet and try again.','auth/credential-already-in-use':'This email already has a password account.','auth/provider-already-linked':'A password is already set for this account.','auth/requires-recent-login':'Please sign out, sign in with Google again, then retry.','auth/operation-not-allowed':'Google sign-in is not enabled in Firebase (Authentication > Sign-in method > Google).','unavailable':'Could not reach the server. Check your internet and try again.','failed-precondition':'Database is not ready. Please try again.','auth/user-disabled':'This account has been disabled.','auth/account-exists-with-different-credential':'This email is already registered another way. Contact the admin.','permission-denied':'Firestore rules blocked saving your profile (permission-denied).','not-found':'Your profile record was not found. Sign out and sign in again.'}[e.code]??('Something went wrong ('+(e.code||e.message||'unknown')+').'));
+$('#gb').onclick=async()=>{er('');const b=$('#gb');if(b.disabled)return;b.disabled=true;b.style.opacity='.6';
+ const p=new firebase.auth.GoogleAuthProvider();p.setCustomParameters({prompt:'select_account'});
+ try{
+  if(SA)await auth.signInWithRedirect(p);
+  else{try{await auth.signInWithPopup(p)}
+   catch(e){if(['auth/popup-blocked','auth/operation-not-supported-in-this-environment'].includes(e.code))await auth.signInWithRedirect(p);else throw e}}
+ }catch(e){console.error(e);er(msg(e))}
+ b.disabled=false;b.style.opacity=''};
 auth.getRedirectResult().catch(e=>er(msg(e)));
-$('#lpt').onclick=()=>{const i=$('#ap'),h=i.type=='password';i.type=h?'text':'password';$('#lpt').textContent=h?'Hide':'Show'};
-if(/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\//i.test(navigator.userAgent)){const w=$('#iab');w.textContent='Google login does not work inside the Facebook/Messenger browser. Tap the menu and choose "Open in browser" (Chrome/Safari), or log in with email and password.';w.classList.remove('hide')}
-$('#fp').onclick=async()=>{const m=$('#ae').value.trim().toLowerCase();if(!m)return er('Type your email above first.');
- try{await auth.sendPasswordResetEmail(m);er('Password reset link sent. Check your email.',true)}catch(e){er(msg(e))}};
-$('#af').onsubmit=async e=>{e.preventDefault();er('');
- try{if(reg){regName=$('#an').value.trim();regPhone=$('#aph').value.trim();await auth.createUserWithEmailAndPassword($('#ae').value.trim().toLowerCase(),$('#ap').value)}
- else await auth.signInWithEmailAndPassword($('#ae').value.trim().toLowerCase(),$('#ap').value)}catch(err){regName=regPhone='';er(msg(err))}};
-
+if(/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\//i.test(navigator.userAgent)){const w=$('#iab');w.textContent='Google login does not work inside the Facebook/Messenger browser. Tap the menu and choose "Open in browser" (Chrome/Safari).';w.classList.remove('hide')}
 // After Google sign-in: ask for name, email, password, phone
 const isG=u=>u.providerData.some(p=>p.providerId=='google.com'),hasPw=u=>u.providerData.some(p=>p.providerId=='password');
 const se=t=>{$('#se2').textContent=t||''};
 function setup(u){$('#sw').innerHTML=av(u.photoURL,me.name);$('#sm2').textContent=u.email;
- $('#sn').value=me.name||u.displayName||'';$('#se').value=u.email;$('#sp').value=me.phone||'';$('#spw').value='';se('');show('#setup')}
-$('#sps').onclick=()=>{const i=$('#spw'),s=i.type=='password';i.type=s?'text':'password';$('#sps').textContent=s?'Hide':'Show'};
+ $('#sn').value=me.name||u.displayName||'';$('#se').value=u.email;$('#sp').value=me.phone||'';se('');show('#setup')}
 $('#sf').onsubmit=async e=>{e.preventDefault();se('');const u=auth.currentUser,b=$('#sb');if(!u)return;
- const n=$('#sn').value.trim(),ph=$('#sp').value.replace(/[\s-]/g,''),pw=$('#spw').value;
+ const n=$('#sn').value.trim(),ph=$('#sp').value.replace(/[\s-]/g,'');
  if(!n)return se('Please enter your name.');
  if(!/^\+?\d{7,15}$/.test(ph))return se('Please enter a valid phone number.');
  b.disabled=true;
  try{
-  if(!hasPw(u)){try{await u.linkWithCredential(firebase.auth.EmailAuthProvider.credential(u.email,pw))}catch(err){console.error('link',err);return se('Password step: '+msg(err)),b.disabled=false}}
   const up={name:n,phone:ph,email:u.email,done:true};
   try{await db.doc('users/'+u.uid).set(up,{merge:true})}catch(err){console.error('save',err);return se('Save step: '+msg(err)),b.disabled=false}
   Object.assign(me,up);finish()
@@ -462,9 +441,9 @@ auth.onAuthStateChanged(async u=>{clean();if(wu){wu();wu=null}
   if(!d.exists){const a=u.email===ADMIN_EMAIL;
    await ref.set({name:regName||u.displayName||u.email.split('@')[0],email:u.email,bio:'',phone:regPhone,photo:u.photoURL||'',role:a?'admin':'member',approved:a,done:!isG(u),createdAt:ts()});regName=regPhone='';d=await ref.get()}
   me={id:u.uid,...d.data()};
-  if(isG(u)&&!hasPw(u)&&me.done!==true)return setup(u);
+  if(isG(u)&&me.done!==true)return setup(u);
   finish()
-  }catch(err){console.error(err);show('#auth');er('Login problem: '+msg(err))}});
+  }catch(err){console.error(err);show('#auth');er('Sign-in problem: '+msg(err)+' ['+(err.code||err.message||'')+']')}});
  
 // ---------- Presence (online) + chat popup ----------
 let AU=[],pu=null,hbT=null,tkT=null,cpm='chat';
