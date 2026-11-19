@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="canonical" href="https://lavbatch2012.github.io/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"LAV Batch 2012","alternateName":["লক্ষ্মীপাশা আদর্শ বিদ্যালয় ব্যাচ ২০১২","Lakshmipasha Adarsha Bidyalaya Batch 2012"],"url":"https://lavbatch2012.github.io/"}</script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ===== LAV 2012: digital "hologram seal + radar" look =====
    Deep indigo base, chamfered (corner-cut) panels, hologram-foil avatar rings,
@@ -184,6 +184,29 @@ hr.ln{border:0;border-top:1px solid var(--line);margin:18px 0}
 @media(max-width:860px){.fbw{flex-direction:column;gap:30px;text-align:center}.fbl p{margin-inline:auto}.fbl .lg.big{margin:0 auto 26px}}
 .spin{width:54px;height:54px;border-radius:50%;border:3px solid transparent;background:linear-gradient(var(--bg),var(--bg)) padding-box,var(--holo) border-box;animation:spin 1s linear infinite}
 @media(prefers-reduced-motion:reduce){.rd .sw{animation:none}*{transition:none!important}}
+
+/* ===== v2: navy + gold "school ID" redesign ===== */
+:root{--bg:#070d1f;--panel:#0f1a38;--ink:#eef2ff;--mute:#93a0c9;--cy:#f5c542;--vi:#e4233f;--ok:#3ddc97;--ball:#ff6b81;
+ --sig:linear-gradient(135deg,#f5c542,#ff9f43);--holo:conic-gradient(from 200deg,#f5c542,#e4233f,#4aa3ff,#f5c542);
+ --disp:'Bricolage Grotesque','Hind Siliguri',system-ui,sans-serif}
+.pg:before,.pg:after,.card:before,.card:after{clip-path:none;border-radius:22px}
+.pg:after,.card:after{inset:1px;border-radius:21px;background:linear-gradient(180deg,#13214a,#0f1a38)}
+input:focus,textarea:focus,select:focus{box-shadow:0 0 0 3px rgba(245,197,66,.2)}
+header{background:rgba(7,13,31,.8)}
+#main{padding-bottom:110px}
+nav{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding:6px;border-radius:26px;border:1px solid rgba(255,255,255,.12);background:rgba(15,26,56,.9);box-shadow:0 14px 40px rgba(0,0,0,.5)}
+nav button{border-radius:20px;padding:6px 0 4px}
+nav button.on{background:rgba(245,197,66,.15)}nav button.on:before{display:none}
+nav button.on .ic{filter:drop-shadow(0 0 7px rgba(245,197,66,.6))}
+#auth,#wait,#setup,#boot{background-image:radial-gradient(120% 60% at 50% -10%,rgba(245,197,66,.22),transparent 60%),radial-gradient(rgba(255,255,255,.06) 1px,transparent 1.3px)}
+.rd .sw{background:conic-gradient(from 0deg,transparent 0 290deg,rgba(245,197,66,.34) 359deg,transparent 360deg)}
+.hero{margin:14px 12px 0;padding:20px 18px;border-radius:26px;background:radial-gradient(120% 140% at 100% 0,rgba(245,197,66,.28),transparent 55%),linear-gradient(160deg,#1a2c63,#0d1733);border:1px solid rgba(245,197,66,.28);box-shadow:0 14px 34px rgba(0,0,0,.4)}
+.hero small{color:#c9d3f5;font-size:13px}.hero h3{font:800 28px/1.15 var(--disp);margin:2px 0 12px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chips span{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border-radius:20px;padding:5px 12px;font-size:13px}.chips b{font-family:var(--disp)}
+.hero p{margin-top:10px;font-size:14px;color:#e8edff;display:flex;gap:8px;align-items:center}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:12px}.gal img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px}.gal .empty{grid-column:1/-1}
+#lb{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.92);display:grid;place-items:center}#lb img{max-width:100%;max-height:100%}
+.srch{margin-bottom:8px}.bld{background:rgba(228,35,63,.18);color:#ff8fa1;border:1px solid rgba(228,35,63,.4);border-radius:10px;padding:2px 9px;font:700 13px var(--disp)}
 </style>
 </head>
 <body>
@@ -218,10 +241,11 @@ rules_version='2';service cloud.firestore{match /databases/{d}/documents{
     <input id="an" class="hide" placeholder="Full name" autocomplete="name">
     <input id="aph" class="hide" type="tel" placeholder="Phone number" autocomplete="tel">
     <input id="ae" type="email" placeholder="Email address" required autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false">
-    <input id="ap" type="password" placeholder="Password" required minlength="6" autocomplete="current-password">
+    <div class="pw"><input id="ap" type="password" placeholder="Password" required minlength="6" autocomplete="current-password"><button type="button" id="lpt">Show</button></div>
     <button class="btn" id="ab">Log in</button>
    </form>
    <p id="ae2" class="er"></p>
+   <p id="iab" class="er hide"></p>
    <button class="lnk" id="fp" type="button">Forgotten password?</button>
    <div class="or">or</div>
    <button class="gbtn" id="gb" type="button"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.5-4.1 7-10.2 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.4-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.5 0 20.1 0 24s.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>Continue with Google</button>
@@ -259,7 +283,7 @@ rules_version='2';service cloud.firestore{match /databases/{d}/documents{
   <div class="card" style="text-align:center">
    <img class="lg big lgx" alt="LAV Batch 2012">
    <h1>Almost in</h1>
-   <div class="sub">Your account is waiting for approval from the admin. Once approved, refresh this page.</div>
+   <div class="sub">Your account is waiting for approval from the admin. You will be let in automatically as soon as it is approved.</div>
    <button class="gbtn" type="button" onclick="auth.signOut()">Sign out</button>
   </div>
  </div>
@@ -288,7 +312,7 @@ esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','
 ago=t=>{if(!t)return'just now';const s=(Date.now()-t.toMillis())/1e3,p=(n,u)=>n+' '+u+(n>1?'s':'')+' ago';return s<60?'just now':s<3600?p(Math.floor(s/60),'minute'):s<86400?p(Math.floor(s/3600),'hour'):p(Math.floor(s/86400),'day')},
 av=(u,n)=>u?`<img class=av src="${u}" alt="">`:`<span class=av>${esc((n||'?')[0])}</span>`,
 toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2200)};
-let me=null,tab='feed',unsubs=[],P={},open=new Set(),cu={},room='all',reg=false,regName='',regPhone='';
+let NE=null,wu=null,me=null,tab='feed',unsubs=[],P={},open=new Set(),cu={},room='all',reg=false,regName='',regPhone='';
 const RX=['👍','❤️','😂','😮','😢'];
 // ---------- Digital icons ----------
 const IC={
@@ -317,6 +341,7 @@ const IC={
 };
 const ic=(n,c='')=>`<svg class="ic ${c}" viewBox="0 0 24 24" aria-hidden="true">${IC[n]}</svg>`;
 
+IC.drop='<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>';IC.img='<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="M4 18l5-5 4 4 3-3 4 4"/>';
 const show=id=>['#boot','#auth','#setup','#wait','#app'].forEach(s=>$(s).classList.toggle('hide',s!==id));
 const clean=()=>{unsubs.forEach(f=>f());unsubs=[];Object.values(cu).forEach(f=>f());cu={}};
 
@@ -328,8 +353,13 @@ function mode(r){reg=r;$('#an').classList.toggle('hide',!r);$('#aph').classList.
  $('#ah').textContent=r?'Create a new account':'Log in';$('#as').textContent=r?"It's quick and easy.":'to continue to LAV Batch 2012';
  $('#fp').classList.toggle('hide',r);$('#nw').classList.toggle('hide',r);$('#bk').classList.toggle('hide',!r);er('')}
 $('#nw').onclick=()=>mode(true);$('#bk').onclick=()=>mode(false);
-const msg=e=>({'auth/invalid-credential':'Wrong email or password. If you joined with Google, tap Continue with Google, or use Forgotten password? to set a password.','auth/wrong-password':'Wrong email or password. If you joined with Google, tap Continue with Google, or use Forgotten password? to set a password.','auth/user-not-found':'No account found with this email.','auth/invalid-email':'Please enter a valid email address.','auth/email-already-in-use':'This email already has an account. Try logging in.','auth/weak-password':'Password must be at least 6 characters.','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/unauthorized-domain':'This website domain is not authorised in Firebase yet.','auth/too-many-requests':'Too many attempts. Please wait a bit and try again.','auth/network-request-failed':'Network problem. Check your internet and try again.','auth/credential-already-in-use':'This email already has a password account.','auth/provider-already-linked':'A password is already set for this account.','auth/requires-recent-login':'Please sign out, sign in with Google again, then retry.','auth/operation-not-allowed':'Email/Password sign-in is not enabled in Firebase (Authentication > Sign-in method).','permission-denied':'Firestore rules blocked saving your profile (permission-denied).','not-found':'Your profile record was not found. Sign out and sign in again.'}[e.code]??('Something went wrong ('+(e.code||e.message||'unknown')+').'));
-$('#gb').onclick=async()=>{er('');try{await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())}catch(e){er(msg(e))}};
+const msg=e=>({'auth/popup-blocked':'Popup was blocked. Allow popups for this site and try again.','auth/web-storage-unsupported':'Your browser blocks storage. Turn off private mode or allow cookies.','auth/internal-error':'Login service error. Please try again.','auth/invalid-credential':'Wrong email or password. If you joined with Google, tap Continue with Google, or use Forgotten password? to set a password.','auth/wrong-password':'Wrong email or password. If you joined with Google, tap Continue with Google, or use Forgotten password? to set a password.','auth/user-not-found':'No account found with this email.','auth/invalid-email':'Please enter a valid email address.','auth/email-already-in-use':'This email already has an account. Try logging in.','auth/weak-password':'Password must be at least 6 characters.','auth/popup-closed-by-user':'','auth/cancelled-popup-request':'','auth/unauthorized-domain':'This website domain is not authorised in Firebase yet.','auth/too-many-requests':'Too many attempts. Please wait a bit and try again.','auth/network-request-failed':'Network problem. Check your internet and try again.','auth/credential-already-in-use':'This email already has a password account.','auth/provider-already-linked':'A password is already set for this account.','auth/requires-recent-login':'Please sign out, sign in with Google again, then retry.','auth/operation-not-allowed':'Email/Password sign-in is not enabled in Firebase (Authentication > Sign-in method).','permission-denied':'Firestore rules blocked saving your profile (permission-denied).','not-found':'Your profile record was not found. Sign out and sign in again.'}[e.code]??('Something went wrong ('+(e.code||e.message||'unknown')+').'));
+$('#gb').onclick=async()=>{er('');const p=new firebase.auth.GoogleAuthProvider();p.setCustomParameters({prompt:'select_account'});
+ try{if(SA)await auth.signInWithRedirect(p);else await auth.signInWithPopup(p)}
+ catch(e){if(e.code=='auth/popup-blocked'||e.code=='auth/operation-not-supported-in-this-environment'){try{await auth.signInWithRedirect(p)}catch(x){er(msg(x))}}else er(msg(e))}};
+auth.getRedirectResult().catch(e=>er(msg(e)));
+$('#lpt').onclick=()=>{const i=$('#ap'),h=i.type=='password';i.type=h?'text':'password';$('#lpt').textContent=h?'Hide':'Show'};
+if(/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\//i.test(navigator.userAgent)){const w=$('#iab');w.textContent='Google login does not work inside the Facebook/Messenger browser. Tap the menu and choose "Open in browser" (Chrome/Safari), or log in with email and password.';w.classList.remove('hide')}
 $('#fp').onclick=async()=>{const m=$('#ae').value.trim().toLowerCase();if(!m)return er('Type your email above first.');
  try{await auth.sendPasswordResetEmail(m);er('Password reset link sent. Check your email.',true)}catch(e){er(msg(e))}};
 $('#af').onsubmit=async e=>{e.preventDefault();er('');
@@ -355,9 +385,11 @@ $('#sf').onsubmit=async e=>{e.preventDefault();se('');const u=auth.currentUser,b
  }catch(err){console.error(err);se(msg(err))}
  b.disabled=false};
 $('#sk').onclick=async()=>{me.done=true;try{await db.doc('users/'+me.id).set({done:true},{merge:true})}catch(e){console.error(e)}finish()};
-function finish(){if(!me.approved)return show('#wait');show('#app');go(tab);startPresence()}
+function finish(){if(wu){wu();wu=null}
+ if(!me.approved){show('#wait');wu=db.doc('users/'+me.id).onSnapshot(d=>{const x=d.data();if(x&&x.approved){Object.assign(me,x);finish()}},()=>{});return}
+ show('#app');go(tab);startPresence()}
 setTimeout(()=>{if(!$('#boot').classList.contains('hide'))show('#auth')},10000);
-auth.onAuthStateChanged(async u=>{clean();
+auth.onAuthStateChanged(async u=>{clean();if(wu){wu();wu=null}
   if(!u){stopPresence();closeCP();me=null;mode(false);return show('#auth')}
   try{
   const ref=db.collection('users').doc(u.uid);let d=await ref.get();
@@ -378,7 +410,7 @@ function startPresence(){stopPresence();beat();hbT=setInterval(beat,90000);tkT=s
  document.addEventListener('visibilitychange',beat);
  pu=db.collection('users').onSnapshot(s=>{AU=s.docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.approved);upd()},()=>{})}
 function stopPresence(){clearInterval(hbT);clearInterval(tkT);document.removeEventListener('visibilitychange',beat);if(pu)pu();pu=null;AU=[];$('#cbn')&&($('#cbn').textContent='')}
-function upd(){const n=AU.filter(onl).length;const b=$('#cbn');if(b)b.textContent=n||'';const o=$('#ocn');if(o)o.textContent=n+' online';listCP()}
+function upd(){heroR();const n=AU.filter(onl).length;const b=$('#cbn');if(b)b.textContent=n||'';const o=$('#ocn');if(o)o.textContent=n+' online';listCP()}
 const lastSeen=u=>u.lastSeen?'Last seen '+ago(u.lastSeen):'Offline';
 let cq='',lmL={},lmD={},rmUn=null;
 const tf=t=>{if(!t)return'';const d=t.toDate?t.toDate():t;return d.toDateString()==new Date().toDateString()?d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):d.toLocaleDateString([],{day:'numeric',month:'short'})};
@@ -421,15 +453,16 @@ $('#cb').innerHTML=ic('chat')+'<em id="cbn" class="bdg"></em>';
 $('#cb').onclick=openCP;$('#cp').onclick=e=>{if(e.target.id=='cp')closeCP()};
 
 // ---------- Navigation ----------
-const TABS=[['feed',ic('home'),'Feed'],['events',ic('cal'),'Events'],['fund',ic('wallet'),'Funds'],['me',ic('user'),'Profile']];
-function go(t){tab=t;clean();$('#nav').innerHTML=TABS.map(([k,i,l])=>`<button class="${k==t?'on':''}" onclick="go('${k}')"><b>${i}</b>${l}</button>`).join('');({feed,events,fund,me:profile})[t]()}
+const TABS=[['feed',ic('home'),'Feed'],['events',ic('cal'),'Events'],['fund',ic('wallet'),'Funds'],['mem',ic('img'),'Photos'],['me',ic('user'),'Profile']];
+function go(t){tab=t;clean();$('#nav').innerHTML=TABS.map(([k,i,l])=>`<button class="${k==t?'on':''}" onclick="go('${k}')"><b>${i}</b>${l}</button>`).join('');({feed,events,fund,mem,me:profile})[t]()}
 
 // ---------- Feed ----------
 function feed(){
- $('#main').innerHTML=`<div class=pg><div class=hd>${av(me.photo,me.name)}<b>${esc(me.name)}</b></div>
+ $('#main').innerHTML=`<div class=hero id=hero></div><div class=pg><div class=hd>${av(me.photo,me.name)}<b>${esc(me.name)}</b></div>
  <textarea id=pt rows=3 placeholder="What's on your mind? Write a status..."></textarea>
  <div style="display:flex;gap:6px;margin-top:6px"><select id=pm style="width:auto"><option value="">Mood</option><option>😎 Feeling great</option><option>🏏 Playing cricket</option><option>🍛 Picnic mood</option><option>😴 Sleepy</option><option>🥲 Missing school days</option></select>
  <input id=pf type=file accept="image/*" style="border:0;padding:6px 0"><button class="btn r" onclick="newPost()">Post</button></div></div><div id=pl></div>`;
+ unsubs.push(db.collection('events').orderBy('date').onSnapshot(s=>{const t=new Date().toISOString().slice(0,10);NE=s.docs.map(x=>x.data()).find(e=>e.date>=t)||null;heroR()},()=>{}));heroR();
  unsubs.push(db.collection('posts').orderBy('createdAt','desc').limit(50).onSnapshot(s=>{
   const a=document.activeElement;if(a&&a.closest&&a.closest('#pl'))return;
   P={};s.docs.forEach(d=>P[d.id]=d.data());
@@ -477,7 +510,7 @@ function fund(){
 async function addL(e){e.preventDefault();await db.collection('ledger').add({type:$('#lt').value,amount:+$('#la').value,note:$('#ln').value,createdAt:ts()});e.target.reset();return false}
 
 // ---------- Profile ----------
-const INF=[['edu','grad','Education','Add education','School, college or university'],['work','brief','Work','Add work / profession','Your job or business'],['addr','pin','Current address','Add address','Village, upazila, district'],['home','home','Hometown','Add hometown','Your permanent home']];
+const INF=[['edu','grad','Education','Add education','School, college or university'],['work','brief','Work','Add work / profession','Your job or business'],['addr','pin','Current address','Add address','Village, upazila, district'],['home','home','Hometown','Add hometown','Your permanent home'],['dob','cal','Birthday','Add birthday','YYYY-MM-DD (e.g. 1997-03-25)'],['blood','drop','Blood group','Add blood group','e.g. B+']];
 const rowsOf=(u,self)=>{let h=INF.map(([k,i,l,a])=>u[k]?`<div class=ir>${ic(i)}<div><small>${l}</small><b>${esc(u[k])}</b></div></div>`:self?`<div class=ir>${ic(i)}<div><button class=lk2 onclick="profile('${k}')">+ ${a}</button></div></div>`:'').join('');
  h+=u.phone?`<div class=ir>${ic('phone')}<div><small>Phone</small><b>${esc(u.phone)}</b></div></div>`:self?`<div class=ir>${ic('phone')}<div><button class=lk2 onclick="profile('pph')">+ Add phone number</button></div></div>`:'';
  if(self&&u.email)h+=`<div class=ir>${ic('mail')}<div><small>Email</small><b>${esc(u.email)}</b></div></div>`;
@@ -496,20 +529,35 @@ function profile(ed){
  $('#main').innerHTML=`<div class=pg style="text-align:center"><span class=pav>${avs(me)}</span><h3>${esc(me.name)}</h3><small style="color:var(--mute)">${me.role=='admin'?'Admin':'Batchmate'}</small>${me.bio?`<p style="margin-top:4px">${esc(me.bio)}</p>`:''}
  <div class=bt style="justify-content:center"><button class=btn onclick="profile(true)">${ic('edit')} Edit profile</button><button class="btn gr" onclick="auth.signOut()">${ic('out')} Sign out</button></div></div>
  <div class=pg><h4>Details</h4>${rowsOf(me,true)}<div class=ir>${ic('lock')}<div id=pwd><small>Password</small>${hasPw(auth.currentUser)?`<button class=lk2 onclick="resetPw()">Change password (link by email)</button>`:`<button class=lk2 onclick="pwForm()">+ Set a password</button>`}</div></div></div>
- ${me.role=='admin'?'<h2>Waiting for approval</h2><div class=pg id=pe></div>':''}<h2>All batchmates</h2><div class=pg id=mb></div>`;
+ ${me.role=='admin'?'<h2>Waiting for approval</h2><div class=pg id=pe></div>':''}<h2>All batchmates</h2><div class=pg><input class=srch id=ms2 placeholder="Search name, place, blood group..." oninput="mbF()"><div id=mb></div></div>`;
  unsubs.push(db.collection('users').onSnapshot(s=>{const U=s.docs.map(d=>({id:d.id,...d.data()}));
-  const mb=$('#mb');if(mb)mb.innerHTML=U.filter(u=>u.approved).map(u=>`<div class=hd style="cursor:pointer" onclick="viewU('${u.id}')">${avs(u)}<div><b>${esc(u.name)}</b><small>${esc(u.edu||u.bio||'')}</small></div></div>`).join('');
+  window.UL=U;mbF();const mb=$('#mbx');if(mb)mb.innerHTML=U.filter(u=>u.approved).map(u=>`<div class=hd style="cursor:pointer" onclick="viewU('${u.id}')">${avs(u)}<div><b>${esc(u.name)}</b><small>${esc(u.edu||u.bio||'')}</small></div></div>`).join('');
   const pe=$('#pe');if(pe)pe.innerHTML=U.filter(u=>!u.approved).map(u=>`<div class=li><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${esc(u.email||'')} ${u.phone?'| '+esc(u.phone):''}</small></span><span><button class="btn g s" onclick="db.doc('users/${u.id}').update({approved:true})">Approve</button> <button class="btn r s" onclick="db.doc('users/${u.id}').delete()">Reject</button></span></div>`).join('')||'<div class=empty>No one is waiting.</div>'}))}
 function pwForm(){$('#pwd').innerHTML=`<small>New password</small><input id=npw type=password minlength=6 placeholder="At least 6 characters" autocomplete=new-password><div class=bt style="margin-top:8px"><button class="btn g s" onclick="setPw()">Save password</button><button class="btn gr s" onclick="profile()">Cancel</button></div>`;$('#npw').focus()}
 async function setPw(){const u=auth.currentUser,pw=$('#npw').value;if(pw.length<6)return toast('Password must be at least 6 characters');
  try{await u.linkWithCredential(firebase.auth.EmailAuthProvider.credential(u.email,pw));toast('Password set. You can now log in with email and password.');profile()}catch(e){console.error(e);toast(msg(e)||'Could not set password')}}
 async function resetPw(){try{await auth.sendPasswordResetEmail(auth.currentUser.email);toast('Password reset link sent to your email')}catch(e){console.error(e);toast(msg(e)||'Could not send the link')}}
 function viewU(id){const u=AU.find(x=>x.id==id);if(!u)return;cpm='user';$('#cp .cpb').classList.remove('rm');
- $('#cp .cpb').innerHTML=`<div class=cph><b>Profile</b><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=cpl><div style="padding:16px 16px 4px;text-align:center"><span class=pav>${avs(u)}</span><h3>${esc(u.name)}</h3><small style="color:var(--mute)">${onl(u)?'Active now':lastSeen(u)}</small>${u.bio?`<p style="margin-top:4px">${esc(u.bio)}</p>`:''}</div><div style="padding:4px 16px 16px">${rowsOf(u,false)}${u.id!=me.id?`<button class="btn" style="width:100%;margin-top:10px" onclick="chatWith('${u.id}')">${ic('chat')} Message</button>`:''}</div></div>`;
+ $('#cp .cpb').innerHTML=`<div class=cph><b>Profile</b><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=cpl><div style="padding:16px 16px 4px;text-align:center"><span class=pav>${avs(u)}</span><h3>${esc(u.name)}</h3><small style="color:var(--mute)">${onl(u)?'Active now':lastSeen(u)}</small>${u.bio?`<p style="margin-top:4px">${esc(u.bio)}</p>`:''}</div><div style="padding:4px 16px 16px">${rowsOf(u,false)}${u.phone?`<div class=bt><a class="btn gr" href="tel:${esc(u.phone)}">${ic('phone')} Call</a><a class="btn g" target=_blank rel=noopener href="https://wa.me/${esc(u.phone.replace(/^0/,'880').replace(/\D/g,''))}">WhatsApp</a></div>`:''}${u.id!=me.id?`<button class="btn" style="width:100%;margin-top:10px" onclick="chatWith('${u.id}')">${ic('chat')} Message</button>`:''}</div></div>`;
  $('#cp').classList.remove('hide')}
 async function saveP(){const f=$('#pp').files[0],u={name:$('#pn').value.trim()||me.name,phone:$('#pph').value.trim(),bio:$('#pb').value.trim()};
  INF.forEach(([k])=>u[k]=$('#f_'+k).value.trim());
  try{if(f)u.photo=await img(f,200);await db.doc('users/'+me.id).update(u);Object.assign(me,u);toast('Saved');profile()}catch(e){console.error(e);toast('Could not save. Try again.')}}
+
+// ---------- Home hero, photos, directory ----------
+function heroR(){const h=$('#hero');if(!h||!me)return;const t=new Date(),t0=new Date(t.getFullYear(),t.getMonth(),t.getDate()),hr=t.getHours(),
+ g=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening',on=AU.filter(onl).length,
+ bd=AU.filter(u=>/^\d{4}-\d{2}-\d{2}$/.test(u.dob||'')).map(u=>{const[,m,d]=u.dob.split('-').map(Number);let n=new Date(t.getFullYear(),m-1,d);if(n<t0)n=new Date(t.getFullYear()+1,m-1,d);return{u,k:Math.round((n-t0)/864e5)}}).sort((a,b)=>a.k-b.k)[0],
+ ev=NE?Math.round((new Date(NE.date)-t0)/864e5):0;
+ h.innerHTML=`<small>${g}</small><h3>${esc((me.name||'').split(' ')[0])}</h3><div class=chips><span><b>${AU.length}</b> batchmates</span><span><i class=dot2></i><b>${on}</b> online</span></div>
+ ${bd?`<p>🎂 ${bd.k==0?esc(bd.u.name)+"'s birthday is today!":esc(bd.u.name)+"'s birthday in "+bd.k+(bd.k>1?' days':' day')}</p>`:''}
+ ${NE?`<p>${ic('cal','sm')} ${esc(NE.title)}: ${ev<=0?'today':'in '+ev+(ev>1?' days':' day')}</p>`:''}`}
+function mem(){$('#main').innerHTML=`<h2>Photos</h2><div class=gal id=gl></div>`;
+ unsubs.push(db.collection('posts').orderBy('createdAt','desc').limit(90).onSnapshot(s=>{const a=s.docs.map(d=>d.data()).filter(p=>p.img);
+  $('#gl').innerHTML=a.map(p=>`<img src="${p.img}" loading=lazy alt="" onclick="lb(this.src)">`).join('')||'<div class=empty>No photos yet. Share one from Feed.</div>'}))}
+const lb=s=>{const d=document.createElement('div');d.id='lb';d.innerHTML=`<img src="${s}" alt="">`;d.onclick=()=>d.remove();document.body.append(d)};
+function mbF(){const mb=$('#mb');if(!mb||!window.UL)return;const q=(($('#ms2')||{}).value||'').trim().toLowerCase();
+ mb.innerHTML=UL.filter(u=>u.approved&&(!q||[u.name,u.edu,u.work,u.addr,u.home,u.blood].join(' ').toLowerCase().includes(q))).map(u=>`<div class=hd style="cursor:pointer" onclick="viewU('${u.id}')">${avs(u)}<div><b>${esc(u.name)}</b><small>${esc([u.work,u.addr].filter(Boolean).join(' | ')||u.bio||'')}</small></div>${u.blood?`<span class=bld>${esc(u.blood)}</span>`:''}</div>`).join('')||'<div class=empty>No match.</div>'}
 
 // ---------- Install app (Android/Chrome button + iPhone hint) ----------
 let dp=null;const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent),SA=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
