@@ -17,6 +17,7 @@
 <link rel="canonical" href="https://lavbatch2012.github.io/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"LAV Batch 2012","alternateName":["লক্ষ্মীপাশা আদর্শ বিদ্যালয় ব্যাচ ২০১২","Lakshmipasha Adarsha Bidyalaya Batch 2012"],"url":"https://lavbatch2012.github.io/"}</script>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('lavTheme')||'aurora'}catch(e){document.documentElement.dataset.theme='aurora'}</script>
 <style>
 /* ===== LAV 2012: digital "hologram seal + radar" look =====
    Deep indigo base, chamfered (corner-cut) panels, hologram-foil avatar rings,
@@ -281,6 +282,37 @@ header h1{font:800 20px/1.1 var(--disp);letter-spacing:-.01em}
 .tgl input[type=checkbox]::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s}
 .tgl input[type=checkbox]:checked{background:var(--cy)}
 .tgl input[type=checkbox]:checked::after{left:23px}
+/* ===== Glass themes: Aurora Glass + Obsidian Neon ===== */
+html[data-theme=aurora]{--bg:#070b24;--gp:#101645;--cy:#27d3ee;--vi:#a78bfa;--sig:linear-gradient(100deg,#14d3e8,#a78bfa 55%,#ec4899);--g1:rgba(255,255,255,.17);--g2:rgba(255,255,255,.05);--gb:rgba(255,255,255,.24);--gl:0 14px 40px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.4);--navon:#fff;--navink:#1b1546;--ink:#f4f7ff;--mute:#a9b2e0}
+html[data-theme=neon]{--bg:#05060a;--gp:#0b0d12;--cy:#beff46;--vi:#22d3ee;--sig:linear-gradient(100deg,#beff46,#22d3ee);--g1:rgba(255,255,255,.09);--g2:rgba(255,255,255,.02);--gb:rgba(190,255,70,.28);--gl:0 0 30px rgba(190,255,70,.08),inset 0 0 0 1px rgba(255,255,255,.04);--navon:#beff46;--navink:#0a1000;--ink:#eef2f0;--mute:#9aa5a0}
+html[data-theme]{--panel:var(--gp);--rad:24px;background:var(--bg)}
+html[data-theme] body{background:transparent;color:var(--ink)}
+html[data-theme] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none}
+html[data-theme=aurora] body::before{background:radial-gradient(60% 38% at 0% 0%,rgba(20,211,232,.5),transparent 70%),radial-gradient(55% 38% at 100% 48%,rgba(139,92,246,.55),transparent 70%),radial-gradient(60% 38% at 8% 100%,rgba(236,72,153,.42),transparent 70%)}
+html[data-theme=neon] body::before{background:radial-gradient(50% 30% at 50% 22%,rgba(190,255,70,.2),transparent 70%),radial-gradient(45% 30% at 100% 85%,rgba(34,211,238,.22),transparent 70%),linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px) 0 0/32px 32px,linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px) 0 0/32px 32px}
+html[data-theme] .pg,html[data-theme] .card,html[data-theme] .ig{border:1px solid var(--gb);border-radius:var(--rad);background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-backdrop-filter:blur(24px) saturate(170%);backdrop-filter:blur(24px) saturate(170%);box-shadow:var(--gl);filter:none}
+html[data-theme] .pg{margin:14px;padding:16px 18px}
+html[data-theme] .ig{margin:12px 14px;padding:14px}
+html[data-theme] .pi{border-radius:18px}
+html[data-theme] .pg:before,html[data-theme] .pg:after,html[data-theme] .card:before,html[data-theme] .card:after{display:none}
+html[data-theme] header{background:linear-gradient(180deg,var(--g1),var(--g2));border-bottom:1px solid var(--gb);-webkit-backdrop-filter:blur(24px) saturate(170%);backdrop-filter:blur(24px) saturate(170%)}
+html[data-theme] #main{padding-bottom:112px}
+html[data-theme] nav{left:16px;right:16px;bottom:calc(12px + env(safe-area-inset-bottom,0px));padding:6px;border:1px solid var(--gb);border-radius:32px;background:linear-gradient(135deg,var(--g1),var(--g2));-webkit-backdrop-filter:blur(26px) saturate(170%);backdrop-filter:blur(26px) saturate(170%);box-shadow:var(--gl)}
+html[data-theme] nav button{border-radius:24px;padding:4px 0}
+html[data-theme] nav button.on{background:var(--navon);color:var(--navink)}
+html[data-theme] nav button.on .ic{color:var(--navink);filter:none;stroke-width:2.2}
+html[data-theme] nav button.on:before{display:none}
+html[data-theme] input,html[data-theme] textarea,html[data-theme] select{background:rgba(255,255,255,.07);border:1px solid var(--gb);border-radius:14px}
+html[data-theme] .btn:not(.r):not(.gr){background:var(--sig);color:#07102a;border-radius:16px}
+html[data-theme] .btn.gr{background:rgba(255,255,255,.1);color:var(--ink);border:1px solid var(--gb);box-shadow:none;border-radius:16px}
+html[data-theme] .seg button{background:rgba(255,255,255,.07);border-color:var(--gb);color:var(--ink)}
+html[data-theme] .seg button.on{background:var(--navon);color:var(--navink)}
+html[data-theme] .cpb{background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.05)),var(--gp);border:1px solid var(--gb);border-radius:26px;-webkit-backdrop-filter:blur(28px);backdrop-filter:blur(28px)}
+.thm{display:flex;gap:12px}.thb{flex:1;border:1px solid var(--gb,var(--line));border-radius:20px;padding:10px;background:rgba(255,255,255,.05);display:flex;flex-direction:column;gap:8px;align-items:center;font-weight:600;font-size:13px}
+.thb.on{border-color:var(--cy);box-shadow:0 0 0 2px var(--cy)}
+.sw{display:block;width:100%;height:56px;border-radius:14px}
+.sw.aurora{background:radial-gradient(60% 90% at 10% 0,#14d3e8,transparent),radial-gradient(60% 90% at 100% 60%,#8b5cf6,transparent),radial-gradient(60% 90% at 0 100%,#ec4899,transparent),#070b24}
+.sw.neon{background:radial-gradient(circle at 50% 40%,rgba(190,255,70,.6),transparent 62%),linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px) 0 0/12px 12px,#05060a}
 </style>
 </head>
 <body>
@@ -378,6 +410,7 @@ const CFG={apiKey:"AIzaSyDqepmd4MjXKQRHghR6o7h4k7JUmTbrZ-k",authDomain:"batch-20
 const ADMIN_EMAIL="shironamhinantor@gmail.com";
 const PERMS=[['approve','Approve / reject new members'],['events','Create and delete events'],['ledger','Funds: accounts and camp entries'],['archive','Upload / delete PDF reports'],['jersey','Jersey: open or close order, fill others, history'],['posts','Delete any post']];
 const isMain=u=>!!u&&u.email===ADMIN_EMAIL;
+const eMsg=e=>e&&e.code=='permission-denied'?'Not allowed. Publish the latest Firestore rules first (firestore.rules).':'Could not save';
 const can=p=>!!me&&(me.role=='admin'||(me.role=='sub'&&(me.perms||[]).includes(p)));
 const dobN=s=>{s=String(s||'').trim();let m=/^(\d{1,2})[-\/. ](\d{1,2})[-\/. ](\d{4})$/.exec(s),d,mo,y;if(m){d=+m[1];mo=+m[2];y=+m[3]}else if(m=/^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(s)){y=+m[1];mo=+m[2];d=+m[3]}else return null;const x=new Date(y,mo-1,d);if(x.getFullYear()!=y||x.getMonth()!=mo-1||x.getDate()!=d)return null;return{d,m:mo,y,s:String(d).padStart(2,'0')+'-'+String(mo).padStart(2,'0')+'-'+y}};
 const dobFmt=el=>{const v=el.value.replace(/\D/g,'').slice(0,8);el.value=v.length>4?v.slice(0,2)+'-'+v.slice(2,4)+'-'+v.slice(4):v.length>2?v.slice(0,2)+'-'+v.slice(2):v};
@@ -395,6 +428,7 @@ let NE=null,wu=null,me=null,tab='feed',unsubs=[],P={},open=new Set(),cu={},room=
 const RX=['👍','❤️','😂','😮','😢'];
 // ---------- Digital icons ----------
 const IC={
+ shield:'<path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
  home:'<path d="M3 11l9-8 9 8"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/>',
  cal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/>',
  wallet:'<path d="M3 7a2 2 0 0 1 2-2h12v3"/><path d="M3 7v11a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-1z"/><circle cx="16" cy="14" r="1.2"/>',
@@ -501,7 +535,7 @@ function radar(){const P=$('#pts');if(!P||cpm!='chat')return;
  const put=(arr,r,off)=>arr.map((u,i)=>{const a=i/arr.length*Math.PI*2+off;return `<button class="rn ${onl(u)?'on':''}" style="left:${50+Math.cos(a)*r}%;top:${50+Math.sin(a)*r}%" onclick="openRoom('${u.id}')" aria-label="${esc(u.name)}">${av(u.photo,u.name)}</button>`}).join('');
  P.innerHTML=put(on,23,-1.2)+put(rec,39,-.35)}
 function renderCP(){cpm='chat';const bx=$('#cp .cpb');bx.classList.remove('rm');
- bx.innerHTML=`<div class=cph><b>Chats</b><span class=on><i class=dot2></i><span id=ocn>${AU.filter(onl).length} online</span></span><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=rd id=rd><i class=sw></i><b class=r1></b><b class=r2></b><b class=r3></b><span class=me>${av(me.photo,me.name)}</span><div id=pts></div></div><div class=cs><input placeholder="Search chats" value="${esc(cq)}" oninput="cq=this.value;listCP()"></div><div class=cpl id=cpl></div>`;listCP()}
+ bx.innerHTML=`<div class=cph><b>Chats</b><span class=on><i class=dot2></i><span id=ocn>${AU.filter(onl).length} online</span></span><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=cs><input placeholder="Search chats" value="${esc(cq)}" oninput="cq=this.value;listCP()"></div><div class=cpl id=cpl></div>`;listCP()}
 function openCP(){stopRoom();$('#cp').classList.remove('hide');renderCP()}
 function closeCP(){stopRoom();stopLM();cq='';$('#cp').classList.add('hide');$('#cp .cpb').classList.remove('rm')}
 const chatWith=id=>openRoom(id);
@@ -524,7 +558,7 @@ $('#cb').onclick=openCP;$('#cp').onclick=e=>{if(e.target.id=='cp')closeCP()};
 
 // ---------- Navigation ----------
 const TABS=[['feed',ic('home'),'Feed'],['events',ic('cal'),'Events'],['jersey',ic('shirt'),'Jersey'],['fund',ic('wallet'),'Funds'],['mem',ic('img'),'Photos'],['me',ic('user'),'Profile']];
-function go(t){tab=t;clean();$('#nav').innerHTML=TABS.map(([k,i,l])=>`<button aria-label="${l}" class="${k==t?'on':''}" onclick="go('${k}')"><b>${k=='me'?`<span class=nv>${av(me.photo,me.name)}</span>`:i}</b></button>`).join('');({feed,events,jersey,fund,mem,me:profile})[t]()}
+function go(t){tab=t;clean();$('#nav').innerHTML=(isAdm()?[...TABS,['admin',ic('shield'),'Admin']]:TABS).map(([k,i,l])=>`<button aria-label="${l}" class="${k==t?'on':''}" onclick="go('${k}')"><b>${k=='me'?`<span class=nv>${av(me.photo,me.name)}</span>`:i}</b></button>`).join('');({feed,events,jersey,fund,mem,me:profile,admin})[t]()}
 
 // ---------- Feed ----------
 function feed(){
@@ -534,7 +568,7 @@ function feed(){
  <input id=pf type=file accept="image/*" style="border:0;padding:6px 0"><button class="btn r" onclick="newPost()">Post</button></div></div><div id=pl></div>`;
  unsubs.push(db.collection('events').orderBy('date').onSnapshot(s=>{const t=new Date().toISOString().slice(0,10);NE=s.docs.map(x=>x.data()).find(e=>e.date>=t)||null;heroR()},()=>{}));heroR();
  unsubs.push(db.collection('posts').orderBy('createdAt','desc').limit(50).onSnapshot(s=>{
-  const a=document.activeElement;if(a&&a.closest&&a.closest('#pl'))return;
+  const a=document.activeElement;if(a&&a.closest&&a.closest('#pl')&&/^(INPUT|TEXTAREA)$/.test(a.tagName)&&a.value)return;
   P={};s.docs.forEach(d=>P[d.id]=d.data());
   $('#pl').innerHTML=s.docs.map(d=>post(d.id,d.data())).join('')||'<div class=empty>No posts yet. Be the first to write one.</div>';
   open.forEach(oc)}))}
@@ -583,7 +617,7 @@ const yOf=l=>+l.year||(l.createdAt&&l.createdAt.toDate?l.createdAt.toDate().getF
 function fund(){FL=[];FA=[];fY=CURY;fDraw(true);
  unsubs.push(db.collection('ledger').orderBy('createdAt','asc').onSnapshot(s=>{FL=s.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.type=='in'||x.type=='out');fDraw()},e=>console.error(e)));
  unsubs.push(db.collection('archive').where('kind','==','fund').onSnapshot(s=>{FA=s.docs.map(d=>({id:d.id,...d.data()})).sort((x,y)=>(x.name||'').localeCompare(y.name||''));fDraw()},e=>console.error(e)))}
-function fDraw(force){if(tab!='fund'||!me||!$('#main'))return;const ae=document.activeElement;if(!force&&ae&&ae.closest&&ae.closest('#fm,#fa'))return;
+function fDraw(force){if(tab!='fund'||!me||!$('#main'))return;const ae=document.activeElement;if(!force&&ae&&ae.closest&&ae.closest('#fm,#fa')&&/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)&&(ae.type=='file'||ae.value))return;
  const adm=can('ledger'),L=fT=='in',cur=fY==CURY,EY=FL.filter(l=>yOf(l)==fY),I=EY.filter(x=>x.type=='in'),O=EY.filter(x=>x.type=='out'),
  i=I.reduce((t,x)=>t+(+x.amount||0),0),o=O.reduce((t,x)=>t+(+x.amount||0),0),b=i-o,R=L?I:O,AY=FA.filter(x=>+x.year==fY),
  YS=[...new Set([CURY,...FL.map(yOf),...FA.map(x=>+x.year)])].sort((x,y)=>y-x);
@@ -593,14 +627,14 @@ function fDraw(force){if(tab!='fund'||!me||!$('#main'))return;const ae=document.
 ${adm&&cur?`<form class=pg id=fm onsubmit="return addL(event)"><div style="display:flex;gap:6px;margin-bottom:6px"><input id=lw placeholder="${L?'Name (who paid)':'Spent by (optional)'}" ${L?'required':''}><input id=la type=number min=1 placeholder="Amount" required style="max-width:120px"></div>${L?'':'<input id=ln placeholder="Expense for (e.g. Jersey, Food)" required style="margin-bottom:6px">'}<button class=btn>${L?'Add lifting':'Add expense'}</button></form>`:''}
 <div class=pg style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span>${L?`<b>Total lifting: ৳${nf(i)}</b><br><small style="color:var(--mute)">${I.length} ${I.length==1?'person':'people'} paid`:`<b>Total expense: ৳${nf(o)}</b><br><small style="color:var(--mute)">${O.length} ${O.length==1?'item':'items'}`}</small></span>${EY.length?`<button class="btn gr s" onclick="printF()">Download PDF</button>`:''}</div>
 <div>${R.map((l,n)=>`<div class="pg li"><span style="display:flex;gap:10px;align-items:flex-start"><i style="min-width:26px;font-style:normal;color:var(--mute)">${n+1}.</i><span><b>${esc(L?(l.who||l.note):l.note)}</b><br><small style="color:var(--mute)">${!L&&l.who?esc(l.who)+' | ':''}${ago(l.createdAt)}</small></span></span><b class="${l.type}">${L?'+':'-'}৳${nf(l.amount)} ${adm?`<button class=x onclick="delL('${l.id}')">${ic('x')}</button>`:''}</b></div>`).join('')||`<div class=empty>${EY.length||cur?(L?'No lifting yet.':'No expense yet.'):'No records for '+fY+' in the app.'}</div>`}</div>
-${AY.length||can('archive')?`<div class=pg id=fa><h4>Saved PDF reports | ${fY}</h4>${AY.map(x=>`<div class=li><span><b>${esc(x.name)}</b><br><small style="color:var(--mute)">${x.year} | ${Math.max(1,Math.round((x.size||0)/1024))} KB</small></span><span><button class="btn gr s" onclick="openA('${x.id}',1)">View</button> <button class="btn gr s" onclick="openA('${x.id}',0)">Download</button>${can('archive')?` <button class=x onclick="delA('${x.id}')">${ic('x')}</button>`:''}</span></div>`).join('')||'<small style="color:var(--mute)">No PDF saved for this year.</small>'}${can('archive')?`<form id=fm2 onsubmit="return upA(event)" style="margin-top:12px"><label class=fl>Upload an old report (PDF, max 700 KB)</label><div style="display:flex;gap:6px;margin-bottom:6px"><input id=ayr type=number value="${fY}" required style="max-width:96px"><input id=atl placeholder="Title (e.g. Picnic 2024)"></div><input id=afl type=file accept="application/pdf" required style="margin-bottom:6px"><button class=btn>Upload PDF</button></form>`:''}</div>`:''}`}
-async function addL(e){e.preventDefault();const L=fT=='in';try{await db.collection('ledger').add({type:fT,amount:+$('#la').value,note:L?'Lifting':$('#ln').value.trim(),cat:L?'Lifting':'Expense',who:$('#lw').value.trim(),year:CURY,createdAt:ts()});e.target.reset()}catch(err){console.error(err);toast('Could not save')}return false}
-async function upA(e){e.preventDefault();const f=$('#afl').files[0],y=+$('#ayr').value;if(!f||!(y>1990&&y<2100))return false;if(f.type&&f.type!='application/pdf')return toast('Choose a PDF file'),false;if(f.size>700*1024)return toast('PDF is too big (max 700 KB)'),false;
+${AY.length||can('archive')?`<div class=pg id=fa><h4>Saved PDF reports | ${fY}</h4>${AY.map(x=>`<div class=li><span><b>${esc(x.name)}</b><br><small style="color:var(--mute)">${x.year} | ${Math.max(1,Math.round((x.size||0)/1024))} KB</small></span><span><button class="btn gr s" onclick="openA('${x.id}',1)">View</button> <button class="btn gr s" onclick="openA('${x.id}',0)">Download</button>${can('archive')?` <button class=x onclick="delA('${x.id}')">${ic('x')}</button>`:''}</span></div>`).join('')||'<small style="color:var(--mute)">No PDF saved for this year.</small>'}${can('archive')?`<form id=fm2 onsubmit="return upA(event)" style="margin-top:12px"><label class=fl>Upload an old report (PDF, max 700 KB)</label><div style="display:flex;gap:6px;margin-bottom:6px"><input id=ayr type=number value="${fY}" required style="max-width:96px"><input id=atl placeholder="Title (e.g. Picnic 2024)"></div><input id=afl type=file accept="application/pdf" hidden onchange="$('#afn').textContent=this.files[0]?this.files[0].name:'No file chosen'"><label for=afl class="btn gr" style="width:100%;margin-bottom:6px">Choose PDF</label><small id=afn style="display:block;color:var(--mute);margin-bottom:10px;word-break:break-all">No file chosen</small><button class=btn style="width:100%">Upload PDF</button></form>`:''}</div>`:''}`}
+async function addL(e){e.preventDefault();const L=fT=='in';try{await db.collection('ledger').add({type:fT,amount:+$('#la').value,note:L?'Lifting':$('#ln').value.trim(),cat:L?'Lifting':'Expense',who:$('#lw').value.trim(),year:CURY,createdAt:ts()});e.target.reset();if(document.activeElement)document.activeElement.blur();toast(L?'Lifting added':'Expense added');fDraw(true)}catch(err){console.error(err);toast(eMsg(err))}return false}
+async function upA(e){e.preventDefault();const f=$('#afl').files[0],y=+$('#ayr').value;if(!f)return toast('Choose a PDF file first'),false;if(!(y>1990&&y<2100))return false;if(f.type&&f.type!='application/pdf')return toast('Choose a PDF file'),false;if(f.size>700*1024)return toast('PDF is too big (max 700 KB)'),false;
  const bt=e.target.querySelector('button');bt.disabled=true;
  try{const data=await new Promise((r,j)=>{const fr=new FileReader();fr.onload=()=>r(String(fr.result).split(',')[1]);fr.onerror=j;fr.readAsDataURL(f)});
   const ref=await db.collection('archive').add({kind:'fund',year:y,name:$('#atl').value.trim()||f.name.replace(/\.pdf$/i,''),size:f.size,createdAt:ts()});
   try{await db.doc('archive/'+ref.id+'/part/d').set({data})}catch(err){await ref.delete().catch(()=>{});throw err}
-  fY=y;toast('PDF uploaded');fDraw(true)}catch(err){console.error(err);toast('Could not upload PDF');bt.disabled=false}return false}
+  fY=y;toast('PDF uploaded');fDraw(true)}catch(err){console.error(err);toast(err&&err.code=='permission-denied'?eMsg(err):'Could not upload PDF');bt.disabled=false}return false}
 async function openA(id,v){const x=FA.find(z=>z.id==id);try{const d=await db.doc('archive/'+id+'/part/d').get(),t=atob(d.data().data),u=new Uint8Array(t.length);for(let k=0;k<t.length;k++)u[k]=t.charCodeAt(k);
  const url=URL.createObjectURL(new Blob([u],{type:'application/pdf'}));
  if(v){window.open(url,'_blank')||(location.href=url)}else{const l=document.createElement('a');l.href=url;l.download=(((x&&x.name)||'').replace(/[^\w\- ]+/g,'').trim()||'report')+'.pdf';document.body.append(l);l.click();l.remove()}
@@ -636,9 +670,9 @@ function profile(ed){
   edR();if(typeof ed=='string')setTimeout(()=>{const i=$('#f_'+ed)||$('#'+ed);if(i){i.focus();i.scrollIntoView({block:'center'})}},60);
   return}
  $('#main').innerHTML=`<div class=pf><div class=pft><span class=pav>${avs(me)}</span><div class=pfs><div><b id=n1>0</b>posts</div><div><b>${AU.length}</b>batchmates</div><div><b>${AU.filter(onl).length}</b>online</div></div></div><b class=pfn>${esc(me.name)}</b><small style="color:var(--mute)">${isMain(me)?'Main Admin':me.role=='admin'?'Admin':me.role=='sub'?'Admin (limited)':'Batchmate'}</small>${me.bio?`<p>${esc(me.bio)}</p>`:''}<div class=bt><button class="btn gr" style="flex:1" onclick="profile(true)">Edit profile</button><button class="btn gr" style="flex:1" onclick="auth.signOut()">Sign out</button></div></div>
- <div class=pg><h4>Details</h4>${rowsOf(me,true)}<div class=ir>${ic('lock')}<div id=pwd><small>Password</small>${hasPw(auth.currentUser)?`<button class=lk2 onclick="resetPw()">Change password (link by email)</button>`:`<button class=lk2 onclick="pwForm()">+ Set a password</button>`}</div></div></div>
+ <div class=pg><h4>Details</h4>${rowsOf(me,true)}</div>
  <h2>My posts</h2><div class=gal id=mg></div>
- ${can('approve')?'<h2>Waiting for approval</h2><div class=pg id=pe></div>':''}${isMain(me)?'<h2>Admins</h2><div class=pg id=adl></div>':''}<h2>All batchmates</h2><div class=pg><input class=srch id=ms2 placeholder="Search name, place, blood group..." oninput="mbF()"><div id=mb></div></div>`;
+ ${themeH()}<h2>All batchmates</h2><div class=pg><input class=srch id=ms2 placeholder="Search name, place, blood group..." oninput="mbF()"><div id=mb></div></div>`;
  if(window.EDUID!=me.id)loadEdu().then(()=>{if(tab=='me'&&$('#n1'))profile()});
  unsubs.push(db.collection('posts').where('uid','==',me.id).onSnapshot(s=>{const a=s.docs.map(d=>d.data()),n=$('#n1'),g=$('#mg');if(n)n.textContent=a.length;if(g)g.innerHTML=a.filter(p=>p.img).map(p=>`<img src="${p.img}" loading=lazy alt="" onclick="lb(this.src)">`).join('')||'<div class=empty>No photos yet.</div>'},()=>{}));
  unsubs.push(db.collection('users').onSnapshot(s=>{const U=s.docs.map(d=>({id:d.id,...d.data()}));
@@ -687,6 +721,18 @@ async function jAdmSave(id){const jn=$('#ajn').value.trim().toUpperCase(),jsz=$(
 async function jAdmClr(id){if(!confirm('Clear this jersey entry?'))return;
  try{await db.doc('users/'+id).update({jn:'',jno:'',jsz:''});toast('Cleared');closeCP()}catch(e){console.error(e);toast('Could not clear')}}
 
+// ---------- Themes + Admin tab ----------
+const isAdm=()=>!!me&&(me.role=='admin'||me.role=='sub');
+function setTheme(k){try{localStorage.setItem('lavTheme',k)}catch(e){}document.documentElement.dataset.theme=k;const m=document.querySelector('meta[name=theme-color]');if(m)m.content=k=='neon'?'#05060a':'#070b24';document.querySelectorAll('.thb').forEach(b=>b.classList.toggle('on',b.dataset.t==k))}
+const themeH=()=>{const c=document.documentElement.dataset.theme||'aurora';return `<h2>Theme</h2><div class=pg><div class=thm>${[['aurora','Aurora Glass'],['neon','Obsidian Neon']].map(([k,l])=>`<button class="thb ${c==k?'on':''}" data-t="${k}" onclick="setTheme('${k}')"><i class="sw ${k}"></i><span>${l}</span></button>`).join('')}</div></div>`};
+const pendH=U=>U.filter(u=>!u.approved).map(u=>`<div class=li><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${esc(u.email||'')} ${u.phone?'| '+esc(u.phone):''}</small></span><span><button class="btn g s" onclick="db.doc('users/${u.id}').update({approved:true})">Approve</button> <button class="btn r s" onclick="db.doc('users/${u.id}').delete()">Reject</button></span></div>`).join('')||'<div class=empty>No one is waiting.</div>';
+function admin(){if(!isAdm())return go('feed');
+ const PL=me.role=='admin'?PERMS:PERMS.filter(x=>(me.perms||[]).includes(x[0])),
+ J=[['events','Events',can('events')],['fund','Funds and PDFs',can('ledger')||can('archive')],['jersey','Jersey',can('jersey')],['feed','Feed (delete posts)',can('posts')]].filter(x=>x[2]);
+ $('#main').innerHTML=`<h2>Admin</h2><div class=pg><b>${isMain(me)?'Main Admin':me.role=='admin'?'Admin':'Admin (limited)'}</b><small style="display:block;color:var(--mute);margin:2px 0 10px">${isMain(me)?'You have every power and no one can remove you.':'What the Main Admin allowed you to do:'}</small><div class=chips>${(isMain(me)?[['all','Everything']]:PL).map(x=>`<span>${esc(x[1])}</span>`).join('')||'<span>Nothing yet</span>'}</div>${J.length?`<div class=bt style="margin-top:12px;flex-wrap:wrap">${J.map(([k,l])=>`<button class="btn gr s" onclick="go('${k}')">${l}</button>`).join('')}</div>`:''}</div>
+ ${can('approve')?'<h2>Waiting for approval</h2><div class=pg id=pe></div>':''}${isMain(me)?'<h2>Admins</h2><div class=pg id=adl></div>':''}`;
+ unsubs.push(db.collection('users').onSnapshot(s=>{const U=s.docs.map(d=>({id:d.id,...d.data()}));window.UL=U;admR(U);const pe=$('#pe');if(pe)pe.innerHTML=pendH(U)},()=>{}))}
+
 // ---------- Home hero, photos, directory ----------
 function heroR(){const h=$('#hero');if(!h||!me)return;const t=new Date(),t0=new Date(t.getFullYear(),t.getMonth(),t.getDate()),hr=t.getHours(),
  g=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening',on=AU.filter(onl).length,
@@ -703,8 +749,8 @@ function mbF(){const mb=$('#mb');if(!mb||!window.UL)return;const q=(($('#ms2')||
 
 // ---------- Jersey ----------
 const JN='প্রিয় ব্যাচমেটরা, এই বছরের ব্যাচ ক্রিকেট জার্সির অর্ডার শুরু হয়েছে। সবাই নিচের ফর্মে আপনার জার্সির নাম, নম্বর, সাইজ ও ফোন নম্বর দিয়ে Save চাপুন। যাদের জার্সি নাম ও সাইজ দেওয়া থাকবে, শুধু তাদের নামই চূড়ান্ত তালিকায় যাবে। অর্ডার বন্ধ হওয়ার আগ পর্যন্ত আপনার তথ্য বদলাতে পারবেন।';let JU=[];const SZ=['S','M','L','XL','2XL','3XL','4XL'],jDone=u=>u.jn&&u.jsz,jOpen=()=>JU.some(u=>(u.role=='admin'||u.role=='sub')&&u.jerseyOpen);
-let jY=CURY,JH=[];
-function jersey(){jY=CURY;JH=[];const adm=can('jersey');$('#main').innerHTML=`<h2>Jersey</h2><div class=seg id=jy></div><div id=jcur><div class=pg id=jh></div><div class=pg id=jf></div><div id=jl></div></div><div id=jold class=hide></div>${adm?`<details class=pg id=jad><summary style="cursor:pointer;font-weight:600">Add or edit a past year</summary><form onsubmit="return jHSave(event)" style="margin-top:10px"><label class=fl>Year</label><input id=jhy type=number required placeholder="e.g. 2025"><label class=fl>Made jersey (one name per line)</label><textarea id=jhyes rows=6></textarea><label class=fl>Did not make jersey (one name per line)</label><textarea id=jhno rows=6></textarea><div class=bt><button class=btn>Save year</button></div></form><hr class=ln><small style="color:var(--mute)">At the end of the season, save this year's live list to history:</small><div class=bt><button class="btn g" type=button onclick="jSnap()">Save ${CURY} list to history</button></div></details>`:''}`;
+let jY=CURY,JH=[],jEd=false;
+function jersey(){jY=CURY;JH=[];jEd=false;const adm=can('jersey');$('#main').innerHTML=`<h2>Jersey</h2><div class=seg id=jy></div><div id=jcur><div class=pg id=jh></div><div class=pg id=jf></div><div id=jl></div></div><div id=jold class=hide></div>${adm?`<details class=pg id=jad><summary style="cursor:pointer;font-weight:600">Add or edit a past year</summary><form onsubmit="return jHSave(event)" style="margin-top:10px"><label class=fl>Year</label><input id=jhy type=number required placeholder="e.g. 2025"><label class=fl>Made jersey (one name per line)</label><textarea id=jhyes rows=6></textarea><label class=fl>Did not make jersey (one name per line)</label><textarea id=jhno rows=6></textarea><div class=bt><button class=btn>Save year</button></div></form><hr class=ln><small style="color:var(--mute)">At the end of the season, save this year's live list to history:</small><div class=bt><button class="btn g" type=button onclick="jSnap()">Save ${CURY} list to history</button></div></details>`:''}`;
  unsubs.push(db.collection('users').onSnapshot(s=>{JU=s.docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.approved).sort((a,b)=>(a.name||'').localeCompare(b.name||''));jR()},()=>{}));
  unsubs.push(db.collection('archive').where('kind','==','jersey').onSnapshot(s=>{JH=s.docs.map(d=>({id:d.id,...d.data()}));jShow()},e=>console.error(e)));jShow()}
 function jShow(){if(tab!='jersey'||!$('#jy'))return;const adm=can('jersey'),cur=jY==CURY,YS=[...new Set([CURY,...JH.map(x=>+x.year)])].sort((x,y)=>y-x);
@@ -716,17 +762,17 @@ function jEdit(y){const h=JH.find(x=>+x.year==y);if(!h)return;$('#jhy').value=y;
 const jDel=id=>confirm('Delete this year from history?')&&db.doc('archive/'+id).delete().catch(()=>toast('Could not delete'));
 const jLines=t=>String(t||'').split('\n').map(x=>x.trim()).filter(Boolean);
 async function jHSave(e){e.preventDefault();const y=+$('#jhy').value;if(!(y>1990&&y<2100))return false;
- try{await db.doc('archive/jersey-'+y).set({kind:'jersey',year:y,yes:jLines($('#jhyes').value),no:jLines($('#jhno').value),createdAt:ts()});jY=y;toast('Saved');e.target.reset();$('#jad').open=false;jShow()}catch(err){console.error(err);toast('Could not save')}return false}
+ try{await db.doc('archive/jersey-'+y).set({kind:'jersey',year:y,yes:jLines($('#jhyes').value),no:jLines($('#jhno').value),createdAt:ts()});jY=y;toast('Saved');e.target.reset();$('#jad').open=false;jShow();window.scrollTo({top:0,behavior:'smooth'})}catch(err){console.error(err);toast(eMsg(err))}return false}
 async function jSnap(){if(!confirm('Save the current '+CURY+' jersey list to history? It replaces any saved list for '+CURY+'.'))return;
  const yes=JU.filter(jDone).map(u=>u.name+' ('+u.jn+(u.jno?' #'+u.jno:'')+', '+u.jsz+')'),no=JU.filter(u=>!jDone(u)).map(u=>u.name);
  try{await db.doc('archive/jersey-'+CURY).set({kind:'jersey',year:CURY,yes,no,createdAt:ts()});toast('Saved to history')}catch(err){console.error(err);toast('Could not save')}}
 function jR(){if(!$('#jh'))return;const adm=can('jersey'),op=jOpen(),D=JU.filter(jDone),mu=JU.find(u=>u.id==me.id)||me;
  if(!(document.activeElement&&document.activeElement.id=='jnote'))$('#jh').innerHTML=`<h4>Batch cricket jersey ${CURY}</h4>${op?`<div class=nt>${esc((JU.find(u=>(u.role=='admin'||u.role=='sub')&&u.jerseyOpen)||{}).jerseyNote||JN)}</div>`:`<p style="color:var(--mute)">Order is closed right now.</p>`}${adm&&!op?`<label class=fl>Note for everyone (shown when the order opens)</label><textarea id=jnote rows=5>${esc(me.jerseyNote||JN)}</textarea>`:''}<div class=chips><span><b>${D.length}</b> submitted</span><span><b>${JU.length-D.length}</b> pending</span></div>${adm?`<div class=bt><button class="btn ${op?'gr':''}" onclick="jTog(${!op})">${op?'Close order':'Open order'}</button><button class="btn g" onclick="printJ()" ${D.length?'':'disabled'}>Download PDF</button></div>`:''}`;
- const jf=$('#jf');if(jf.dataset.op!=String(op)){jf.dataset.op=op;jf.classList.toggle('hide',!op);
-  jf.innerHTML=op?`<form onsubmit="return jSave(event)"><label class=fl>Jersey name</label><input id=jn value="${esc(mu.jn)}" required maxlength=18 placeholder="e.g. KHAN" style="text-transform:uppercase"><label class=fl>Number</label><input id=jno value="${esc(mu.jno)}" maxlength=4 placeholder="e.g. 46"><label class=fl>Size</label><select id=jsz required><option value="">Select size</option>${SZ.map(z=>`<option ${mu.jsz==z?'selected':''}>${z}</option>`).join('')}</select><label class=fl>Phone number</label><input id=jph type=tel value="${esc(mu.phone)}" required placeholder="01XXXXXXXXX"><div class=bt><button class=btn>Save</button></div></form>`:''}
+ const jf=$('#jf'),sf=!jDone(mu)||jEd,jk=op+'|'+sf+'|'+[mu.jn,mu.jno,mu.jsz,mu.phone].join('~');if(jf.dataset.op!=jk){jf.dataset.op=jk;jf.classList.toggle('hide',!op);
+  jf.innerHTML=op?(sf?`<form onsubmit="return jSave(event)"><label class=fl>Jersey name</label><input id=jn value="${esc(mu.jn)}" required maxlength=18 placeholder="e.g. KHAN" style="text-transform:uppercase"><label class=fl>Number</label><input id=jno value="${esc(mu.jno)}" maxlength=4 placeholder="e.g. 46"><label class=fl>Size</label><select id=jsz required><option value="">Select size</option>${SZ.map(z=>`<option ${mu.jsz==z?'selected':''}>${z}</option>`).join('')}</select><label class=fl>Phone number</label><input id=jph type=tel value="${esc(mu.phone)}" required placeholder="01XXXXXXXXX"><div class=bt><button class=btn>Save</button>${jDone(mu)?`<button class="btn gr" type=button onclick="jEd=false;jR()">Cancel</button>`:''}</div></form>`:`<h4>Your jersey</h4><div class=hd><div><b>${esc(mu.jn)}${mu.jno?' | #'+esc(mu.jno):''}</b><small>Size ${esc(mu.jsz)}${mu.phone?' | '+esc(mu.phone):''}</small></div></div><div class=bt><button class="btn gr" onclick="jEd=true;jR()">Edit my jersey</button></div>`):''}
  $('#jl').innerHTML=`<h2>List</h2>`+JU.map(u=>`<div class="pg li"><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${jDone(u)?esc(u.jn)+(u.jno?' | #'+esc(u.jno):'')+' | '+esc(u.jsz):'Not submitted'}${adm&&u.phone?' | '+esc(u.phone):''}</small></span><span style="display:flex;gap:8px;align-items:center">${adm?`<button class="btn s gr" onclick="jAdm('${u.id}')">Edit</button>`:''}${jDone(u)?`<span class=in>${ic('check')}</span>`:''}</span></div>`).join('')}
 async function jSave(e){e.preventDefault();const u={jn:$('#jn').value.trim().toUpperCase(),jno:$('#jno').value.trim(),jsz:$('#jsz').value,phone:$('#jph').value.replace(/[\s-]/g,'')};if(!u.jn||!u.jsz)return false;
- try{await db.doc('users/'+me.id).update(u);Object.assign(me,u);toast('Saved')}catch(err){console.error(err);toast('Could not save')}return false}
+ try{await db.doc('users/'+me.id).update(u);Object.assign(me,u);jEd=false;toast('Saved');jR()}catch(err){console.error(err);toast(eMsg(err))}return false}
 const jTog=v=>{const u={jerseyOpen:v};if(v&&$('#jnote'))u.jerseyNote=$('#jnote').value.trim();return db.doc('users/'+me.id).update(u).then(()=>Object.assign(me,u)).catch(()=>toast('Could not change'))};
 function printJ(){const D=JU.filter(jDone),c={};D.forEach(u=>c[u.jsz]=(c[u.jsz]||0)+1);let p=$('#pr');if(!p){p=document.createElement('div');p.id='pr';document.body.append(p)}
  p.innerHTML=`<h1>LAV Batch 2012 - Cricket Jersey List</h1><table><tr><th>SL</th><th>Name</th><th>Jersey name</th><th>Number</th><th>Size</th></tr>${D.map((u,i)=>`<tr><td>${i+1}</td><td>${esc(u.name)}</td><td>${esc(u.jn)}</td><td>${esc(u.jno||'')}</td><td>${esc(u.jsz)}</td></tr>`).join('')}</table><p>Total: ${D.length} | ${SZ.filter(z=>c[z]).map(z=>z+': '+c[z]).join(', ')}</p>`;window.print()}
