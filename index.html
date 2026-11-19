@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="canonical" href="https://lavbatch2012.github.io/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"LAV Batch 2012","alternateName":["লক্ষ্মীপাশা আদর্শ বিদ্যালয় ব্যাচ ২০১২","Lakshmipasha Adarsha Bidyalaya Batch 2012"],"url":"https://lavbatch2012.github.io/"}</script>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Grand+Hotel&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ===== LAV 2012: digital "hologram seal + radar" look =====
    Deep indigo base, chamfered (corner-cut) panels, hologram-foil avatar rings,
@@ -238,6 +238,29 @@ nav button{font-size:10.5px}nav button.on{background:none}nav button.on .ic{colo
 .bal small{opacity:.85}.bal>b{display:block;font:800 40px/1.2 var(--disp)}.mini{display:flex;gap:8px;margin:10px 0}.mini span{background:rgba(0,0,0,.25);border-radius:14px;padding:4px 12px;font:700 13px var(--disp)}
 .bar{height:8px;border-radius:5px;background:rgba(255,255,255,.28);margin:12px 0 6px}.bar i{display:block;height:100%;border-radius:5px;background:#fff}
 .tp{display:flex;align-items:center;gap:10px;padding:7px 0}.tp .bar{flex:1;margin:0;background:#262626}.tp .bar i{background:var(--sig)}
+
+/* ===== v4: full Instagram layout ===== */
+header .lg{display:none}header h1{font:400 31px/1 'Grand Hotel',cursive;letter-spacing:0}header h1 small{display:none}
+.cbtn{background:none;border:0;width:40px}.cbtn .ic{width:26px;height:26px}
+.fbl h1{font:400 clamp(46px,9vw,70px)/1 'Grand Hotel',cursive}
+.ig{border-bottom:1px solid var(--line);padding:4px 0 14px}
+.ih{display:flex;align-items:center;gap:10px;padding:8px 12px}.ih .av{width:34px;height:34px;font-size:14px}.ih .nm b{font-weight:600;font-size:14px}.ih .nm small{font-size:12px;color:var(--mute)}
+.ig .pi{width:100%;margin:0;border-radius:0;max-height:none}
+.ia{display:flex;gap:4px;padding:6px 8px 0}.ia button{border:0;background:none;color:var(--ink);padding:6px;width:auto}.ia .ic{width:26px;height:26px}.hrt{font-size:23px;line-height:26px;display:block}
+.il,.ic2,.ic3{padding:0 14px;font-size:14px}.ic2{margin-top:4px}.ic3{display:block;color:var(--mute);margin-top:4px}.ig .sh{margin:8px 14px 0}.ig .cl,.ig form.row{padding:0 14px}
+.tray{margin:0 0 4px}.tray .ava{position:relative}
+.plus{position:absolute;right:-2px;bottom:-2px;width:20px;height:20px;border-radius:50%;background:#0095f6;color:#fff;border:2px solid #000;display:grid;place-items:center;font:700 14px/1 sans-serif;font-style:normal}
+.hero{padding:10px 12px 6px}.hero>small,.hero>h3,.hero>.chips{display:none}
+.hero>p{margin:6px 4px;background:#121212;border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+nav button{font-size:0}nav button b{height:36px}nav button .ic{width:27px;height:27px}nav .nv .av{width:27px;height:27px;border-width:2px;font-size:12px}
+.pf{padding:16px;border-bottom:1px solid var(--line)}.pft{display:flex;align-items:center;gap:22px}.pfs{display:flex;flex:1;justify-content:space-around;text-align:center;font-size:13px}
+.pfs b{display:block;font:700 19px var(--disp)}.pfn{display:block;margin-top:10px}.pf p{margin-top:2px}.pf .bt{margin-top:12px;flex-wrap:nowrap}
+
+/* v5: plain black screens + logo splash */
+#auth,#wait,#setup,#boot{background-color:#000;background-image:none}
+.bl{width:84px;height:84px;border-radius:22px;animation:pls 1.8s ease-in-out infinite}
+.bf{position:fixed;left:0;right:0;bottom:calc(32px + env(safe-area-inset-bottom,0px));text-align:center;font:400 26px 'Grand Hotel',cursive;color:var(--mute)}
+@keyframes pls{0%,100%{transform:scale(.94);opacity:.75}50%{transform:scale(1.04);opacity:1}}
 </style>
 </head>
 <body>
@@ -257,7 +280,7 @@ rules_version='2';service cloud.firestore{match /databases/{d}/documents{
  match /posts/{p}{allow read,create,update:if ok();allow delete:if ok()&&(resource.data.uid==request.auth.uid||adm())}
  match /rooms/{r}/m/{x}{allow read,write:if ok()}}}
 -->
-<div id="boot"><i class="spin"></i></div>
+<div id="boot"><img class="lgx bl" alt=""><span class="bf">LAV Batch 2012</span></div>
 <div id="auth" class="hide">
  <div class="fbw">
   <div class="fbl">
@@ -480,12 +503,12 @@ async function sm(e){e.preventDefault();const i=$('#mi'),t=i.value.trim();if(!t)
  try{await db.collection('rooms/'+room+'/m').add({uid:me.id,name:me.name,text:t,createdAt:ts()})}catch(err){console.error(err);toast('Could not send')}return false}
 async function sendImg(inp){const f=inp.files[0];if(!f)return;
  try{const im=await img(f,640);await db.collection('rooms/'+room+'/m').add({uid:me.id,name:me.name,text:'',img:im,createdAt:ts()})}catch(err){console.error(err);toast('Could not send photo')}inp.value=''}
-$('#cb').innerHTML=ic('chat')+'<em id="cbn" class="bdg"></em>';
+$('#cb').innerHTML=ic('send')+'<em id="cbn" class="bdg"></em>';
 $('#cb').onclick=openCP;$('#cp').onclick=e=>{if(e.target.id=='cp')closeCP()};
 
 // ---------- Navigation ----------
 const TABS=[['feed',ic('home'),'Feed'],['events',ic('cal'),'Events'],['fund',ic('wallet'),'Funds'],['mem',ic('img'),'Photos'],['me',ic('user'),'Profile']];
-function go(t){tab=t;clean();$('#nav').innerHTML=TABS.map(([k,i,l])=>`<button class="${k==t?'on':''}" onclick="go('${k}')"><b>${i}</b>${l}</button>`).join('');({feed,events,fund,mem,me:profile})[t]()}
+function go(t){tab=t;clean();$('#nav').innerHTML=TABS.map(([k,i,l])=>`<button aria-label="${l}" class="${k==t?'on':''}" onclick="go('${k}')"><b>${k=='me'?`<span class=nv>${av(me.photo,me.name)}</span>`:i}</b></button>`).join('');({feed,events,fund,mem,me:profile})[t]()}
 
 // ---------- Feed ----------
 function feed(){
@@ -500,18 +523,18 @@ function feed(){
   $('#pl').innerHTML=s.docs.map(d=>post(d.id,d.data())).join('')||'<div class=empty>No posts yet. Be the first to write one.</div>';
   open.forEach(oc)}))}
 function post(id,p){const L=p.likes||{},n=Object.keys(L).length,my=L[me.id];
- return `<article class=pg><div class=hd>${av(p.photo,p.name)}<div><b>${esc(p.name)}</b><small>${ago(p.createdAt)}${p.mood?' | '+esc(p.mood):''}</small></div>${p.uid==me.id||me.role=='admin'?`<button class=x onclick="delP('${id}')">${ic('x')}</button>`:''}</div>
- ${p.text?`<p>${esc(p.text)}</p>`:''}${p.img?`<img class=pi src="${p.img}" alt="">`:''}
+ return `<article class=ig><div class=ih>${av(p.photo,p.name)}<div class=nm><b>${esc(p.name)}</b>${p.mood?`<small>${esc(p.mood)}</small>`:''}</div>${p.uid==me.id||me.role=='admin'?`<button class=x onclick="delP('${id}')">${ic('x')}</button>`:''}</div>
+ ${p.img?`<img class=pi src="${p.img}" alt="" ondblclick="lk('${id}','❤️')">`:''}
+ <div class=ia><button onclick="lk('${id}')" aria-label="Like">${my?'<span class=hrt>❤️</span>':ic('like')}</button><button onclick="cm('${id}')" aria-label="Comment">${ic('comment')}</button><button onclick="sh('${id}')" aria-label="Share">${ic('share')}</button></div>
+ <div class=il>${n?`<b>${n} ${n>1?'likes':'like'}</b>`:''}</div>
+ ${p.text?`<p class=ic2><b>${esc(p.name)}</b> ${esc(p.text)}</p>`:''}
  ${p.shared?`<div class=sh><b>${esc(p.shared.name)}</b><p>${esc(p.shared.text)}</p>${p.shared.img?`<img class=pi src="${p.shared.img}" alt="">`:''}</div>`:''}
- <div class=st><span>${n?Object.values(L).slice(0,3).join('')+' '+n:''}</span><span>${p.cc||0} comments</span></div>
- <div class=ac><div class=rx id="r${id}"><button onclick="lk('${id}')">${my||ic('like')} ${my?'':'Like'}</button><div class=rp>${RX.map(r=>`<i onclick="lk('${id}','${r}')">${r}</i>`).join('')}</div></div><button onclick="cm('${id}')">${ic('comment')} Comment</button><button onclick="sh('${id}')">${ic('share')} Share</button></div>
+ <small class=ic3 onclick="cm('${id}')">${p.cc?'View all '+p.cc+' comments':'Add a comment'} | ${ago(p.createdAt)}</small>
  <div id="c${id}"></div></article>`}
 function img(f,max=720){return new Promise(r=>{if(!f)return r('');const i=new Image;i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.6))};i.src=URL.createObjectURL(f)})}
 async function newPost(){const text=$('#pt').value.trim(),im=await img($('#pf').files[0]);if(!text&&!im)return toast('Write something or add a photo');
  await db.collection('posts').add({uid:me.id,name:me.name,photo:me.photo,text,img:im,mood:$('#pm').value,cc:0,likes:{},createdAt:ts()});feed()}
-function lk(id,r){const L=(P[id]||{}).likes||{},rx=$('#r'+id);
- if(r){rx.classList.remove('o');return db.doc('posts/'+id).update({['likes.'+me.id]:r})}
- if(L[me.id])return db.doc('posts/'+id).update({['likes.'+me.id]:FV.delete()});rx.classList.toggle('o')}
+function lk(id,r){const L=(P[id]||{}).likes||{};if(L[me.id]&&!r)return db.doc('posts/'+id).update({['likes.'+me.id]:FV.delete()});return db.doc('posts/'+id).update({['likes.'+me.id]:r||'❤️'})}
 const delP=id=>confirm('Delete this post?')&&db.doc('posts/'+id).delete();
 async function sh(id){const p=P[id];if(!p)return;const t=prompt('Add something to your share (optional)');if(t===null)return;
  await db.collection('posts').add({uid:me.id,name:me.name,photo:me.photo,text:t,img:'',cc:0,likes:{},shared:{name:p.name,text:p.text||'',img:p.img||''},createdAt:ts()});toast('Shared to your feed')}
@@ -565,10 +588,11 @@ function profile(ed){
   <div class=bt><button class="btn g" onclick="saveP()">${ic('check')} Save</button><button class="btn gr" onclick="profile()">Cancel</button></div></div>`;
   if(typeof ed=='string')setTimeout(()=>{const i=$('#f_'+ed)||$('#'+ed);if(i){i.focus();i.scrollIntoView({block:'center'})}},60);
   return}
- $('#main').innerHTML=`<div class=pg style="text-align:center"><span class=pav>${avs(me)}</span><h3>${esc(me.name)}</h3><small style="color:var(--mute)">${me.role=='admin'?'Admin':'Batchmate'}</small>${me.bio?`<p style="margin-top:4px">${esc(me.bio)}</p>`:''}
- <div class=bt style="justify-content:center"><button class=btn onclick="profile(true)">${ic('edit')} Edit profile</button><button class="btn gr" onclick="auth.signOut()">${ic('out')} Sign out</button></div></div>
+ $('#main').innerHTML=`<div class=pf><div class=pft><span class=pav>${avs(me)}</span><div class=pfs><div><b id=n1>0</b>posts</div><div><b>${AU.length}</b>batchmates</div><div><b>${AU.filter(onl).length}</b>online</div></div></div><b class=pfn>${esc(me.name)}</b><small style="color:var(--mute)">${me.role=='admin'?'Admin':'Batchmate'}</small>${me.bio?`<p>${esc(me.bio)}</p>`:''}<div class=bt><button class="btn gr" style="flex:1" onclick="profile(true)">Edit profile</button><button class="btn gr" style="flex:1" onclick="auth.signOut()">Sign out</button></div></div>
  <div class=pg><h4>Details</h4>${rowsOf(me,true)}<div class=ir>${ic('lock')}<div id=pwd><small>Password</small>${hasPw(auth.currentUser)?`<button class=lk2 onclick="resetPw()">Change password (link by email)</button>`:`<button class=lk2 onclick="pwForm()">+ Set a password</button>`}</div></div></div>
+ <h2>My posts</h2><div class=gal id=mg></div>
  ${me.role=='admin'?'<h2>Waiting for approval</h2><div class=pg id=pe></div>':''}<h2>All batchmates</h2><div class=pg><input class=srch id=ms2 placeholder="Search name, place, blood group..." oninput="mbF()"><div id=mb></div></div>`;
+ unsubs.push(db.collection('posts').where('uid','==',me.id).onSnapshot(s=>{const a=s.docs.map(d=>d.data()),n=$('#n1'),g=$('#mg');if(n)n.textContent=a.length;if(g)g.innerHTML=a.filter(p=>p.img).map(p=>`<img src="${p.img}" loading=lazy alt="" onclick="lb(this.src)">`).join('')||'<div class=empty>No photos yet.</div>'},()=>{}));
  unsubs.push(db.collection('users').onSnapshot(s=>{const U=s.docs.map(d=>({id:d.id,...d.data()}));
   window.UL=U;mbF();const mb=$('#mbx');if(mb)mb.innerHTML=U.filter(u=>u.approved).map(u=>`<div class=hd style="cursor:pointer" onclick="viewU('${u.id}')">${avs(u)}<div><b>${esc(u.name)}</b><small>${esc(u.edu||u.bio||'')}</small></div></div>`).join('');
   const pe=$('#pe');if(pe)pe.innerHTML=U.filter(u=>!u.approved).map(u=>`<div class=li><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${esc(u.email||'')} ${u.phone?'| '+esc(u.phone):''}</small></span><span><button class="btn g s" onclick="db.doc('users/${u.id}').update({approved:true})">Approve</button> <button class="btn r s" onclick="db.doc('users/${u.id}').delete()">Reject</button></span></div>`).join('')||'<div class=empty>No one is waiting.</div>'}))}
@@ -588,7 +612,7 @@ function heroR(){const h=$('#hero');if(!h||!me)return;const t=new Date(),t0=new 
  g=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening',on=AU.filter(onl).length,
  bd=AU.filter(u=>/^\d{4}-\d{2}-\d{2}$/.test(u.dob||'')).map(u=>{const[,m,d]=u.dob.split('-').map(Number);let n=new Date(t.getFullYear(),m-1,d);if(n<t0)n=new Date(t.getFullYear()+1,m-1,d);return{u,k:Math.round((n-t0)/864e5)}}).sort((a,b)=>a.k-b.k)[0],
  ev=NE?Math.round((new Date(NE.date)-t0)/864e5):0;
- h.innerHTML=`<div class=tray>${[...AU].filter(u=>u.id!=me.id).sort((x,y)=>onl(y)-onl(x)).slice(0,14).map(u=>`<button onclick="openRoom('${u.id}')">${avs(u)}<small>${esc((u.name||'').split(' ')[0])}</small></button>`).join('')}</div><small>${g}</small><h3>${esc((me.name||'').split(' ')[0])}</h3><div class=chips><span><b>${AU.length}</b> batchmates</span><span><i class=dot2></i><b>${on}</b> online</span></div>
+ h.innerHTML=`<div class=tray><button onclick="$('#pt')&&$('#pt').focus()"><span class=ava>${av(me.photo,me.name)}<i class=plus>+</i></span><small>You</small></button>${[...AU].filter(u=>u.id!=me.id).sort((x,y)=>onl(y)-onl(x)).slice(0,14).map(u=>`<button onclick="openRoom('${u.id}')">${avs(u)}<small>${esc((u.name||'').split(' ')[0])}</small></button>`).join('')}</div><small>${g}</small><h3>${esc((me.name||'').split(' ')[0])}</h3><div class=chips><span><b>${AU.length}</b> batchmates</span><span><i class=dot2></i><b>${on}</b> online</span></div>
  ${bd?`<p>🎂 ${bd.k==0?esc(bd.u.name)+"'s birthday is today!":esc(bd.u.name)+"'s birthday in "+bd.k+(bd.k>1?' days':' day')}</p>`:''}
  ${NE?`<p>${ic('cal','sm')} ${esc(NE.title)}: ${ev<=0?'today':'in '+ev+(ev>1?' days':' day')}</p>`:''}`}
 function mem(){$('#main').innerHTML=`<h2>Photos</h2><div class=gal id=gl></div>`;
