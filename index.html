@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="canonical" href="https://lavbatch2012.github.io/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"LAV Batch 2012","alternateName":["লক্ষ্মীপাশা আদর্শ বিদ্যালয় ব্যাচ ২০১২","Lakshmipasha Adarsha Bidyalaya Batch 2012"],"url":"https://lavbatch2012.github.io/"}</script>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Grand+Hotel&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ===== LAV 2012: digital "hologram seal + radar" look =====
    Deep indigo base, chamfered (corner-cut) panels, hologram-foil avatar rings,
@@ -261,6 +261,18 @@ nav button{font-size:0}nav button b{height:36px}nav button .ic{width:27px;height
 .bl{width:84px;height:84px;border-radius:22px;animation:pls 1.8s ease-in-out infinite}
 .bf{position:fixed;left:0;right:0;bottom:calc(32px + env(safe-area-inset-bottom,0px));text-align:center;font:400 26px 'Grand Hotel',cursive;color:var(--mute)}
 @keyframes pls{0%,100%{transform:scale(.94);opacity:.75}50%{transform:scale(1.04);opacity:1}}
+
+#pr{display:none}
+@media print{html,body{background:#fff!important}body>*:not(#pr){display:none!important}
+#pr{display:block;color:#000;background:#fff;font:14px 'Hind Siliguri',Arial,sans-serif;padding:8px}#pr h1{font-size:20px;margin-bottom:12px}
+#pr table{width:100%;border-collapse:collapse}#pr th,#pr td{border:1px solid #444;padding:5px 8px;text-align:left}#pr th{background:#eee}#pr p{margin-top:12px;font-weight:600}@page{margin:12mm}}
+
+/* v6: professional wordmark */
+header h1{font:800 20px/1.1 var(--disp);letter-spacing:-.01em}
+.fbl h1{font:800 clamp(38px,8vw,60px)/1.05 var(--disp);letter-spacing:-.02em}
+.bf{font:600 14px var(--disp);letter-spacing:.06em;color:var(--mute)}
+
+.nt{margin-top:8px;padding:12px 14px;border-radius:14px;background:rgba(0,149,246,.12);border:1px solid rgba(0,149,246,.4);line-height:1.6}
 </style>
 </head>
 <body>
@@ -395,7 +407,7 @@ const IC={
 };
 const ic=(n,c='')=>`<svg class="ic ${c}" viewBox="0 0 24 24" aria-hidden="true">${IC[n]}</svg>`;
 
-IC.drop='<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>';IC.img='<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="M4 18l5-5 4 4 3-3 4 4"/>';
+IC.shirt='<path d="M8 3L3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/>';IC.drop='<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>';IC.img='<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="M4 18l5-5 4 4 3-3 4 4"/>';
 const show=id=>['#boot','#auth','#setup','#wait','#app'].forEach(s=>$(s).classList.toggle('hide',s!==id));
 const clean=()=>{unsubs.forEach(f=>f());unsubs=[];Object.values(cu).forEach(f=>f());cu={}};
 
@@ -507,8 +519,8 @@ $('#cb').innerHTML=ic('send')+'<em id="cbn" class="bdg"></em>';
 $('#cb').onclick=openCP;$('#cp').onclick=e=>{if(e.target.id=='cp')closeCP()};
 
 // ---------- Navigation ----------
-const TABS=[['feed',ic('home'),'Feed'],['events',ic('cal'),'Events'],['fund',ic('wallet'),'Funds'],['mem',ic('img'),'Photos'],['me',ic('user'),'Profile']];
-function go(t){tab=t;clean();$('#nav').innerHTML=TABS.map(([k,i,l])=>`<button aria-label="${l}" class="${k==t?'on':''}" onclick="go('${k}')"><b>${k=='me'?`<span class=nv>${av(me.photo,me.name)}</span>`:i}</b></button>`).join('');({feed,events,fund,mem,me:profile})[t]()}
+const TABS=[['feed',ic('home'),'Feed'],['events',ic('cal'),'Events'],['jersey',ic('shirt'),'Jersey'],['fund',ic('wallet'),'Funds'],['mem',ic('img'),'Photos'],['me',ic('user'),'Profile']];
+function go(t){tab=t;clean();$('#nav').innerHTML=TABS.map(([k,i,l])=>`<button aria-label="${l}" class="${k==t?'on':''}" onclick="go('${k}')"><b>${k=='me'?`<span class=nv>${av(me.photo,me.name)}</span>`:i}</b></button>`).join('');({feed,events,jersey,fund,mem,me:profile})[t]()}
 
 // ---------- Feed ----------
 function feed(){
@@ -562,11 +574,12 @@ const rsvp=(id,v)=>db.doc('events/'+id).update({['going.'+me.id]:v=='g'?me.name:
 
 // ---------- Funds ----------
 function fund(){const adm=me.role=='admin';
- $('#main').innerHTML=`<div class=bal id=bal></div>${adm?`<form class=pg onsubmit="return addL(event)"><div style="display:flex;gap:6px;margin-bottom:6px"><select id=lt style="width:auto"><option value=in>Income</option><option value=out>Expense</option><option value=goal>Set goal</option></select><input id=la type=number min=1 placeholder="Amount" required></div><div style="display:flex;gap:6px;margin-bottom:6px"><select id=lc>${CATS.map(c=>`<option>${c}</option>`).join('')}</select><input id=lw placeholder="Who (optional)"></div><input id=ln placeholder="What for / note" required style="margin-bottom:6px"><button class=btn>Add entry</button></form>`:''}<div class=pg id=tp></div><div class=seg>${['all',...CATS].map(c=>`<button class="${fcat==c?'on':''}" onclick="fcat='${c}';fund()">${c=='all'?'All':c}</button>`).join('')}</div><div id=ll></div>`;
- unsubs.push(db.collection('ledger').orderBy('createdAt','desc').onSnapshot(s=>{const A=s.docs.map(d=>({id:d.id,...d.data()})),E=A.filter(x=>x.type!='goal'),gl=A.find(x=>x.type=='goal'),W={};let i=0,o=0;
+ $('#main').innerHTML=`<div class=bal id=bal></div>${adm?`<form class=pg onsubmit="return addL(event)"><div style="display:flex;gap:6px;margin-bottom:6px"><select id=lt style="width:auto"><option value=in>Income</option><option value=out>Expense</option><option value=goal>Set goal</option></select><input id=la type=number min=1 placeholder="Amount" required></div><div style="display:flex;gap:6px;margin-bottom:6px"><select id=lc>${CATS.map(c=>`<option>${c}</option>`).join('')}</select><input id=lw placeholder="Who (optional)"></div><input id=ln placeholder="What for / note" required style="margin-bottom:6px"><button class=btn>Add entry</button></form>`:''}${adm?`<form class=pg onsubmit="return addC(event)"><h4>Start a collection</h4><input id=ct placeholder="e.g. Iftar 2027, Picnic, Cricket" required style="margin:6px 0"><select id=cc2 style="margin-bottom:6px">${CATS.map(c=>`<option>${c}</option>`).join('')}</select><button class=btn>Start collection</button><small style="color:var(--mute);display:block;margin-top:8px">Everyone gives as they wish. You record what you receive.</small></form>`:''}<div id=cl></div><div class=pg id=tp></div><div class=seg>${['all',...CATS].map(c=>`<button class="${fcat==c?'on':''}" onclick="fcat='${c}';fund()">${c=='all'?'All':c}</button>`).join('')}</div><div id=ll></div>`;
+ unsubs.push(db.collection('ledger').orderBy('createdAt','desc').onSnapshot(s=>{const A=s.docs.map(d=>({id:d.id,...d.data()})),E=A.filter(x=>x.type!='goal'&&x.type!='camp'),gl=A.find(x=>x.type=='goal'),W={};let i=0,o=0;
   E.forEach(l=>{l.type=='in'?i+=l.amount:o+=l.amount;if(l.type=='in'&&l.who)W[l.who]=(W[l.who]||0)+l.amount});const b=i-o,top=Object.entries(W).sort((x,y)=>y[1]-x[1]).slice(0,5);
   $('#bal').innerHTML=`<small>Batch fund balance</small><b>৳${b}</b><div class=mini><span>In ৳${i}</span><span>Out ৳${o}</span></div>${gl?`<div class=bar><i style="width:${Math.max(0,Math.min(100,b/gl.amount*100))}%"></i></div><small>${esc(gl.note)}: ৳${b} of ৳${gl.amount} ${adm?`<button class=x onclick="delL('${gl.id}')">${ic('x')}</button>`:''}</small>`:''}`;
   $('#tp').innerHTML=top.length?`<h4>Top contributors</h4>${top.map(([n,v])=>`<div class=tp><b style="width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(n)}</b><div class=bar><i style="width:${v/top[0][1]*100}%"></i></div><span>৳${v}</span></div>`).join('')}`:'';
+  cR(A);
   $('#ll').innerHTML=E.filter(l=>fcat=='all'||l.cat==fcat).map(l=>`<div class="pg li"><span><b>${esc(l.note)}</b><br><small style="color:var(--mute)">${l.cat?esc(l.cat)+' | ':''}${l.who?esc(l.who)+' | ':''}${ago(l.createdAt)}</small></span><b class="${l.type}">${l.type=='in'?'+':'-'}৳${l.amount} ${adm?`<button class=x onclick="delL('${l.id}')">${ic('x')}</button>`:''}</b></div>`).join('')||'<div class=empty>No entries yet.</div>'}))}
 async function addL(e){e.preventDefault();await db.collection('ledger').add({type:$('#lt').value,amount:+$('#la').value,note:$('#ln').value,cat:$('#lc').value,who:$('#lw').value.trim(),createdAt:ts()});e.target.reset();return false}
 const delL=id=>confirm('Delete this entry?')&&db.doc('ledger/'+id).delete();
@@ -621,6 +634,37 @@ function mem(){$('#main').innerHTML=`<h2>Photos</h2><div class=gal id=gl></div>`
 const lb=s=>{const d=document.createElement('div');d.id='lb';d.innerHTML=`<img src="${s}" alt="">`;d.onclick=()=>d.remove();document.body.append(d)};
 function mbF(){const mb=$('#mb');if(!mb||!window.UL)return;const q=(($('#ms2')||{}).value||'').trim().toLowerCase();
  mb.innerHTML=UL.filter(u=>u.approved&&(!q||[u.name,u.edu,u.work,u.addr,u.home,u.blood].join(' ').toLowerCase().includes(q))).map(u=>`<div class=hd style="cursor:pointer" onclick="viewU('${u.id}')">${avs(u)}<div><b>${esc(u.name)}</b><small>${esc([u.work,u.addr].filter(Boolean).join(' | ')||u.bio||'')}</small></div>${u.blood?`<span class=bld>${esc(u.blood)}</span>`:''}</div>`).join('')||'<div class=empty>No match.</div>'}
+
+// ---------- Jersey ----------
+const JN='প্রিয় ব্যাচমেটরা, এই বছরের ব্যাচ ক্রিকেট জার্সির অর্ডার শুরু হয়েছে। সবাই নিচের ফর্মে আপনার জার্সির নাম, নম্বর, সাইজ ও ফোন নম্বর দিয়ে Save চাপুন। যাদের জার্সি নাম ও সাইজ দেওয়া থাকবে, শুধু তাদের নামই চূড়ান্ত তালিকায় যাবে। অর্ডার বন্ধ হওয়ার আগ পর্যন্ত আপনার তথ্য বদলাতে পারবেন।';let JU=[];const SZ=['S','M','L','XL','2XL','3XL','4XL'],jDone=u=>u.jn&&u.jsz,jOpen=()=>JU.some(u=>u.role=='admin'&&u.jerseyOpen);
+function jersey(){$('#main').innerHTML=`<h2>Jersey</h2><div class=pg id=jh></div><div class=pg id=jf></div><div id=jl></div>`;
+ unsubs.push(db.collection('users').onSnapshot(s=>{JU=s.docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.approved).sort((a,b)=>(a.name||'').localeCompare(b.name||''));jR()},()=>{}))}
+function jR(){if(!$('#jh'))return;const adm=me.role=='admin',op=jOpen(),D=JU.filter(jDone),mu=JU.find(u=>u.id==me.id)||me;
+ if(!(document.activeElement&&document.activeElement.id=='jnote'))$('#jh').innerHTML=`<h4>Batch cricket jersey</h4>${op?`<div class=nt>${esc((JU.find(u=>u.role=='admin'&&u.jerseyOpen)||{}).jerseyNote||JN)}</div>`:`<p style="color:var(--mute)">Order is closed right now.</p>`}${adm&&!op?`<label class=fl>Note for everyone (shown when the order opens)</label><textarea id=jnote rows=5>${esc(me.jerseyNote||JN)}</textarea>`:''}<div class=chips><span><b>${D.length}</b> submitted</span><span><b>${JU.length-D.length}</b> pending</span></div>${adm?`<div class=bt><button class="btn ${op?'gr':''}" onclick="jTog(${!op})">${op?'Close order':'Open order'}</button><button class="btn g" onclick="printJ()" ${D.length?'':'disabled'}>Download PDF</button></div>`:''}`;
+ const jf=$('#jf');if(jf.dataset.op!=String(op)){jf.dataset.op=op;jf.classList.toggle('hide',!op);
+  jf.innerHTML=op?`<form onsubmit="return jSave(event)"><label class=fl>Jersey name</label><input id=jn value="${esc(mu.jn)}" required maxlength=18 placeholder="e.g. KHAN" style="text-transform:uppercase"><label class=fl>Number</label><input id=jno value="${esc(mu.jno)}" maxlength=4 placeholder="e.g. 46"><label class=fl>Size</label><select id=jsz required><option value="">Select size</option>${SZ.map(z=>`<option ${mu.jsz==z?'selected':''}>${z}</option>`).join('')}</select><label class=fl>Phone number</label><input id=jph type=tel value="${esc(mu.phone)}" required placeholder="01XXXXXXXXX"><div class=bt><button class=btn>Save</button></div></form>`:''}
+ $('#jl').innerHTML=`<h2>List</h2>`+JU.map(u=>`<div class="pg li"><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${jDone(u)?esc(u.jn)+(u.jno?' | #'+esc(u.jno):'')+' | '+esc(u.jsz):'Not submitted'}${adm&&u.phone?' | '+esc(u.phone):''}</small></span>${jDone(u)?`<span class=in>${ic('check')}</span>`:''}</div>`).join('')}
+async function jSave(e){e.preventDefault();const u={jn:$('#jn').value.trim().toUpperCase(),jno:$('#jno').value.trim(),jsz:$('#jsz').value,phone:$('#jph').value.replace(/[\s-]/g,'')};if(!u.jn||!u.jsz)return false;
+ try{await db.doc('users/'+me.id).update(u);Object.assign(me,u);toast('Saved')}catch(err){console.error(err);toast('Could not save')}return false}
+const jTog=v=>{const u={jerseyOpen:v};if(v&&$('#jnote'))u.jerseyNote=$('#jnote').value.trim();return db.doc('users/'+me.id).update(u).then(()=>Object.assign(me,u)).catch(()=>toast('Could not change'))};
+function printJ(){const D=JU.filter(jDone),c={};D.forEach(u=>c[u.jsz]=(c[u.jsz]||0)+1);let p=$('#pr');if(!p){p=document.createElement('div');p.id='pr';document.body.append(p)}
+ p.innerHTML=`<h1>LAV Batch 2012 - Cricket Jersey List</h1><table><tr><th>SL</th><th>Name</th><th>Jersey name</th><th>Number</th><th>Size</th></tr>${D.map((u,i)=>`<tr><td>${i+1}</td><td>${esc(u.name)}</td><td>${esc(u.jn)}</td><td>${esc(u.jno||'')}</td><td>${esc(u.jsz)}</td></tr>`).join('')}</table><p>Total: ${D.length} | ${SZ.filter(z=>c[z]).map(z=>z+': '+c[z]).join(', ')}</p>`;window.print()}
+
+// ---------- Collections (chanda) ----------
+let cOpen=null;
+function cR(A){if(A)window.LA=A;A=window.LA||[];const b=$('#cl');if(!b)return;const adm=me.role=='admin',C=A.filter(x=>x.type=='camp');window.CL=C;
+ b.innerHTML=C.map(c=>{const P=A.filter(x=>x.camp==c.id),tot=P.reduce((a,x)=>a+x.amount,0),paid={};P.forEach(x=>paid[x.uid]=(paid[x.uid]||0)+x.amount);const n=Object.keys(paid).length,op=cOpen==c.id;
+  return `<div class=pg><div class=hd onclick="cOpen=${op?'null':`'${c.id}'`};cR()" style="cursor:pointer"><div><b style="font:700 17px var(--disp)">${esc(c.note)}</b><small>${esc(c.cat||'')} | ${n} of ${AU.length} paid | ৳${tot} collected</small></div><button class="btn gr s" onclick="event.stopPropagation();printC('${c.id}')">PDF</button>${adm?`<button class=x onclick="event.stopPropagation();delC('${c.id}')">${ic('x')}</button>`:''}</div>
+  ${op?[...AU].sort((a,b)=>(a.name||'').localeCompare(b.name||'')).map(u=>`<div class=li><span>${esc(u.name)}</span><span>${paid[u.id]?`<b class=in>৳${paid[u.id]}</b>`:`<small style="color:var(--mute)">Not yet</small>`} ${adm?`<button class="btn s" onclick="cAdd('${c.id}','${u.id}')">+ Add</button>`:''}</span></div>`).join(''):''}</div>`}).join('')}
+async function addC(e){e.preventDefault();try{await db.collection('ledger').add({type:'camp',amount:0,note:$('#ct').value.trim(),cat:$('#cc2').value,createdAt:ts()});e.target.reset();toast('Collection started')}catch(err){console.error(err);toast('Could not save')}return false}
+async function cAdd(cid,uid){const c=(window.CL||[]).find(x=>x.id==cid),u=AU.find(x=>x.id==uid);if(!c||!u)return;const v=+prompt('Amount received from '+u.name+' (৳)');if(!(v>0))return;
+ try{await db.collection('ledger').add({type:'in',amount:v,note:c.note,cat:c.cat||'Other',who:u.name,uid:u.id,camp:cid,createdAt:ts()});toast('Added')}catch(err){console.error(err);toast('Could not save')}}
+const delC=id=>confirm('Delete this collection? Money already recorded stays in the fund.')&&db.doc('ledger/'+id).delete();
+
+function printC(cid){const A=window.LA||[],c=(window.CL||[]).find(x=>x.id==cid);if(!c)return;const paid={};A.filter(x=>x.camp==cid).forEach(x=>paid[x.uid]=(paid[x.uid]||0)+x.amount);
+ const L=[...AU].filter(u=>paid[u.id]).sort((a,b)=>(a.name||'').localeCompare(b.name||'')),tot=L.reduce((a,u)=>a+paid[u.id],0),N=[...AU].filter(u=>!paid[u.id]).sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+ let p=$('#pr');if(!p){p=document.createElement('div');p.id='pr';document.body.append(p)}
+ p.innerHTML=`<h1>LAV Batch 2012 - ${esc(c.note)}</h1><table><tr><th>SL</th><th>Name</th><th>Amount (Taka)</th></tr>${L.map((u,i)=>`<tr><td>${i+1}</td><td>${esc(u.name)}</td><td>${paid[u.id]}</td></tr>`).join('')}</table><p>Total: ${L.length} contributors | Taka ${tot} | ${new Date().toLocaleDateString()}</p>${N.length?`<h1 style="margin-top:24px">Not paid yet (${N.length})</h1><table><tr><th>SL</th><th>Name</th></tr>${N.map((u,i)=>`<tr><td>${i+1}</td><td>${esc(u.name)}</td></tr>`).join('')}</table>`:''}`;window.print()}
 
 // ---------- Install app (Android/Chrome button + iPhone hint) ----------
 let dp=null;const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent),SA=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
