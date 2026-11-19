@@ -274,25 +274,42 @@ header h1{font:800 20px/1.1 var(--disp);letter-spacing:-.01em}
 
 .nt{margin-top:8px;padding:12px 14px;border-radius:14px;background:rgba(0,149,246,.12);border:1px solid rgba(0,149,246,.4);line-height:1.6}
 @media print{#pr.fr{font-size:9px}#pr.fr h1{font-size:16px;margin-bottom:4px}#pr.fr p{margin-top:4px}#pr.fr td,#pr.fr th{padding:1px 4px}#pr.fr h2{font-size:12px;margin:8px 0 4px}#pr.fr .pc{display:flex;gap:12px;align-items:flex-start}#pr.fr .pc>div{flex:1}#pr.fr .pc>div:first-child{flex:1.2}#pr.fr td:last-child,#pr.fr th:last-child{text-align:right}#pr.fr .tt td{font-weight:700;background:#eee}}
+
+.edc{border:1px solid var(--line);border-radius:14px;padding:2px 12px 12px;margin-top:10px;background:rgba(255,255,255,.03)}
+.tgl{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;font-size:14px}
+.tgl input[type=checkbox]{-webkit-appearance:none;appearance:none;flex:none;width:46px!important;height:26px;padding:0;border:0;border-radius:13px;background:#3a3f55;position:relative;box-shadow:none;transition:background .2s}
+.tgl input[type=checkbox]::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s}
+.tgl input[type=checkbox]:checked{background:var(--cy)}
+.tgl input[type=checkbox]:checked::after{left:23px}
 </style>
 </head>
 <body>
 <!--
 FIREBASE SETUP
 1) Authentication > Sign-in method: enable Email/Password AND Google. Add your website domain under Authentication > Settings > Authorized domains.
-2) Firestore Rules (replace shironamhinantor@gmail.com with the same email as ADMIN_EMAIL below):
+2) Firestore Rules (replace shironamhinantor@gmail.com with the same email as ADMIN_EMAIL below; roles: admin = Main Admin, sub = limited admin with a perms list):
 rules_version='2';service cloud.firestore{match /databases/{d}/documents{
- function ok(){return request.auth!=null&&get(/databases/$(d)/documents/users/$(request.auth.uid)).data.approved==true}
- function adm(){return ok()&&get(/databases/$(d)/documents/users/$(request.auth.uid)).data.role=='admin'}
+ function me(){return get(/databases/$(d)/documents/users/$(request.auth.uid)).data}
+ function ok(){return request.auth!=null&&me().approved==true}
+ function adm(){return ok()&&me().role=='admin'}
+ function sub(p){return ok()&&me().role=='sub'&&(p in me().get('perms',[]))}
+ function can(p){return adm()||sub(p)}
+ function same(){return request.resource.data.role==resource.data.role&&request.resource.data.get('perms',[])==resource.data.get('perms',[])}
  match /users/{u}{allow read:if request.auth!=null;
   allow create:if request.auth.uid==u&&((request.resource.data.approved==false&&request.resource.data.role=='member')||request.auth.token.email=='shironamhinantor@gmail.com');
-  allow update:if adm()||(request.auth.uid==u&&request.resource.data.approved==resource.data.approved&&request.resource.data.role==resource.data.role);allow delete:if adm()}
- match /events/{e}{allow read:if ok();allow create,delete:if adm();allow update:if ok()}
- match /ledger/{l}{allow read:if ok();allow write:if adm()}
+  allow update:if (request.auth.token.email=='shironamhinantor@gmail.com'&&ok()&&(resource.data.email!='shironamhinantor@gmail.com'||(request.resource.data.role=='admin'&&request.resource.data.approved==true)))
+   ||(adm()&&resource.data.email!='shironamhinantor@gmail.com'&&same())
+   ||(request.auth.uid==u&&request.resource.data.approved==resource.data.approved&&same())
+   ||(sub('approve')&&resource.data.approved==false&&request.resource.data.diff(resource.data).affectedKeys().hasOnly(['approved'])&&request.resource.data.approved==true)
+   ||(sub('jersey')&&request.resource.data.diff(resource.data).affectedKeys().hasOnly(['jn','jno','jsz','phone']));
+  allow delete:if (adm()&&resource.data.email!='shironamhinantor@gmail.com')||(sub('approve')&&resource.data.approved==false);
+  match /priv/{x}{allow read,write:if ok()&&request.auth.uid==u}}
+ match /events/{e}{allow read:if ok();allow create,delete:if can('events');allow update:if ok()}
+ match /ledger/{l}{allow read:if ok();allow write:if can('ledger')}
  match /{p=**}/c/{x}{allow read,write:if ok()}
- match /posts/{p}{allow read,create,update:if ok();allow delete:if ok()&&(resource.data.uid==request.auth.uid||adm())}
- match /archive/{a}{allow read:if ok();allow write:if adm()}
- match /archive/{a}/part/{p}{allow read:if ok();allow write:if adm()}
+ match /posts/{p}{allow read,create,update:if ok();allow delete:if ok()&&(resource.data.uid==request.auth.uid||can('posts'))}
+ match /archive/{a}{allow read:if ok();allow write:if can('archive')||can('jersey')}
+ match /archive/{a}/part/{p}{allow read:if ok();allow write:if can('archive')}
  match /rooms/{r}/m/{x}{allow read,write:if ok()}}}
 -->
 <div id="boot"><img class="lgx bl" alt=""><span class="bf">LAV Batch 2012</span></div>
@@ -359,6 +376,12 @@ rules_version='2';service cloud.firestore{match /databases/{d}/documents{
 const CFG={apiKey:"AIzaSyDqepmd4MjXKQRHghR6o7h4k7JUmTbrZ-k",authDomain:"batch-2012-34afd.firebaseapp.com",projectId:"batch-2012-34afd",storageBucket:"batch-2012-34afd.firebasestorage.app",messagingSenderId:"71429753691",appId:"1:71429753691:web:1534d9238ddfb39c77687e"};
 // 2) The admin's email (cashier/organizer). This account is approved automatically.
 const ADMIN_EMAIL="shironamhinantor@gmail.com";
+const PERMS=[['approve','Approve / reject new members'],['events','Create and delete events'],['ledger','Funds: accounts and camp entries'],['archive','Upload / delete PDF reports'],['jersey','Jersey: open or close order, fill others, history'],['posts','Delete any post']];
+const isMain=u=>!!u&&u.email===ADMIN_EMAIL;
+const can=p=>!!me&&(me.role=='admin'||(me.role=='sub'&&(me.perms||[]).includes(p)));
+const dobN=s=>{s=String(s||'').trim();let m=/^(\d{1,2})[-\/. ](\d{1,2})[-\/. ](\d{4})$/.exec(s),d,mo,y;if(m){d=+m[1];mo=+m[2];y=+m[3]}else if(m=/^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(s)){y=+m[1];mo=+m[2];d=+m[3]}else return null;const x=new Date(y,mo-1,d);if(x.getFullYear()!=y||x.getMonth()!=mo-1||x.getDate()!=d)return null;return{d,m:mo,y,s:String(d).padStart(2,'0')+'-'+String(mo).padStart(2,'0')+'-'+y}};
+const dobFmt=el=>{const v=el.value.replace(/\D/g,'').slice(0,8);el.value=v.length>4?v.slice(0,2)+'-'+v.slice(2,4)+'-'+v.slice(4):v.length>2?v.slice(0,2)+'-'+v.slice(2):v};
+
 
 firebase.initializeApp(CFG);
 const auth=firebase.auth(),db=firebase.firestore();try{db.settings({experimentalAutoDetectLongPolling:true,merge:true})}catch(e){}
@@ -455,7 +478,7 @@ const avs=u=>`<span class=ava>${av(u.photo,u.name)}${onl(u)?'<i class=dot></i>':
 function beat(){if(me&&!document.hidden)db.doc('users/'+me.id).update({lastSeen:ts()}).catch(()=>{})}
 function startPresence(){stopPresence();beat();hbT=setInterval(beat,90000);tkT=setInterval(upd,30000);
  document.addEventListener('visibilitychange',beat);
- pu=db.collection('users').onSnapshot(s=>{AU=s.docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.approved);upd()},()=>{})}
+ pu=db.collection('users').onSnapshot(s=>{AU=s.docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.approved);const sm=me&&AU.find(u=>u.id==me.id);if(sm){me.role=sm.role;me.perms=sm.perms||[]}upd()},()=>{})}
 function stopPresence(){clearInterval(hbT);clearInterval(tkT);document.removeEventListener('visibilitychange',beat);if(pu)pu();pu=null;AU=[];$('#cbn')&&($('#cbn').textContent='')}
 function upd(){heroR();const n=AU.filter(onl).length;const b=$('#cbn');if(b)b.textContent=n||'';const o=$('#ocn');if(o)o.textContent=n+' online';listCP()}
 const lastSeen=u=>u.lastSeen?'Last seen '+ago(u.lastSeen):'Offline';
@@ -516,7 +539,7 @@ function feed(){
   $('#pl').innerHTML=s.docs.map(d=>post(d.id,d.data())).join('')||'<div class=empty>No posts yet. Be the first to write one.</div>';
   open.forEach(oc)}))}
 function post(id,p){const L=p.likes||{},n=Object.keys(L).length,my=L[me.id];
- return `<article class=ig><div class=ih>${av(p.photo,p.name)}<div class=nm><b>${esc(p.name)}</b>${p.mood?`<small>${esc(p.mood)}</small>`:''}</div>${p.uid==me.id||me.role=='admin'?`<button class=x onclick="delP('${id}')">${ic('x')}</button>`:''}</div>
+ return `<article class=ig><div class=ih>${av(p.photo,p.name)}<div class=nm><b>${esc(p.name)}</b>${p.mood?`<small>${esc(p.mood)}</small>`:''}</div>${p.uid==me.id||can('posts')?`<button class=x onclick="delP('${id}')">${ic('x')}</button>`:''}</div>
  ${p.img?`<img class=pi src="${p.img}" alt="" ondblclick="lk('${id}','❤️')">`:''}
  <div class=ia><button onclick="lk('${id}')" aria-label="Like">${my?'<span class=hrt>❤️</span>':ic('like')}</button><button onclick="cm('${id}')" aria-label="Comment">${ic('comment')}</button><button onclick="sh('${id}')" aria-label="Share">${ic('share')}</button></div>
  <div class=il>${n?`<b>${n} ${n>1?'likes':'like'}</b>`:''}</div>
@@ -540,7 +563,7 @@ async function sc(e,id){e.preventDefault();const i=e.target.querySelector('input
 
 // ---------- Events ----------
 let evF='up',fcat='all';const CATS=['Donation','Picnic','Cricket','Other'];
-function events(){const adm=me.role=='admin';
+function events(){const adm=can('events');
  $('#main').innerHTML=`<h2>Events</h2><div class=seg><button class="${evF=='up'?'on':''}" onclick="evF='up';events()">Upcoming</button><button class="${evF=='past'?'on':''}" onclick="evF='past';events()">Past</button></div>${adm?`<form class=pg onsubmit="return addE(event)"><input id=et placeholder="Event name" required style="margin-bottom:6px"><div style="display:flex;gap:6px;margin-bottom:6px"><input id=ed type=date required><input id=etm type=time></div><input id=ep placeholder="Place" required style="margin-bottom:6px"><textarea id=eds rows=2 placeholder="Details (plan, what to bring)" style="margin-bottom:6px"></textarea><button class=btn>Add event</button></form>`:''}<div id=el></div>`;
  unsubs.push(db.collection('events').orderBy('date',evF=='up'?'asc':'desc').onSnapshot(s=>{const t=new Date().toISOString().slice(0,10),L=s.docs.filter(d=>(d.data().date>=t)==(evF=='up'));
   $('#el').innerHTML=L.map(d=>{const e=d.data(),g=e.going||{},m=e.maybe||{},k=Object.keys(g),dt=new Date(e.date+'T00:00'),dd=Math.round((dt-new Date(t+'T00:00'))/864e5),mine=g[me.id]?'g':m[me.id]?'m':'';
@@ -561,7 +584,7 @@ function fund(){FL=[];FA=[];fY=CURY;fDraw(true);
  unsubs.push(db.collection('ledger').orderBy('createdAt','asc').onSnapshot(s=>{FL=s.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.type=='in'||x.type=='out');fDraw()},e=>console.error(e)));
  unsubs.push(db.collection('archive').where('kind','==','fund').onSnapshot(s=>{FA=s.docs.map(d=>({id:d.id,...d.data()})).sort((x,y)=>(x.name||'').localeCompare(y.name||''));fDraw()},e=>console.error(e)))}
 function fDraw(force){if(tab!='fund'||!me||!$('#main'))return;const ae=document.activeElement;if(!force&&ae&&ae.closest&&ae.closest('#fm,#fa'))return;
- const adm=me.role=='admin',L=fT=='in',cur=fY==CURY,EY=FL.filter(l=>yOf(l)==fY),I=EY.filter(x=>x.type=='in'),O=EY.filter(x=>x.type=='out'),
+ const adm=can('ledger'),L=fT=='in',cur=fY==CURY,EY=FL.filter(l=>yOf(l)==fY),I=EY.filter(x=>x.type=='in'),O=EY.filter(x=>x.type=='out'),
  i=I.reduce((t,x)=>t+(+x.amount||0),0),o=O.reduce((t,x)=>t+(+x.amount||0),0),b=i-o,R=L?I:O,AY=FA.filter(x=>+x.year==fY),
  YS=[...new Set([CURY,...FL.map(yOf),...FA.map(x=>+x.year)])].sort((x,y)=>y-x);
  $('#main').innerHTML=`<div class=seg>${YS.map(y=>`<button class="${y==fY?'on':''}" onclick="fY=${y};fDraw(true)">${y}</button>`).join('')}</div>
@@ -570,7 +593,7 @@ function fDraw(force){if(tab!='fund'||!me||!$('#main'))return;const ae=document.
 ${adm&&cur?`<form class=pg id=fm onsubmit="return addL(event)"><div style="display:flex;gap:6px;margin-bottom:6px"><input id=lw placeholder="${L?'Name (who paid)':'Spent by (optional)'}" ${L?'required':''}><input id=la type=number min=1 placeholder="Amount" required style="max-width:120px"></div>${L?'':'<input id=ln placeholder="Expense for (e.g. Jersey, Food)" required style="margin-bottom:6px">'}<button class=btn>${L?'Add lifting':'Add expense'}</button></form>`:''}
 <div class=pg style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span>${L?`<b>Total lifting: ৳${nf(i)}</b><br><small style="color:var(--mute)">${I.length} ${I.length==1?'person':'people'} paid`:`<b>Total expense: ৳${nf(o)}</b><br><small style="color:var(--mute)">${O.length} ${O.length==1?'item':'items'}`}</small></span>${EY.length?`<button class="btn gr s" onclick="printF()">Download PDF</button>`:''}</div>
 <div>${R.map((l,n)=>`<div class="pg li"><span style="display:flex;gap:10px;align-items:flex-start"><i style="min-width:26px;font-style:normal;color:var(--mute)">${n+1}.</i><span><b>${esc(L?(l.who||l.note):l.note)}</b><br><small style="color:var(--mute)">${!L&&l.who?esc(l.who)+' | ':''}${ago(l.createdAt)}</small></span></span><b class="${l.type}">${L?'+':'-'}৳${nf(l.amount)} ${adm?`<button class=x onclick="delL('${l.id}')">${ic('x')}</button>`:''}</b></div>`).join('')||`<div class=empty>${EY.length||cur?(L?'No lifting yet.':'No expense yet.'):'No records for '+fY+' in the app.'}</div>`}</div>
-${AY.length||adm?`<div class=pg id=fa><h4>Saved PDF reports | ${fY}</h4>${AY.map(x=>`<div class=li><span><b>${esc(x.name)}</b><br><small style="color:var(--mute)">${x.year} | ${Math.max(1,Math.round((x.size||0)/1024))} KB</small></span><span><button class="btn gr s" onclick="openA('${x.id}',1)">View</button> <button class="btn gr s" onclick="openA('${x.id}',0)">Download</button>${adm?` <button class=x onclick="delA('${x.id}')">${ic('x')}</button>`:''}</span></div>`).join('')||'<small style="color:var(--mute)">No PDF saved for this year.</small>'}${adm?`<form id=fm2 onsubmit="return upA(event)" style="margin-top:12px"><label class=fl>Upload an old report (PDF, max 700 KB)</label><div style="display:flex;gap:6px;margin-bottom:6px"><input id=ayr type=number value="${fY}" required style="max-width:96px"><input id=atl placeholder="Title (e.g. Picnic 2024)"></div><input id=afl type=file accept="application/pdf" required style="margin-bottom:6px"><button class=btn>Upload PDF</button></form>`:''}</div>`:''}`}
+${AY.length||can('archive')?`<div class=pg id=fa><h4>Saved PDF reports | ${fY}</h4>${AY.map(x=>`<div class=li><span><b>${esc(x.name)}</b><br><small style="color:var(--mute)">${x.year} | ${Math.max(1,Math.round((x.size||0)/1024))} KB</small></span><span><button class="btn gr s" onclick="openA('${x.id}',1)">View</button> <button class="btn gr s" onclick="openA('${x.id}',0)">Download</button>${can('archive')?` <button class=x onclick="delA('${x.id}')">${ic('x')}</button>`:''}</span></div>`).join('')||'<small style="color:var(--mute)">No PDF saved for this year.</small>'}${can('archive')?`<form id=fm2 onsubmit="return upA(event)" style="margin-top:12px"><label class=fl>Upload an old report (PDF, max 700 KB)</label><div style="display:flex;gap:6px;margin-bottom:6px"><input id=ayr type=number value="${fY}" required style="max-width:96px"><input id=atl placeholder="Title (e.g. Picnic 2024)"></div><input id=afl type=file accept="application/pdf" required style="margin-bottom:6px"><button class=btn>Upload PDF</button></form>`:''}</div>`:''}`}
 async function addL(e){e.preventDefault();const L=fT=='in';try{await db.collection('ledger').add({type:fT,amount:+$('#la').value,note:L?'Lifting':$('#ln').value.trim(),cat:L?'Lifting':'Expense',who:$('#lw').value.trim(),year:CURY,createdAt:ts()});e.target.reset()}catch(err){console.error(err);toast('Could not save')}return false}
 async function upA(e){e.preventDefault();const f=$('#afl').files[0],y=+$('#ayr').value;if(!f||!(y>1990&&y<2100))return false;if(f.type&&f.type!='application/pdf')return toast('Choose a PDF file'),false;if(f.size>700*1024)return toast('PDF is too big (max 700 KB)'),false;
  const bt=e.target.querySelector('button');bt.disabled=true;
@@ -591,30 +614,36 @@ function printF(){const EY=FL.filter(l=>yOf(l)==fY),I=EY.filter(x=>x.type=='in')
 const delL=id=>confirm('Delete this entry?')&&db.doc('ledger/'+id).delete();
 
 // ---------- Profile ----------
-const INF=[['edu','grad','Education','Add education','School, college or university'],['work','brief','Work','Add work / profession','Your job or business'],['addr','pin','Current address','Add address','Village, upazila, district'],['home','home','Hometown','Add hometown','Your permanent home'],['dob','cal','Birthday','Add birthday','YYYY-MM-DD (e.g. 1997-03-25)'],['blood','drop','Blood group','Add blood group','e.g. B+']];
-const rowsOf=(u,self)=>{let h=INF.map(([k,i,l,a])=>u[k]?`<div class=ir>${ic(i)}<div><small>${l}</small><b>${esc(u[k])}</b></div></div>`:self?`<div class=ir>${ic(i)}<div><button class=lk2 onclick="profile('${k}')">+ ${a}</button></div></div>`:'').join('');
+const INF=[['edu','grad','Education','Add education','School, college or university'],['work','brief','Work','Add work / profession','Your job or business'],['addr','pin','Current address','Add address','Village, upazila, district'],['home','home','Hometown','Add hometown','Your permanent home'],['dob','cal','Birthday','Add birthday','DD-MM-YYYY (e.g. 25-03-1997)'],['blood','drop','Blood group','Add blood group','e.g. B+']];
+const eduL=(u,self)=>self&&window.EDUID==u.id?window.MYEDU:(u.edus||(u.edu?[{deg:u.edu,inst:'',yr:''}]:[]));
+const eduH=(L,self)=>`<div class=ir>${ic('grad')}<div><small>Education</small>${L.map(e=>`<b>${esc(e.deg||'')}</b><small style="display:block;margin:0 0 6px">${esc([e.inst,e.yr].filter(Boolean).join(' | '))}${self&&e.pv?' 🔒 only you':self&&e.hy&&e.yr?' 🔒 year hidden':''}</small>`).join('')}</div></div>`;
+const rowsOf=(u,self)=>{let h=INF.map(([k,i,l,a])=>{if(k=='edu'){const E=eduL(u,self);return E.length?eduH(E,self):self?`<div class=ir>${ic(i)}<div><button class=lk2 onclick="profile('edu')">+ ${a}</button></div></div>`:''}
+ const v=k=='dob'&&u[k]?((dobN(u[k])||{}).s||u[k]):u[k];return v?`<div class=ir>${ic(i)}<div><small>${l}</small><b>${esc(v)}</b></div></div>`:self?`<div class=ir>${ic(i)}<div><button class=lk2 onclick="profile('${k}')">+ ${a}</button></div></div>`:''}).join('');
  h+=u.phone?`<div class=ir>${ic('phone')}<div><small>Phone</small><b>${esc(u.phone)}</b></div></div>`:self?`<div class=ir>${ic('phone')}<div><button class=lk2 onclick="profile('pph')">+ Add phone number</button></div></div>`:'';
  if(self&&u.email)h+=`<div class=ir>${ic('mail')}<div><small>Email</small><b>${esc(u.email)}</b></div></div>`;
  return h||'<div class=empty>Nothing added yet.</div>'};
 function profile(ed){
  if(ed){
-  $('#main').innerHTML=`<h2>Edit profile</h2><div class=pg>
+  if(window.EDUID!=me.id){loadEdu().then(()=>profile(ed));return}window.ED=(window.MYEDU||[]).map(e=>({deg:e.deg||'',inst:e.inst||'',yr:e.yr||'',hy:!!e.hy,pv:!!e.pv}));if(!ED.length)ED=[{deg:'',inst:'',yr:'',hy:false,pv:false}];
+   $('#main').innerHTML=`<h2>Edit profile</h2><div class=pg>
   <label class=fl>Name</label><input id=pn value="${esc(me.name)}">
   <label class=fl>Phone number</label><input id=pph type=tel value="${esc(me.phone)}" placeholder="01XXXXXXXXX">
   <label class=fl>About me</label><textarea id=pb rows=2 placeholder="Write something about yourself">${esc(me.bio)}</textarea>
-  ${INF.map(([k,i,l,a,ph])=>`<label class=fl>${l}</label><input id=f_${k} value="${esc(me[k])}" placeholder="${ph}">`).join('')}
+  <label class=fl>Education</label><div id=edl></div><button class="btn gr" type=button onclick="edAdd()" style="width:100%;margin-top:10px">+ Add another degree / certificate</button>
+   ${INF.filter(x=>x[0]!='edu').map(([k,i,l,a,ph])=>`<label class=fl>${l}</label><input id=f_${k} value="${esc(k=='dob'?((dobN(me[k])||{}).s||me[k]):me[k])}" placeholder="${ph}"${k=='dob'?' inputmode=numeric maxlength=10 oninput="dobFmt(this)"':''}>`).join('')}
   <label class=fl>Profile photo</label><input id=pp type=file accept="image/*" style="border:0;padding:4px 0;background:none">
   <div class=bt><button class="btn g" onclick="saveP()">${ic('check')} Save</button><button class="btn gr" onclick="profile()">Cancel</button></div></div>`;
-  if(typeof ed=='string')setTimeout(()=>{const i=$('#f_'+ed)||$('#'+ed);if(i){i.focus();i.scrollIntoView({block:'center'})}},60);
+  edR();if(typeof ed=='string')setTimeout(()=>{const i=$('#f_'+ed)||$('#'+ed);if(i){i.focus();i.scrollIntoView({block:'center'})}},60);
   return}
- $('#main').innerHTML=`<div class=pf><div class=pft><span class=pav>${avs(me)}</span><div class=pfs><div><b id=n1>0</b>posts</div><div><b>${AU.length}</b>batchmates</div><div><b>${AU.filter(onl).length}</b>online</div></div></div><b class=pfn>${esc(me.name)}</b><small style="color:var(--mute)">${me.role=='admin'?'Admin':'Batchmate'}</small>${me.bio?`<p>${esc(me.bio)}</p>`:''}<div class=bt><button class="btn gr" style="flex:1" onclick="profile(true)">Edit profile</button><button class="btn gr" style="flex:1" onclick="auth.signOut()">Sign out</button></div></div>
+ $('#main').innerHTML=`<div class=pf><div class=pft><span class=pav>${avs(me)}</span><div class=pfs><div><b id=n1>0</b>posts</div><div><b>${AU.length}</b>batchmates</div><div><b>${AU.filter(onl).length}</b>online</div></div></div><b class=pfn>${esc(me.name)}</b><small style="color:var(--mute)">${isMain(me)?'Main Admin':me.role=='admin'?'Admin':me.role=='sub'?'Admin (limited)':'Batchmate'}</small>${me.bio?`<p>${esc(me.bio)}</p>`:''}<div class=bt><button class="btn gr" style="flex:1" onclick="profile(true)">Edit profile</button><button class="btn gr" style="flex:1" onclick="auth.signOut()">Sign out</button></div></div>
  <div class=pg><h4>Details</h4>${rowsOf(me,true)}<div class=ir>${ic('lock')}<div id=pwd><small>Password</small>${hasPw(auth.currentUser)?`<button class=lk2 onclick="resetPw()">Change password (link by email)</button>`:`<button class=lk2 onclick="pwForm()">+ Set a password</button>`}</div></div></div>
  <h2>My posts</h2><div class=gal id=mg></div>
- ${me.role=='admin'?'<h2>Waiting for approval</h2><div class=pg id=pe></div>':''}<h2>All batchmates</h2><div class=pg><input class=srch id=ms2 placeholder="Search name, place, blood group..." oninput="mbF()"><div id=mb></div></div>`;
+ ${can('approve')?'<h2>Waiting for approval</h2><div class=pg id=pe></div>':''}${isMain(me)?'<h2>Admins</h2><div class=pg id=adl></div>':''}<h2>All batchmates</h2><div class=pg><input class=srch id=ms2 placeholder="Search name, place, blood group..." oninput="mbF()"><div id=mb></div></div>`;
+ if(window.EDUID!=me.id)loadEdu().then(()=>{if(tab=='me'&&$('#n1'))profile()});
  unsubs.push(db.collection('posts').where('uid','==',me.id).onSnapshot(s=>{const a=s.docs.map(d=>d.data()),n=$('#n1'),g=$('#mg');if(n)n.textContent=a.length;if(g)g.innerHTML=a.filter(p=>p.img).map(p=>`<img src="${p.img}" loading=lazy alt="" onclick="lb(this.src)">`).join('')||'<div class=empty>No photos yet.</div>'},()=>{}));
  unsubs.push(db.collection('users').onSnapshot(s=>{const U=s.docs.map(d=>({id:d.id,...d.data()}));
   window.UL=U;mbF();const mb=$('#mbx');if(mb)mb.innerHTML=U.filter(u=>u.approved).map(u=>`<div class=hd style="cursor:pointer" onclick="viewU('${u.id}')">${avs(u)}<div><b>${esc(u.name)}</b><small>${esc(u.edu||u.bio||'')}</small></div></div>`).join('');
-  const pe=$('#pe');if(pe)pe.innerHTML=U.filter(u=>!u.approved).map(u=>`<div class=li><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${esc(u.email||'')} ${u.phone?'| '+esc(u.phone):''}</small></span><span><button class="btn g s" onclick="db.doc('users/${u.id}').update({approved:true})">Approve</button> <button class="btn r s" onclick="db.doc('users/${u.id}').delete()">Reject</button></span></div>`).join('')||'<div class=empty>No one is waiting.</div>'}))}
+  admR(U);const pe=$('#pe');if(pe)pe.innerHTML=U.filter(u=>!u.approved).map(u=>`<div class=li><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${esc(u.email||'')} ${u.phone?'| '+esc(u.phone):''}</small></span><span><button class="btn g s" onclick="db.doc('users/${u.id}').update({approved:true})">Approve</button> <button class="btn r s" onclick="db.doc('users/${u.id}').delete()">Reject</button></span></div>`).join('')||'<div class=empty>No one is waiting.</div>'}))}
 function pwForm(){$('#pwd').innerHTML=`<small>New password</small><input id=npw type=password minlength=6 placeholder="At least 6 characters" autocomplete=new-password><div class=bt style="margin-top:8px"><button class="btn g s" onclick="setPw()">Save password</button><button class="btn gr s" onclick="profile()">Cancel</button></div>`;$('#npw').focus()}
 async function setPw(){const u=auth.currentUser,pw=$('#npw').value;if(pw.length<6)return toast('Password must be at least 6 characters');
  try{await u.linkWithCredential(firebase.auth.EmailAuthProvider.credential(u.email,pw));toast('Password set. You can now log in with email and password.');profile()}catch(e){console.error(e);toast(msg(e)||'Could not set password')}}
@@ -623,13 +652,45 @@ function viewU(id){const u=AU.find(x=>x.id==id);if(!u)return;cpm='user';$('#cp .
  $('#cp .cpb').innerHTML=`<div class=cph><b>Profile</b><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=cpl><div style="padding:16px 16px 4px;text-align:center"><span class=pav>${avs(u)}</span><h3>${esc(u.name)}</h3><small style="color:var(--mute)">${onl(u)?'Active now':lastSeen(u)}</small>${u.bio?`<p style="margin-top:4px">${esc(u.bio)}</p>`:''}</div><div style="padding:4px 16px 16px">${rowsOf(u,false)}${u.phone?`<div class=bt><a class="btn gr" href="tel:${esc(u.phone)}">${ic('phone')} Call</a><a class="btn g" target=_blank rel=noopener href="https://wa.me/${esc(u.phone.replace(/^0/,'880').replace(/\D/g,''))}">WhatsApp</a></div>`:''}${u.id!=me.id?`<button class="btn" style="width:100%;margin-top:10px" onclick="chatWith('${u.id}')">${ic('chat')} Message</button>`:''}</div></div>`;
  $('#cp').classList.remove('hide')}
 async function saveP(){const f=$('#pp').files[0],u={name:$('#pn').value.trim()||me.name,phone:$('#pph').value.trim(),bio:$('#pb').value.trim()};
- INF.forEach(([k])=>u[k]=$('#f_'+k).value.trim());
- try{if(f)u.photo=await img(f,200);await db.doc('users/'+me.id).update(u);Object.assign(me,u);toast('Saved');profile()}catch(e){console.error(e);toast('Could not save. Try again.')}}
+ INF.forEach(([k])=>{if(k!='edu')u[k]=$('#f_'+k).value.trim()});
+ if(u.dob){const b=dobN(u.dob);if(!b)return toast('Birthday must be DD-MM-YYYY (e.g. 25-03-1997)');u.dob=b.s}
+ const full=ED.map(e=>({deg:(e.deg||'').trim(),inst:(e.inst||'').trim(),yr:(e.yr||'').trim(),hy:!!e.hy,pv:!!e.pv})).filter(e=>e.deg||e.inst);
+ if(full.some(e=>e.yr&&!/^\d{4}$/.test(e.yr)))return toast('Passing year must be 4 digits, e.g. 2015');
+ const pub=full.filter(e=>!e.pv).map(e=>({deg:e.deg,inst:e.inst,yr:e.hy?'':e.yr}));
+ u.edus=pub;u.edu=pub.map(e=>[e.deg,e.inst].filter(Boolean).join(', ')).join('; ');
+ try{if(f)u.photo=await img(f,200);await db.doc('users/'+me.id+'/priv/edu').set({list:full});await db.doc('users/'+me.id).update(u);Object.assign(me,u);window.MYEDU=full;window.EDUID=me.id;toast('Saved');profile()}catch(e){console.error(e);toast('Could not save. Try again.')}}
+
+// ---------- Education, admins, jersey fill-in ----------
+async function loadEdu(){let L=null;try{const d=await db.doc('users/'+me.id+'/priv/edu').get();if(d.exists)L=d.data().list||[]}catch(e){console.error(e)}
+ if(!L)L=me.edus&&me.edus.length?me.edus.map(e=>({...e,hy:false,pv:false})):me.edu?[{deg:me.edu,inst:'',yr:'',hy:false,pv:false}]:[];
+ window.MYEDU=L;window.EDUID=me.id}
+function edR(){const b=$('#edl');if(!b)return;b.innerHTML=ED.map((e,i)=>`<div class=edc><label class=fl>Degree or certificate</label><input ${i==0?'id=f_edu ':''}value="${esc(e.deg)}" maxlength=80 oninput="ED[${i}].deg=this.value"><label class=fl>Institution</label><input value="${esc(e.inst)}" maxlength=100 oninput="ED[${i}].inst=this.value"><label class=fl>Passing year</label><input value="${esc(e.yr)}" inputmode=numeric maxlength=4 placeholder="e.g. 2015" oninput="ED[${i}].yr=this.value.replace(/\\D/g,'')"><label class=tgl><span>🔒 Keep passing year private</span><input type=checkbox ${e.hy?'checked':''} onchange="ED[${i}].hy=this.checked"></label><label class=tgl><span>🔒 Keep private, only I can see</span><input type=checkbox ${e.pv?'checked':''} onchange="ED[${i}].pv=this.checked"></label>${ED.length>1?`<button class="btn r s" type=button onclick="edDel(${i})" style="margin-top:12px">Remove this</button>`:''}</div>`).join('')}
+function edAdd(){ED.push({deg:'',inst:'',yr:'',hy:false,pv:false});edR();const x=document.querySelectorAll('#edl .edc'),l=x[x.length-1];if(l){l.scrollIntoView({block:'center'});l.querySelector('input').focus()}}
+function edDel(i){ED.splice(i,1);edR()}
+
+function admR(U){const b=$('#adl');if(!b)return;const L=U.filter(u=>u.approved&&!isMain(u)).sort((a,c)=>(a.name||'').localeCompare(c.name||''));
+ b.innerHTML=`<small style="color:var(--mute)">You are the Main Admin and no one can remove you. Pick a batchmate and tick what they are allowed to do.</small>`+(L.map(u=>{const r=u.role||'member',n=(u.perms||[]).length;return `<div class=li><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${r=='admin'?'Full admin':r=='sub'?'Admin | '+n+' permission'+(n==1?'':'s'):'Batchmate'}</small></span><button class="btn s ${r=='member'?'':'gr'}" onclick="admEdit('${u.id}')">${r=='member'?'Make admin':'Manage'}</button></div>`}).join('')||'<div class=empty>No batchmates yet.</div>')}
+function admEdit(id){const u=(window.UL||AU).find(x=>x.id==id);if(!u||isMain(u)||!isMain(me))return;cpm='adm';const P=u.perms||[];$('#cp .cpb').classList.remove('rm');
+ $('#cp .cpb').innerHTML=`<div class=cph><b>${esc(u.name)}</b><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=cpl><div style="padding:4px 16px 16px"><small style="color:var(--mute)">Tick what this person can do. Everything else stays with you.</small>${PERMS.map(([k,l])=>`<label class=tgl><span>${l}</span><input type=checkbox class=pm value="${k}" ${u.role=='admin'||P.includes(k)?'checked':''}></label>`).join('')}<div class=bt><button class="btn g" onclick="admSave('${id}')">Save</button>${(u.role||'member')!='member'?`<button class="btn r" onclick="admDel('${id}')">Remove admin</button>`:''}</div></div></div>`;
+ $('#cp').classList.remove('hide')}
+async function admSave(id){const P=[...document.querySelectorAll('#cp .pm:checked')].map(x=>x.value);
+ try{await db.doc('users/'+id).update(P.length?{role:'sub',perms:P}:{role:'member',perms:FV.delete(),jerseyOpen:false});toast('Saved');closeCP()}catch(e){console.error(e);toast('Could not save')}}
+async function admDel(id){if(!confirm('Remove admin rights from this person?'))return;
+ try{await db.doc('users/'+id).update({role:'member',perms:FV.delete(),jerseyOpen:false});toast('Removed');closeCP()}catch(e){console.error(e);toast('Could not save')}}
+
+function jAdm(id){const u=JU.find(x=>x.id==id);if(!u||!can('jersey'))return;cpm='jadm';$('#cp .cpb').classList.remove('rm');
+ $('#cp .cpb').innerHTML=`<div class=cph><b>${esc(u.name)}</b><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=cpl><div style="padding:4px 16px 16px"><small style="color:var(--mute)">Fill this batchmate's jersey details for them.</small><label class=fl>Jersey name</label><input id=ajn value="${esc(u.jn)}" maxlength=18 style="text-transform:uppercase"><label class=fl>Number</label><input id=ajo value="${esc(u.jno)}" maxlength=4><label class=fl>Size</label><select id=ajs><option value="">Select size</option>${SZ.map(z=>`<option ${u.jsz==z?'selected':''}>${z}</option>`).join('')}</select><label class=fl>Phone number (optional)</label><input id=ajp type=tel value="${esc(u.phone)}"><div class=bt><button class="btn g" onclick="jAdmSave('${id}')">Save</button>${jDone(u)?`<button class="btn r" onclick="jAdmClr('${id}')">Clear</button>`:''}</div></div></div>`;
+ $('#cp').classList.remove('hide')}
+async function jAdmSave(id){const jn=$('#ajn').value.trim().toUpperCase(),jsz=$('#ajs').value;if(!jn||!jsz)return toast('Jersey name and size are required');
+ const u={jn,jno:$('#ajo').value.trim(),jsz},p=$('#ajp').value.replace(/[\s-]/g,'');if(p)u.phone=p;
+ try{await db.doc('users/'+id).update(u);toast('Saved');closeCP()}catch(e){console.error(e);toast('Could not save')}}
+async function jAdmClr(id){if(!confirm('Clear this jersey entry?'))return;
+ try{await db.doc('users/'+id).update({jn:'',jno:'',jsz:''});toast('Cleared');closeCP()}catch(e){console.error(e);toast('Could not clear')}}
 
 // ---------- Home hero, photos, directory ----------
 function heroR(){const h=$('#hero');if(!h||!me)return;const t=new Date(),t0=new Date(t.getFullYear(),t.getMonth(),t.getDate()),hr=t.getHours(),
  g=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening',on=AU.filter(onl).length,
- bd=AU.filter(u=>/^\d{4}-\d{2}-\d{2}$/.test(u.dob||'')).map(u=>{const[,m,d]=u.dob.split('-').map(Number);let n=new Date(t.getFullYear(),m-1,d);if(n<t0)n=new Date(t.getFullYear()+1,m-1,d);return{u,k:Math.round((n-t0)/864e5)}}).sort((a,b)=>a.k-b.k)[0],
+ bd=AU.filter(u=>dobN(u.dob)).map(u=>{const{m,d}=dobN(u.dob);let n=new Date(t.getFullYear(),m-1,d);if(n<t0)n=new Date(t.getFullYear()+1,m-1,d);return{u,k:Math.round((n-t0)/864e5)}}).sort((a,b)=>a.k-b.k)[0],
  ev=NE?Math.round((new Date(NE.date)-t0)/864e5):0;
  h.innerHTML=`<div class=tray><button onclick="$('#pt')&&$('#pt').focus()"><span class=ava>${av(me.photo,me.name)}<i class=plus>+</i></span><small>You</small></button>${[...AU].filter(u=>u.id!=me.id).sort((x,y)=>onl(y)-onl(x)).slice(0,14).map(u=>`<button onclick="openRoom('${u.id}')">${avs(u)}<small>${esc((u.name||'').split(' ')[0])}</small></button>`).join('')}</div><small>${g}</small><h3>${esc((me.name||'').split(' ')[0])}</h3><div class=chips><span><b>${AU.length}</b> batchmates</span><span><i class=dot2></i><b>${on}</b> online</span></div>
  ${NE?`<p>${ic('cal','sm')} ${esc(NE.title)}: ${ev<=0?'today':'in '+ev+(ev>1?' days':' day')}</p>`:''}`}
@@ -641,12 +702,12 @@ function mbF(){const mb=$('#mb');if(!mb||!window.UL)return;const q=(($('#ms2')||
  mb.innerHTML=UL.filter(u=>u.approved&&(!q||[u.name,u.edu,u.work,u.addr,u.home,u.blood].join(' ').toLowerCase().includes(q))).map(u=>`<div class=hd style="cursor:pointer" onclick="viewU('${u.id}')">${avs(u)}<div><b>${esc(u.name)}</b><small>${esc([u.work,u.addr].filter(Boolean).join(' | ')||u.bio||'')}</small></div>${u.blood?`<span class=bld>${esc(u.blood)}</span>`:''}</div>`).join('')||'<div class=empty>No match.</div>'}
 
 // ---------- Jersey ----------
-const JN='প্রিয় ব্যাচমেটরা, এই বছরের ব্যাচ ক্রিকেট জার্সির অর্ডার শুরু হয়েছে। সবাই নিচের ফর্মে আপনার জার্সির নাম, নম্বর, সাইজ ও ফোন নম্বর দিয়ে Save চাপুন। যাদের জার্সি নাম ও সাইজ দেওয়া থাকবে, শুধু তাদের নামই চূড়ান্ত তালিকায় যাবে। অর্ডার বন্ধ হওয়ার আগ পর্যন্ত আপনার তথ্য বদলাতে পারবেন।';let JU=[];const SZ=['S','M','L','XL','2XL','3XL','4XL'],jDone=u=>u.jn&&u.jsz,jOpen=()=>JU.some(u=>u.role=='admin'&&u.jerseyOpen);
+const JN='প্রিয় ব্যাচমেটরা, এই বছরের ব্যাচ ক্রিকেট জার্সির অর্ডার শুরু হয়েছে। সবাই নিচের ফর্মে আপনার জার্সির নাম, নম্বর, সাইজ ও ফোন নম্বর দিয়ে Save চাপুন। যাদের জার্সি নাম ও সাইজ দেওয়া থাকবে, শুধু তাদের নামই চূড়ান্ত তালিকায় যাবে। অর্ডার বন্ধ হওয়ার আগ পর্যন্ত আপনার তথ্য বদলাতে পারবেন।';let JU=[];const SZ=['S','M','L','XL','2XL','3XL','4XL'],jDone=u=>u.jn&&u.jsz,jOpen=()=>JU.some(u=>(u.role=='admin'||u.role=='sub')&&u.jerseyOpen);
 let jY=CURY,JH=[];
-function jersey(){jY=CURY;JH=[];const adm=me.role=='admin';$('#main').innerHTML=`<h2>Jersey</h2><div class=seg id=jy></div><div id=jcur><div class=pg id=jh></div><div class=pg id=jf></div><div id=jl></div></div><div id=jold class=hide></div>${adm?`<details class=pg id=jad><summary style="cursor:pointer;font-weight:600">Add or edit a past year</summary><form onsubmit="return jHSave(event)" style="margin-top:10px"><label class=fl>Year</label><input id=jhy type=number required placeholder="e.g. 2025"><label class=fl>Made jersey (one name per line)</label><textarea id=jhyes rows=6></textarea><label class=fl>Did not make jersey (one name per line)</label><textarea id=jhno rows=6></textarea><div class=bt><button class=btn>Save year</button></div></form><hr class=ln><small style="color:var(--mute)">At the end of the season, save this year's live list to history:</small><div class=bt><button class="btn g" type=button onclick="jSnap()">Save ${CURY} list to history</button></div></details>`:''}`;
+function jersey(){jY=CURY;JH=[];const adm=can('jersey');$('#main').innerHTML=`<h2>Jersey</h2><div class=seg id=jy></div><div id=jcur><div class=pg id=jh></div><div class=pg id=jf></div><div id=jl></div></div><div id=jold class=hide></div>${adm?`<details class=pg id=jad><summary style="cursor:pointer;font-weight:600">Add or edit a past year</summary><form onsubmit="return jHSave(event)" style="margin-top:10px"><label class=fl>Year</label><input id=jhy type=number required placeholder="e.g. 2025"><label class=fl>Made jersey (one name per line)</label><textarea id=jhyes rows=6></textarea><label class=fl>Did not make jersey (one name per line)</label><textarea id=jhno rows=6></textarea><div class=bt><button class=btn>Save year</button></div></form><hr class=ln><small style="color:var(--mute)">At the end of the season, save this year's live list to history:</small><div class=bt><button class="btn g" type=button onclick="jSnap()">Save ${CURY} list to history</button></div></details>`:''}`;
  unsubs.push(db.collection('users').onSnapshot(s=>{JU=s.docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.approved).sort((a,b)=>(a.name||'').localeCompare(b.name||''));jR()},()=>{}));
  unsubs.push(db.collection('archive').where('kind','==','jersey').onSnapshot(s=>{JH=s.docs.map(d=>({id:d.id,...d.data()}));jShow()},e=>console.error(e)));jShow()}
-function jShow(){if(tab!='jersey'||!$('#jy'))return;const adm=me.role=='admin',cur=jY==CURY,YS=[...new Set([CURY,...JH.map(x=>+x.year)])].sort((x,y)=>y-x);
+function jShow(){if(tab!='jersey'||!$('#jy'))return;const adm=can('jersey'),cur=jY==CURY,YS=[...new Set([CURY,...JH.map(x=>+x.year)])].sort((x,y)=>y-x);
  $('#jy').innerHTML=YS.map(y=>`<button class="${y==jY?'on':''}" onclick="jY=${y};jShow()">${y}</button>`).join('');
  $('#jcur').classList.toggle('hide',!cur);const o=$('#jold');o.classList.toggle('hide',cur);if(cur){o.innerHTML='';return}
  const h=JH.find(x=>+x.year==jY),yes=(h&&h.yes)||[],no=(h&&h.no)||[],L=(t,c,R)=>`<div class=pg><h4>${t} (${R.length})</h4>${R.map((n,k)=>`<div class=li><span style="display:flex;gap:10px"><i style="min-width:26px;font-style:normal;color:var(--mute)">${k+1}.</i><b>${esc(n)}</b></span><span class="${c}">${c=='in'?ic('check'):ic('x')}</span></div>`).join('')||'<small style="color:var(--mute)">None listed.</small>'}</div>`;
@@ -659,11 +720,11 @@ async function jHSave(e){e.preventDefault();const y=+$('#jhy').value;if(!(y>1990
 async function jSnap(){if(!confirm('Save the current '+CURY+' jersey list to history? It replaces any saved list for '+CURY+'.'))return;
  const yes=JU.filter(jDone).map(u=>u.name+' ('+u.jn+(u.jno?' #'+u.jno:'')+', '+u.jsz+')'),no=JU.filter(u=>!jDone(u)).map(u=>u.name);
  try{await db.doc('archive/jersey-'+CURY).set({kind:'jersey',year:CURY,yes,no,createdAt:ts()});toast('Saved to history')}catch(err){console.error(err);toast('Could not save')}}
-function jR(){if(!$('#jh'))return;const adm=me.role=='admin',op=jOpen(),D=JU.filter(jDone),mu=JU.find(u=>u.id==me.id)||me;
- if(!(document.activeElement&&document.activeElement.id=='jnote'))$('#jh').innerHTML=`<h4>Batch cricket jersey ${CURY}</h4>${op?`<div class=nt>${esc((JU.find(u=>u.role=='admin'&&u.jerseyOpen)||{}).jerseyNote||JN)}</div>`:`<p style="color:var(--mute)">Order is closed right now.</p>`}${adm&&!op?`<label class=fl>Note for everyone (shown when the order opens)</label><textarea id=jnote rows=5>${esc(me.jerseyNote||JN)}</textarea>`:''}<div class=chips><span><b>${D.length}</b> submitted</span><span><b>${JU.length-D.length}</b> pending</span></div>${adm?`<div class=bt><button class="btn ${op?'gr':''}" onclick="jTog(${!op})">${op?'Close order':'Open order'}</button><button class="btn g" onclick="printJ()" ${D.length?'':'disabled'}>Download PDF</button></div>`:''}`;
+function jR(){if(!$('#jh'))return;const adm=can('jersey'),op=jOpen(),D=JU.filter(jDone),mu=JU.find(u=>u.id==me.id)||me;
+ if(!(document.activeElement&&document.activeElement.id=='jnote'))$('#jh').innerHTML=`<h4>Batch cricket jersey ${CURY}</h4>${op?`<div class=nt>${esc((JU.find(u=>(u.role=='admin'||u.role=='sub')&&u.jerseyOpen)||{}).jerseyNote||JN)}</div>`:`<p style="color:var(--mute)">Order is closed right now.</p>`}${adm&&!op?`<label class=fl>Note for everyone (shown when the order opens)</label><textarea id=jnote rows=5>${esc(me.jerseyNote||JN)}</textarea>`:''}<div class=chips><span><b>${D.length}</b> submitted</span><span><b>${JU.length-D.length}</b> pending</span></div>${adm?`<div class=bt><button class="btn ${op?'gr':''}" onclick="jTog(${!op})">${op?'Close order':'Open order'}</button><button class="btn g" onclick="printJ()" ${D.length?'':'disabled'}>Download PDF</button></div>`:''}`;
  const jf=$('#jf');if(jf.dataset.op!=String(op)){jf.dataset.op=op;jf.classList.toggle('hide',!op);
   jf.innerHTML=op?`<form onsubmit="return jSave(event)"><label class=fl>Jersey name</label><input id=jn value="${esc(mu.jn)}" required maxlength=18 placeholder="e.g. KHAN" style="text-transform:uppercase"><label class=fl>Number</label><input id=jno value="${esc(mu.jno)}" maxlength=4 placeholder="e.g. 46"><label class=fl>Size</label><select id=jsz required><option value="">Select size</option>${SZ.map(z=>`<option ${mu.jsz==z?'selected':''}>${z}</option>`).join('')}</select><label class=fl>Phone number</label><input id=jph type=tel value="${esc(mu.phone)}" required placeholder="01XXXXXXXXX"><div class=bt><button class=btn>Save</button></div></form>`:''}
- $('#jl').innerHTML=`<h2>List</h2>`+JU.map(u=>`<div class="pg li"><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${jDone(u)?esc(u.jn)+(u.jno?' | #'+esc(u.jno):'')+' | '+esc(u.jsz):'Not submitted'}${adm&&u.phone?' | '+esc(u.phone):''}</small></span>${jDone(u)?`<span class=in>${ic('check')}</span>`:''}</div>`).join('')}
+ $('#jl').innerHTML=`<h2>List</h2>`+JU.map(u=>`<div class="pg li"><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${jDone(u)?esc(u.jn)+(u.jno?' | #'+esc(u.jno):'')+' | '+esc(u.jsz):'Not submitted'}${adm&&u.phone?' | '+esc(u.phone):''}</small></span><span style="display:flex;gap:8px;align-items:center">${adm?`<button class="btn s gr" onclick="jAdm('${u.id}')">Edit</button>`:''}${jDone(u)?`<span class=in>${ic('check')}</span>`:''}</span></div>`).join('')}
 async function jSave(e){e.preventDefault();const u={jn:$('#jn').value.trim().toUpperCase(),jno:$('#jno').value.trim(),jsz:$('#jsz').value,phone:$('#jph').value.replace(/[\s-]/g,'')};if(!u.jn||!u.jsz)return false;
  try{await db.doc('users/'+me.id).update(u);Object.assign(me,u);toast('Saved')}catch(err){console.error(err);toast('Could not save')}return false}
 const jTog=v=>{const u={jerseyOpen:v};if(v&&$('#jnote'))u.jerseyNote=$('#jnote').value.trim();return db.doc('users/'+me.id).update(u).then(()=>Object.assign(me,u)).catch(()=>toast('Could not change'))};
@@ -672,7 +733,7 @@ function printJ(){const D=JU.filter(jDone),c={};D.forEach(u=>c[u.jsz]=(c[u.jsz]|
 
 // ---------- Collections (chanda) ----------
 let cOpen=null;
-function cR(A){if(A)window.LA=A;A=window.LA||[];const b=$('#cl');if(!b)return;const adm=me.role=='admin',C=A.filter(x=>x.type=='camp');window.CL=C;
+function cR(A){if(A)window.LA=A;A=window.LA||[];const b=$('#cl');if(!b)return;const adm=can('ledger'),C=A.filter(x=>x.type=='camp');window.CL=C;
  b.innerHTML=C.map(c=>{const P=A.filter(x=>x.camp==c.id),tot=P.reduce((a,x)=>a+x.amount,0),paid={};P.forEach(x=>paid[x.uid]=(paid[x.uid]||0)+x.amount);const n=Object.keys(paid).length,op=cOpen==c.id;
   return `<div class=pg><div class=hd onclick="cOpen=${op?'null':`'${c.id}'`};cR()" style="cursor:pointer"><div><b style="font:700 17px var(--disp)">${esc(c.note)}</b><small>${esc(c.cat||'')} | ${n} of ${AU.length} paid | ৳${tot} collected</small></div><button class="btn gr s" onclick="event.stopPropagation();printC('${c.id}')">PDF</button>${adm?`<button class=x onclick="event.stopPropagation();delC('${c.id}')">${ic('x')}</button>`:''}</div>
   ${op?[...AU].sort((a,b)=>(a.name||'').localeCompare(b.name||'')).map(u=>`<div class=li><span>${esc(u.name)}</span><span>${paid[u.id]?`<b class=in>৳${paid[u.id]}</b>`:`<small style="color:var(--mute)">Not yet</small>`} ${adm?`<button class="btn s" onclick="cAdd('${c.id}','${u.id}')">+ Add</button>`:''}</span></div>`).join(''):''}</div>`}).join('')}
