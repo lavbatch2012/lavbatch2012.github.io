@@ -346,6 +346,32 @@ header h1 small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @keyframes onpl{0%{box-shadow:0 0 0 0 rgba(52,224,161,.65)}70%,100%{box-shadow:0 0 0 7px rgba(52,224,161,0)}}
 
 
+/* ===== profile + cover (Facebook style) ===== */
+.pfx{margin:12px;border-radius:26px;border:1px solid rgba(39,211,238,.45);background:linear-gradient(160deg,rgba(49,46,129,.55),rgba(11,15,42,.9));box-shadow:0 0 26px rgba(39,211,238,.12)}
+.pcv{position:relative;aspect-ratio:5/3;max-height:300px;border-radius:25px 25px 0 0;background:linear-gradient(135deg,#312e81,#1d4ed8 60%,#06b6d4) center/cover no-repeat}
+.pcb{position:absolute;top:12px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;padding:0;border:1px solid rgba(255,255,255,.3);background:rgba(8,10,30,.62);color:#fff;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.pcb:first-child{left:12px}.pcb.pcm{right:12px;background:#22c1f5;color:#04101c;border-color:transparent}.pcb.pcc{top:auto;bottom:12px;right:12px}.pcb .ic{width:21px;height:21px;stroke-width:2.2}
+.pmn{position:absolute;top:60px;right:12px;z-index:5;min-width:200px;padding:6px;border-radius:16px;background:var(--panel,#0b0f2a);border:1px solid var(--line);box-shadow:0 16px 44px rgba(0,0,0,.6)}
+.pmn button{display:block;width:100%;text-align:left;padding:12px;border:0;border-radius:10px;background:none;color:var(--ink);font:600 14.5px var(--disp)}.pmn button:active{background:rgba(255,255,255,.08)}
+.pin{padding:0 16px 16px}.pphw{position:relative;width:104px;margin-top:-52px}
+.pph{display:grid;place-items:center;width:104px;height:104px;border-radius:30px;overflow:hidden;border:3px solid #8b6bff;background:#10153a;font:700 40px var(--disp);box-shadow:0 8px 24px rgba(0,0,0,.45)}.pph img{width:100%;height:100%;object-fit:cover}
+.pphc{position:absolute;right:-6px;bottom:-6px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;padding:0;border:3px solid #0b0f2a;background:#8b6bff;color:#fff}.pphc .ic{width:17px;height:17px}
+.pnm{margin:12px 0 0;font:700 22px/1.25 var(--disp)}.prl{color:var(--mute)}
+.pac{margin:12px;border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.03);overflow:hidden}
+.pah{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border:0;background:none;color:var(--ink);font:700 16px var(--disp);text-align:left}.pah>span{margin-left:auto;color:var(--mute);transition:transform .2s}
+.pah i{flex:none;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff}.pah i .ic{width:20px;height:20px}
+.pac.on .pah>span{transform:rotate(180deg)}.pab{display:none;padding:0 14px 14px}.pac.on .pab{display:block}
+.pbk{padding:14px;margin-top:10px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.04)}.pbk b{display:block;font:700 16px var(--disp)}.pbk small{display:block;margin:2px 0 10px;color:var(--mute)}.pbk .bt{flex-wrap:wrap}
+.ucv{height:110px;background:linear-gradient(135deg,#312e81,#1d4ed8 60%,#06b6d4) center/cover no-repeat}
+.phw{position:fixed;inset:0;z-index:58;display:flex;align-items:flex-end;justify-content:center;background:rgba(2,3,12,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.phb{width:100%;max-width:460px;max-height:94vh;overflow-y:auto;box-sizing:border-box;padding:16px 16px calc(14px + env(safe-area-inset-bottom,0px));border-radius:26px 26px 0 0;background:var(--panel,#0b0f2a);border:1px solid rgba(255,255,255,.14);text-align:center;animation:dgp .24s ease}
+.phb h3{margin:0 0 4px;font:700 20px var(--disp);color:#a5b4fc}.phb>small{color:var(--mute);font-size:13px}
+.phs{position:relative;margin:12px auto;border-radius:18px;overflow:hidden;background:#02030c;touch-action:none;cursor:grab}.phs canvas{display:block}
+.phs::after{content:"";position:absolute;inset:0;border:2px solid rgba(255,255,255,.75);border-radius:inherit;pointer-events:none}.phs.c::after{border-radius:50%;box-shadow:0 0 0 999px rgba(2,3,12,.6)}
+.phr{display:flex;gap:8px;margin-bottom:8px}.phr button,.pha button{flex:1;padding:12px 0;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:var(--ink);font:600 15px var(--disp)}
+.phl{display:flex;align-items:center;gap:12px;margin:8px 2px;font:600 14px var(--disp);color:var(--ink)}.phl span{width:74px;flex:none;text-align:left}.phl input{flex:1;accent-color:#0ea5e9}
+.php{display:flex;gap:8px;overflow-x:auto;padding:8px 0}.php button{flex:none;width:72px;background:none;border:2px solid transparent;border-radius:14px;padding:4px;color:var(--ink);font:600 12px var(--disp)}.php button.on{border-color:#0ea5e9}.php img{display:block;width:54px;height:54px;margin:0 auto 4px;border-radius:50%;object-fit:cover}
+.pha{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.pha .pri{background:linear-gradient(135deg,#5b6dff,#0ea5e9);border:0;color:#04101c;font-weight:800}
 /* ===== notification bell + enable popup ===== */
 .bel{position:relative;flex:none;width:40px;height:40px;border-radius:50%;display:inline-grid;place-items:center;padding:0;background:rgba(39,211,238,.1);border:1px solid rgba(39,211,238,.5);color:var(--cy);box-shadow:0 0 14px rgba(39,211,238,.28),inset 0 0 10px rgba(39,211,238,.14)}
 .bel .ic{width:22px;height:22px;stroke-width:1.9}
@@ -938,6 +964,41 @@ const rowsOf=(u,self)=>{let h=INF.map(([k,i,l,a])=>{if(k=='edu'){const E=eduL(u,
  h+=u.phone?`<div class=ir>${ic('phone')}<div><small>Phone</small><b>${esc(u.phone)}</b></div></div>`:self?`<div class=ir>${ic('phone')}<div><button class=lk2 onclick="profile('pph')">+ Add phone number</button></div></div>`:'';
  if(self&&u.email)h+=`<div class=ir>${ic('mail')}<div><small>Email</small><b>${esc(u.email)}</b></div></div>`;
  return h||'<div class=empty>Nothing added yet.</div>'};
+// ---------- Profile and cover photo (Facebook style) ----------
+const COV={},DOTS='<svg class=ic viewBox="0 0 24 24"><path stroke-width="3.2" d="M12 5h.01M12 12h.01M12 19h.01"/></svg>';
+const covLoad=async id=>{if(id in COV)return COV[id];let v='';try{const d=await db.doc('covers/'+id).get();if(d.exists)v=d.data().img||''}catch(e){}COV[id]=v;return v};
+const phCov=(id,sel)=>covLoad(id).then(v=>{const e=$(sel);if(e&&v)e.style.backgroundImage='url("'+v+'")'});
+const ageOf=u=>{const b=dobN(u.dob);if(!b)return'';const n=new Date();let a=n.getFullYear()-b.y;if(n.getMonth()+1<b.m||(n.getMonth()+1==b.m&&n.getDate()<b.d))a--;return a>=0&&a<120?a:''};
+function pfMenuX(){document.querySelectorAll('.pmn').forEach(x=>x.remove())}
+function pfMenu(){const c=$('#pcv');if(!c)return;if(c.querySelector('.pmn'))return pfMenuX();const m=document.createElement('div');m.className='pmn';m.innerHTML=[['Edit profile',"profile(true)"],['Change profile photo',"phPick('avatar')"],['Change cover photo',"phPick('cover')"],['Sign out',"signOutAsk()"]].map(([l,f])=>`<button onclick="pfMenuX();${f}">${l}</button>`).join('');c.appendChild(m);setTimeout(()=>document.addEventListener('click',pfMenuX,{once:true}),0)}
+function phPick(k){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=()=>{if(i.files[0])phAdj(k,URL.createObjectURL(i.files[0]))};i.click()}
+function phCur(k){const v=k=='cover'?COV[me.id]:me.photo;if(!v)return toast('No '+(k=='cover'?'cover':'profile')+' photo yet');phAdj(k,v)}
+async function covDel(){if(!COV[me.id])return toast('No cover photo yet');if(!await ask('Remove your cover photo?',{ok:'Remove',danger:1}))return;try{await db.doc('covers/'+me.id).delete();COV[me.id]='';profile();toast('Cover photo removed')}catch(e){console.error(e);toast('Could not remove')}}
+function phAdj(k,src){const cov=k=='cover',W=Math.min(320,innerWidth-64),H=cov?Math.round(W*.6):W,OW=cov?800:220,OH=cov?480:220,i0=new Image;
+ i0.onerror=()=>toast('Could not open this photo');
+ i0.onload=()=>{let im=i0;const M=Math.max(i0.width,i0.height);if(M>1800){const f=1800/M,t=document.createElement('canvas');t.width=i0.width*f;t.height=i0.height*f;t.getContext('2d').drawImage(i0,0,0,t.width,t.height);im=t}
+  let st={z:1,x:0,y:0,r:0,b:1,c:1,s:1};const P=[['Original',1,1,1],['Bright',1.15,1.05,1.1],['Sparkle',1.1,1.15,1.35],['Drama',.95,1.3,1.1],['Soft',1.05,.88,.9]],w=document.createElement('div');w.className='phw';
+  w.innerHTML=`<div class=phb><h3>${cov?'Adjust cover photo':'Adjust profile photo'}</h3><small>Drag the photo to place it. Pinch or use the slider to zoom.</small><div class="phs${cov?'':' c'}" style="width:${W}px;height:${H}px"><canvas width=${W*2} height=${H*2} style="width:${W}px;height:${H}px"></canvas></div><div class=phr><button data-m="-1,0">◀</button><button data-m="0,-1">▲</button><button data-m="0,1">▼</button><button data-m="1,0">▶</button></div><label class=phl><span>Zoom</span><input type=range id=phz min=1 max=3 step=.01 value=1></label><div class=php>${P.map((p,n)=>`<button data-p=${n}><img src="${src}" style="filter:brightness(${p[1]}) contrast(${p[2]}) saturate(${p[3]})" alt=""><span>${p[0]}</span></button>`).join('')}</div><label class=phl><span>Light</span><input type=range id=phb min=.5 max=1.5 step=.01 value=1></label><label class=phl><span>Contrast</span><input type=range id=phc min=.5 max=1.5 step=.01 value=1></label><label class=phl><span>Color</span><input type=range id=phs2 min=0 max=2 step=.01 value=1></label><div class=pha><button data-a=x>Cancel</button><button data-a=r>Rotate</button><button data-a=z>Reset</button><button data-a=ok class=pri>Save</button></div></div>`;
+  const q=e=>w.querySelector(e),cv=q('canvas'),g=cv.getContext('2d'),stg=q('.phs'),dim=()=>st.r%2?[im.height,im.width]:[im.width,im.height],sc=()=>{const[a,b]=dim();return Math.max(W/a,H/b)*st.z};
+  const rd=()=>{const[a,b]=dim(),s=sc(),mx=Math.max(0,(a*s-W)/2),my=Math.max(0,(b*s-H)/2);st.x=Math.max(-mx,Math.min(mx,st.x));st.y=Math.max(-my,Math.min(my,st.y));g.setTransform(2,0,0,2,0,0);g.clearRect(0,0,W,H);g.save();g.translate(W/2+st.x,H/2+st.y);g.rotate(st.r*Math.PI/2);g.scale(s,s);g.drawImage(im,-im.width/2,-im.height/2);g.restore();cv.style.filter=`brightness(${st.b}) contrast(${st.c}) saturate(${st.s})`};
+  const sync=()=>{q('#phz').value=st.z;q('#phb').value=st.b;q('#phc').value=st.c;q('#phs2').value=st.s;rd()},zm=v=>{st.z=Math.max(1,Math.min(3,v));q('#phz').value=st.z;rd()};
+  q('#phz').oninput=e=>zm(+e.target.value);q('#phb').oninput=e=>{st.b=+e.target.value;rd()};q('#phc').oninput=e=>{st.c=+e.target.value;rd()};q('#phs2').oninput=e=>{st.s=+e.target.value;rd()};
+  w.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{const[a,c]=b.dataset.m.split(',');st.x+=a*12;st.y+=c*12;rd()});
+  w.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=P[b.dataset.p];st.b=p[1];st.c=p[2];st.s=p[3];w.querySelectorAll('[data-p]').forEach(x=>x.classList.toggle('on',x===b));sync()});
+  const ps=new Map();let d0=1,z0=1;const dd=()=>{const[a,b]=[...ps.values()];return Math.hypot(a[0]-b[0],a[1]-b[1])||1};
+  stg.onpointerdown=e=>{stg.setPointerCapture(e.pointerId);ps.set(e.pointerId,[e.clientX,e.clientY]);if(ps.size==2){d0=dd();z0=st.z}};
+  stg.onpointermove=e=>{const o=ps.get(e.pointerId);if(!o)return;if(ps.size==1){st.x+=e.clientX-o[0];st.y+=e.clientY-o[1]}ps.set(e.pointerId,[e.clientX,e.clientY]);if(ps.size==2)return zm(z0*dd()/d0);rd()};
+  stg.onpointerup=stg.onpointercancel=e=>ps.delete(e.pointerId);stg.onwheel=e=>{e.preventDefault();zm(st.z-e.deltaY*.002)};
+  const exp=()=>{const o=document.createElement('canvas');o.width=OW;o.height=OH;const x=o.getContext('2d'),f=OW/W,nf='filter' in x;x.imageSmoothingQuality='high';if(nf)x.filter=`brightness(${st.b}) contrast(${st.c}) saturate(${st.s})`;
+   x.translate(OW/2+st.x*f,OH/2+st.y*f);x.rotate(st.r*Math.PI/2);x.scale(sc()*f,sc()*f);x.drawImage(im,-im.width/2,-im.height/2);
+   if(!nf){x.setTransform(1,0,0,1,0,0);const d=x.getImageData(0,0,OW,OH),p=d.data;for(let n=0;n<p.length;n+=4){const r=(p[n]*st.b-128)*st.c+128,gg=(p[n+1]*st.b-128)*st.c+128,bb=(p[n+2]*st.b-128)*st.c+128,l=.299*r+.587*gg+.114*bb;p[n]=l+(r-l)*st.s;p[n+1]=l+(gg-l)*st.s;p[n+2]=l+(bb-l)*st.s}x.putImageData(d,0,0)}
+   return o.toDataURL('image/jpeg',cov?.8:.82)};
+  w.querySelectorAll('[data-a]').forEach(b=>b.onclick=async()=>{const a=b.dataset.a;if(a=='x')return w.remove();if(a=='r'){st.r=(st.r+1)%4;st.x=st.y=0;return rd()}
+   if(a=='z'){st={z:1,x:0,y:0,r:0,b:1,c:1,s:1};w.querySelectorAll('[data-p]').forEach(x=>x.classList.remove('on'));return sync()}
+   b.disabled=true;b.textContent='Saving...';
+   try{const u=exp();if(cov){await db.doc('covers/'+me.id).set({img:u,at:ts()});COV[me.id]=u}else{await db.doc('users/'+me.id).update({photo:u});me.photo=u}w.remove();toast(cov?'Cover photo updated':'Profile photo updated');if(tab=='me')profile()}catch(e){console.error(e);b.disabled=false;b.textContent='Save';toast('Could not save. Check your connection and the Firestore rules.')}});
+  w.addEventListener('click',e=>{if(e.target===w)w.remove()});document.body.appendChild(w);rd()};
+ i0.src=src}
 function profile(ed){
  if(ed){
   if(window.EDUID!=me.id){loadEdu().then(()=>profile(ed));return}window.ED=(window.MYEDU||[]).map(e=>({deg:e.deg||'',inst:e.inst||'',yr:e.yr||'',hy:!!e.hy,pv:!!e.pv}));if(!ED.length)ED=[{deg:'',inst:'',yr:'',hy:false,pv:false}];
@@ -951,11 +1012,14 @@ function profile(ed){
   <div class=bt><button class="btn g" onclick="saveP()">${ic('check')} Save</button><button class="btn gr" onclick="profile()">Cancel</button></div></div>`;
   edR();if(typeof ed=='string')setTimeout(()=>{const i=$('#f_'+ed)||$('#'+ed);if(i){i.focus();i.scrollIntoView({block:'center'})}},60);
   return}
- $('#main').innerHTML=`<div class=pf><div class=pft><span class=pav>${avs(me)}</span><div class=pfs><div><b id=n1>0</b>posts</div><div><b>${AU.length}</b>batchmates</div><div><b>${AU.filter(onl).length}</b>online</div></div></div><b class=pfn>${esc(me.name)}</b><small style="color:var(--mute)">${isMain(me)?'Main Admin':me.role=='admin'?'Admin':me.role=='sub'?'Admin (limited)':'Batchmate'}</small>${me.bio?`<p>${esc(me.bio)}</p>`:''}<div class=bt><button class="btn gr" style="flex:1" onclick="profile(true)">Edit profile</button><button class="btn gr" style="flex:1" onclick="signOutAsk()">Sign out</button></div></div>
+ $('#main').innerHTML=`<div class=pfx><div class=pcv id=pcv><button class=pcb onclick="go('feed')" aria-label="Back">${ic('back')}</button><button class="pcb pcm" onclick="pfMenu()" aria-label="Menu">${DOTS}</button><button class="pcb pcc" onclick="phPick('cover')" aria-label="Change cover photo">${ic('camera')}</button></div><div class=pin><div class=pphw><span class=pph onclick="phPick('avatar')">${me.photo?`<img src="${me.photo}" alt="">`:`<b>${esc((me.name||'?')[0])}</b>`}</span><button class=pphc onclick="phPick('avatar')" aria-label="Change profile photo">${ic('camera')}</button></div><h3 class=pnm>${isMain(me)?'👑 ':''}${esc(me.name)}</h3><small class=prl>${isMain(me)?'Main Admin':me.role=='admin'?'Admin':me.role=='sub'?'Admin (limited)':'Batchmate'}</small><div class=chips style="margin-top:10px">${me.blood?`<span>${ic('drop','sm')} ${esc(me.blood)}</span>`:''}${ageOf(me)!==''?`<span>Age ${ageOf(me)}</span>`:''}<span><b id=n1>0</b> posts</span></div>${me.bio?`<p style="margin-top:10px">${esc(me.bio)}</p>`:''}</div></div>
+ <div class=pac><button class=pah onclick="this.parentNode.classList.toggle('on')"><i>${ic('camera')}</i>Photos<span>⌄</span></button><div class=pab><div class=pbk><b>Profile photo</b><small>Shown everywhere in the app</small><div class=bt><button class="btn s" onclick="phPick('avatar')">Choose photo</button><button class="btn gr s" onclick="phCur('avatar')">Adjust</button></div></div><div class=pbk><b>Cover photo</b><small>The wide photo at the top of your profile</small><div class=bt><button class="btn s" onclick="phPick('cover')">Choose photo</button><button class="btn gr s" onclick="phCur('cover')">Adjust</button><button class="btn gr s" onclick="covDel()">Remove</button></div></div></div></div>
+ <div class=pac><button class=pah onclick="profile(true)"><i style="background:linear-gradient(135deg,#6366f1,#3b82f6)">${ic('edit')}</i>Edit profile<span>›</span></button></div>
+ <div class=pac><button class=pah onclick="signOutAsk()"><i style="background:linear-gradient(135deg,#fb7185,#e11d48)">${ic('out')}</i>Sign out<span>›</span></button></div>
  <div class=pg><h4>Details</h4>${rowsOf(me,true)}</div>
  <h2>My posts</h2><div class=gal id=mg></div>
  ${themeH()}<h2>All batchmates</h2><div class=pg><input class=srch id=ms2 placeholder="Search name, place, blood group..." oninput="mbF()"><div id=mb></div></div>`;
- if(window.EDUID!=me.id)loadEdu().then(()=>{if(tab=='me'&&$('#n1'))profile()});
+ phCov(me.id,'#pcv');if(window.EDUID!=me.id)loadEdu().then(()=>{if(tab=='me'&&$('#n1'))profile()});
  unsubs.push(db.collection('posts').where('uid','==',me.id).onSnapshot(s=>{const a=s.docs.map(d=>d.data()),n=$('#n1'),g=$('#mg');if(n)n.textContent=a.length;if(g)g.innerHTML=a.filter(p=>p.img).map(p=>`<img src="${p.img}" loading=lazy alt="" onclick="lb(this.src)">`).join('')||'<div class=empty>No photos yet.</div>'},()=>{}));
  unsubs.push(db.collection('users').onSnapshot(s=>{const U=s.docs.map(d=>({id:d.id,...d.data()}));
   window.UL=U;mbF();const mb=$('#mbx');if(mb)mb.innerHTML=U.filter(u=>u.approved).map(u=>`<div class=hd style="cursor:pointer" onclick="viewU('${u.id}')">${avs(u)}<div><b>${esc(u.name)}</b><small>${esc(u.edu||u.bio||'')}</small></div></div>`).join('');
@@ -965,8 +1029,8 @@ async function setPw(){const u=auth.currentUser,pw=$('#npw').value;if(pw.length<
  try{await u.linkWithCredential(firebase.auth.EmailAuthProvider.credential(u.email,pw));toast('Password set. You can now log in with email and password.');profile()}catch(e){console.error(e);toast(msg(e)||'Could not set password')}}
 async function resetPw(){try{await auth.sendPasswordResetEmail(auth.currentUser.email);toast('Password reset link sent to your email')}catch(e){console.error(e);toast(msg(e)||'Could not send the link')}}
 function viewU(id){const u=AU.find(x=>x.id==id);if(!u)return;cpm='user';$('#cp .cpb').classList.remove('rm');
- $('#cp .cpb').innerHTML=`<div class=cph><b>Profile</b><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=cpl><div style="padding:16px 16px 4px;text-align:center"><span class=pav>${avs(u)}</span><h3>${esc(u.name)}</h3><small style="color:var(--mute)">${onl(u)?'Active now':lastSeen(u)}</small>${u.bio?`<p style="margin-top:4px">${esc(u.bio)}</p>`:''}</div><div style="padding:4px 16px 16px">${rowsOf(u,false)}${u.phone?`<div class=bt><a class="btn gr" href="tel:${esc(u.phone)}">${ic('phone')} Call</a><a class="btn g" target=_blank rel=noopener href="https://wa.me/${esc(u.phone.replace(/^0/,'880').replace(/\D/g,''))}">WhatsApp</a></div>`:''}${u.id!=me.id?`<button class="btn" style="width:100%;margin-top:10px" onclick="chatWith('${u.id}')">${ic('chat')} Message</button>`:''}</div></div>`;
- $('#cp').classList.remove('hide')}
+ $('#cp .cpb').innerHTML=`<div class=cph><b>Profile</b><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=cpl><div class=ucv id=ucv></div><div style="padding:0 16px 4px;text-align:center;margin-top:-48px"><span class=pav>${avs(u)}</span><h3>${esc(u.name)}</h3><small style="color:var(--mute)">${onl(u)?'Active now':lastSeen(u)}</small>${u.bio?`<p style="margin-top:4px">${esc(u.bio)}</p>`:''}</div><div style="padding:4px 16px 16px">${rowsOf(u,false)}${u.phone?`<div class=bt><a class="btn gr" href="tel:${esc(u.phone)}">${ic('phone')} Call</a><a class="btn g" target=_blank rel=noopener href="https://wa.me/${esc(u.phone.replace(/^0/,'880').replace(/\D/g,''))}">WhatsApp</a></div>`:''}${u.id!=me.id?`<button class="btn" style="width:100%;margin-top:10px" onclick="chatWith('${u.id}')">${ic('chat')} Message</button>`:''}</div></div>`;
+ $('#cp').classList.remove('hide');phCov(u.id,'#ucv')}
 async function saveP(){const f=$('#pp').files[0],u={name:$('#pn').value.trim()||me.name,phone:$('#pph').value.trim(),bio:$('#pb').value.trim()};
  INF.forEach(([k])=>{if(k!='edu')u[k]=$('#f_'+k).value.trim()});
  if(u.dob){const b=dobN(u.dob);if(!b)return toast('Birthday must be DD-MM-YYYY (e.g. 25-03-1997)');u.dob=b.s}
