@@ -7,7 +7,7 @@
 <meta name="description" content="LAV Batch 2012 - the friends app of Lakshmipasha Adarsha Bidyalaya Batch 2012 (লক্ষ্মীপাশা আদর্শ বিদ্যালয় ব্যাচ ২০১২): posts, chat, cricket, picnic, funds and accounts.">
 <meta name="keywords" content="লক্ষ্মীপাশা আদর্শ বিদ্যালয় ব্যাচ ২০১২, লক্ষ্মীপাশা আদর্শ বিদ্যালয়, LAV Batch 2012, Lakshmipasha Adarsha Bidyalaya Batch 2012, Lakshmipasha Adarsha Vidyalaya 2012">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22 width=%22512%22 height=%22512%22 role=%22img%22 aria-label=%22LAV Batch 2012 logo%22%3E%3Crect width=%22512%22 height=%22512%22 rx=%22116%22 fill=%22%231e1b4b%22/%3E%3Cg transform=%22scale(2.56)%22%3E%3Ccircle cx=%22100%22 cy=%22100%22 r=%2282%22 fill=%22%23312e81%22/%3E %3Ccircle cx=%22100%22 cy=%22100%22 r=%2258%22 fill=%22%233730a3%22/%3E %3Cg fill=%22none%22 stroke-width=%2214%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E %3Cpath d=%22M38 70 V134 H70%22 stroke=%22%23ff5a5f%22/%3E %3Cpath d=%22M78 136 L100 86 L122 136 M88 122 H112%22 stroke=%22%23ffffff%22/%3E %3Cpath d=%22M130 70 L148 134 L166 70%22 stroke=%22%23ffb703%22/%3E %3C/g%3E %3Ccircle cx=%22100%22 cy=%2262%22 r=%2212%22 fill=%22%23ffb703%22/%3E %3Ctext x=%22100%22 y=%22178%22 text-anchor=%22middle%22 font-family=%22DejaVu Sans,Arial,sans-serif%22 font-size=%2216%22 font-weight=%22700%22 fill=%22%23a5b4fc%22 letter-spacing=%223%22%3EBATCH%202012%3C/text%3E%3C/g%3E%3C/svg%3E">
-<meta name="theme-color" content="#0b1220">
+<meta name="theme-color" content="#eaf3fc">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -17,7 +17,7 @@
 <link rel="canonical" href="https://lavbatch2012.github.io/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"LAV Batch 2012","alternateName":["লক্ষ্মীপাশা আদর্শ বিদ্যালয় ব্যাচ ২০১২","Lakshmipasha Adarsha Bidyalaya Batch 2012"],"url":"https://lavbatch2012.github.io/"}</script>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>try{document.documentElement.dataset.theme=localStorage.getItem('lavTheme')||'aurora'}catch(e){document.documentElement.dataset.theme='aurora'}</script>
+<script>try{var _l=localStorage;document.documentElement.dataset.theme=_l.getItem('lavTheme3')||_l.getItem('lavDefTheme')||'sky'}catch(e){document.documentElement.dataset.theme='sky'}</script>
 <style>
 /* ===== LAV 2012: digital "hologram seal + radar" look =====
    Deep indigo base, chamfered (corner-cut) panels, hologram-foil avatar rings,
@@ -452,6 +452,219 @@ header.ph h1,header.ph h1 small{color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.75)
 .plt{display:flex;justify-content:space-between;font-weight:600}.plt em{font-style:normal;color:var(--mute);font-weight:500}.plb{height:6px;border-radius:3px;background:rgba(255,255,255,.1);margin-top:6px}.plb i{display:block;height:100%;border-radius:3px;background:var(--sig)}
 .plr{display:flex;align-items:center;gap:8px;margin-top:8px}.plr input[type=text],.plr input:not([type]){flex:1}
 #mb2 .pg input,#mb2 .pg select,#mb2 .pg textarea{margin-top:8px}
+nav button>span{display:none}
+
+/* ===== v7: "Sky Clean" — light cloud-glass, navy ink, teal actions, gold accents ===== */
+html:is([data-theme=sky],[data-theme=mosaic]){color-scheme:light;--bg:#eaf3fc;--gp:#fff;--panel:#fff;--ink:#0f2236;--mute:#6a7b92;--line:rgba(15,34,54,.08);
+ --cy:#0f6f8f;--vi:#c9972f;--ok:#12a679;--ball:#e5484d;--gold:#d4a843;--gold2:#f0d078;
+ --sig:linear-gradient(135deg,#1b8aab,#0f5f7a);--holo:conic-gradient(from 200deg,#f0d078,#c9972f,#6fb9d9,#f0d078);
+ --g1:#fff;--g2:rgba(255,255,255,.78);--gb:rgba(20,60,100,.08);--gl:0 10px 30px rgba(31,80,130,.10),0 1px 0 rgba(255,255,255,.9) inset;
+ --navon:rgba(15,111,143,.11);--navink:#0f6f8f;--rad:24px;--soft:rgba(15,34,54,.045)}
+html:is([data-theme=sky],[data-theme=mosaic]) body::before{background:
+ radial-gradient(55% 14% at 12% 4%,rgba(255,255,255,.95),transparent 70%),
+ radial-gradient(50% 12% at 88% 9%,rgba(255,255,255,.85),transparent 70%),
+ radial-gradient(70% 22% at 50% -4%,rgba(120,185,235,.55),transparent 75%),
+ linear-gradient(180deg,#cde5fa 0,#e6f1fc 260px,#f3f7fb 520px,#f4f7fb 100%)}
+html:is([data-theme=sky],[data-theme=mosaic]) body{color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) ::selection{background:rgba(15,111,143,.2)}
+
+/* header */
+html:is([data-theme=sky],[data-theme=mosaic]) header{background:rgba(255,255,255,.62);border-bottom:1px solid rgba(255,255,255,.7);box-shadow:0 6px 22px rgba(31,80,130,.07);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%)}
+html:is([data-theme=sky],[data-theme=mosaic]) header .lg{display:block;width:40px;height:40px;border-radius:13px;border:0;background:none;box-shadow:0 4px 12px rgba(15,34,54,.18)}
+html:is([data-theme=sky],[data-theme=mosaic]) header h1{font:800 17px/1.1 var(--disp);letter-spacing:.01em;color:var(--ink);white-space:nowrap}
+html:is([data-theme=sky],[data-theme=mosaic]) header h1 small{display:block;max-width:150px;font:500 11px/1.2 'Hind Siliguri',sans-serif;color:var(--mute);margin-top:2px}
+html:is([data-theme=sky],[data-theme=mosaic]) .cbtn{background:#fff;border:1px solid var(--line);box-shadow:0 4px 12px rgba(31,80,130,.1);color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) .onp{background:#fff;border:1px solid rgba(18,166,121,.3);box-shadow:0 4px 12px rgba(31,80,130,.08);color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) .onp span{color:var(--mute)}
+html:is([data-theme=sky],[data-theme=mosaic]) .bel{background:#fff;border:1px solid var(--line);color:var(--cy);box-shadow:0 4px 12px rgba(31,80,130,.1)}
+html:is([data-theme=sky],[data-theme=mosaic]) .bel.on{color:var(--ok);border-color:rgba(18,166,121,.35);background:#fff;box-shadow:0 4px 12px rgba(31,80,130,.1)}
+html:is([data-theme=sky],[data-theme=mosaic]) .bel.off{color:var(--mute);background:#fff;border-color:var(--line)}
+html:is([data-theme=sky],[data-theme=mosaic]) .bel i{box-shadow:0 0 0 2px #fff;background:#e5484d}
+html:is([data-theme=sky],[data-theme=mosaic]) .bdg{background:#e5484d;color:#fff;box-shadow:0 0 0 3px #fff}
+html:is([data-theme=sky],[data-theme=mosaic]) header.ph{background:linear-gradient(180deg,rgba(10,30,54,.25),rgba(10,30,54,.7)),var(--hp) center/cover no-repeat;border-radius:0 0 26px 26px}
+html:is([data-theme=sky],[data-theme=mosaic]) header.ph h1,html:is([data-theme=sky],[data-theme=mosaic]) header.ph h1 small{color:#fff}
+
+/* headings */
+html:is([data-theme=sky],[data-theme=mosaic]) h2{font:800 20px/1.2 var(--disp);color:var(--ink);margin:24px 18px 4px}
+html:is([data-theme=sky],[data-theme=mosaic]) h2:before{width:4px;height:18px;background:linear-gradient(180deg,var(--gold2),var(--gold))}
+html:is([data-theme=sky],[data-theme=mosaic]) .ah{color:var(--ink)}
+
+/* cards */
+html:is([data-theme=sky],[data-theme=mosaic]) .pg,html:is([data-theme=sky],[data-theme=mosaic]) .card,html:is([data-theme=sky],[data-theme=mosaic]) .ig{background:linear-gradient(180deg,#fff,rgba(255,255,255,.86));border:1px solid rgba(255,255,255,.95);border-radius:var(--rad);box-shadow:var(--gl);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+html:is([data-theme=sky],[data-theme=mosaic]) .pg{margin:14px 14px;padding:16px 18px}
+html:is([data-theme=sky],[data-theme=mosaic]) .ig{margin:14px;padding:12px 0 14px;overflow:hidden}
+html:is([data-theme=sky],[data-theme=mosaic]) .ig .pi{border-radius:0;margin:10px 0 0}
+html:is([data-theme=sky],[data-theme=mosaic]) .pi{border:0;border-radius:18px}
+html:is([data-theme=sky],[data-theme=mosaic]) .ih .nm b,html:is([data-theme=sky],[data-theme=mosaic]) .hd b{color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) .sh{background:var(--soft);border:1px solid var(--line)}
+html:is([data-theme=sky],[data-theme=mosaic]) .cl p{background:var(--soft)}
+html:is([data-theme=sky],[data-theme=mosaic]) .ac{border-top-color:var(--line)}
+html:is([data-theme=sky],[data-theme=mosaic]) .ac button,html:is([data-theme=sky],[data-theme=mosaic]) .rx>button{background:var(--soft);color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) .ac button:active,html:is([data-theme=sky],[data-theme=mosaic]) .rx>button:active{background:rgba(15,111,143,.14);color:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) .ac button.sel{background:var(--cy);color:#fff}
+html:is([data-theme=sky],[data-theme=mosaic]) .ia button{color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) .x:hover{background:var(--soft)}
+html:is([data-theme=sky],[data-theme=mosaic]) .av{background:linear-gradient(#e9f1fa,#e9f1fa) padding-box,var(--holo) border-box;color:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) .dot{border-color:#fff}
+html:is([data-theme=sky],[data-theme=mosaic]) .plus,html:is([data-theme=sky],[data-theme=mosaic]) .gpc .gcam{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a05;border-color:#fff}
+html:is([data-theme=sky],[data-theme=mosaic]) .gpc .gcam{border-color:#fff}
+html:is([data-theme=sky],[data-theme=mosaic]) .grp{background:linear-gradient(#e9f1fa,#e9f1fa) padding-box,var(--holo) border-box;color:var(--cy)}
+
+/* stories + hero */
+html:is([data-theme=sky],[data-theme=mosaic]) .tray .av{border-width:3px}
+html:is([data-theme=sky],[data-theme=mosaic]) .tray small{color:var(--ink);font-weight:500}
+html:is([data-theme=sky],[data-theme=mosaic]) .tray .dyr .av{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--gold)}
+html:is([data-theme=sky],[data-theme=mosaic]) .tray .dyr.sn .av{box-shadow:0 0 0 2px #fff,0 0 0 4px rgba(106,123,146,.35)}
+html:is([data-theme=sky],[data-theme=mosaic]) .hero{margin:6px 0 0;padding:12px 14px 4px;background:none;border:0;box-shadow:none}
+html:is([data-theme=sky],[data-theme=mosaic]) .hero>p{background:#fff;border:1px solid var(--gb);border-radius:999px;padding:8px 14px;box-shadow:0 6px 16px rgba(31,80,130,.08);color:var(--ink);font-weight:500}
+html:is([data-theme=sky],[data-theme=mosaic]) .hero>p .ic{color:var(--vi)}
+
+/* fields + buttons */
+html:is([data-theme=sky],[data-theme=mosaic]) input,html:is([data-theme=sky],[data-theme=mosaic]) textarea,html:is([data-theme=sky],[data-theme=mosaic]) select{background:#f2f6fb;border:1px solid rgba(15,34,54,.1);border-radius:14px;color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) input::placeholder,html:is([data-theme=sky],[data-theme=mosaic]) textarea::placeholder{color:#8fa0b6}
+html:is([data-theme=sky],[data-theme=mosaic]) input:focus,html:is([data-theme=sky],[data-theme=mosaic]) textarea:focus,html:is([data-theme=sky],[data-theme=mosaic]) select:focus{background:#fff;border-color:var(--cy);box-shadow:0 0 0 3px rgba(15,111,143,.15)}
+html:is([data-theme=sky],[data-theme=mosaic]) select option{background:#fff;color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) .btn:not(.r):not(.gr){background:var(--sig);color:#fff;border-radius:16px;box-shadow:0 8px 18px rgba(15,95,122,.28)}
+html:is([data-theme=sky],[data-theme=mosaic]) .btn.g{background:linear-gradient(135deg,#1fbf8f,#12a679);color:#fff;box-shadow:0 8px 18px rgba(18,166,121,.26)}
+html:is([data-theme=sky],[data-theme=mosaic]) .btn.gr{background:#fff;color:var(--ink);border:1px solid var(--gb);box-shadow:0 4px 12px rgba(31,80,130,.07)}
+html:is([data-theme=sky],[data-theme=mosaic]) .btn.r.s{background:#fde8ea;color:#c0262d;box-shadow:none}
+html:is([data-theme=sky],[data-theme=mosaic]) .btn.s{box-shadow:none}
+html:is([data-theme=sky],[data-theme=mosaic]) .lk2,html:is([data-theme=sky],[data-theme=mosaic]) .lnk{color:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) .ir>.ic{color:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) .fl,html:is([data-theme=sky],[data-theme=mosaic]) .card label{color:var(--mute)}
+html:is([data-theme=sky],[data-theme=mosaic]) .er{color:#d6293e}.er.ok,html:is([data-theme=sky],[data-theme=mosaic]) .er.ok{color:var(--ok)}
+html:is([data-theme=sky],[data-theme=mosaic]) .gbtn{background:#fff;border:1px solid var(--gb);box-shadow:0 6px 16px rgba(31,80,130,.1)}
+html:is([data-theme=sky],[data-theme=mosaic]) .tgl input[type=checkbox]{background:#cdd8e6}
+html:is([data-theme=sky],[data-theme=mosaic]) .tgl input[type=checkbox]:checked{background:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) .pw button{color:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) .nt{background:rgba(15,111,143,.08);border-color:rgba(15,111,143,.25)}
+html:is([data-theme=sky],[data-theme=mosaic]) .bld{background:#fde8ea;color:#c0262d;border-color:rgba(229,72,77,.3)}
+
+/* chips / segments (gold active, like the reference) */
+html:is([data-theme=sky],[data-theme=mosaic]) .seg button{background:#fff;border:1px solid var(--gb);color:var(--ink);border-radius:999px;box-shadow:0 3px 10px rgba(31,80,130,.06)}
+html:is([data-theme=sky],[data-theme=mosaic]) .seg button.on{background:linear-gradient(135deg,var(--gold2),var(--gold));border-color:transparent;color:#3a2a05;box-shadow:0 6px 14px rgba(201,151,47,.35)}
+html:is([data-theme=sky],[data-theme=mosaic]) .chips span{background:var(--soft)}
+
+/* floating bottom bar with labels */
+html:is([data-theme=sky],[data-theme=mosaic]) nav{left:14px;right:14px;bottom:calc(12px + env(safe-area-inset-bottom,0px));padding:6px 4px;border:1px solid rgba(255,255,255,.95);border-radius:30px;background:rgba(255,255,255,.82);box-shadow:0 14px 36px rgba(31,80,130,.18),0 1px 0 #fff inset;-webkit-backdrop-filter:blur(26px) saturate(170%);backdrop-filter:blur(26px) saturate(170%)}
+html:is([data-theme=sky],[data-theme=mosaic]) nav button{color:var(--mute);border-radius:22px;padding:5px 0 4px;gap:1px;min-width:0}
+html:is([data-theme=sky],[data-theme=mosaic]) nav button>span{display:block;font:600 9.5px/1.2 var(--disp);letter-spacing:.01em;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html:is([data-theme=sky],[data-theme=mosaic]) nav button b{height:28px}
+html:is([data-theme=sky],[data-theme=mosaic]) nav button .ic{width:23px;height:23px}
+html:is([data-theme=sky],[data-theme=mosaic]) nav button.on{background:var(--navon);color:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) nav button.on .ic{color:var(--cy);stroke-width:2.1}
+html:is([data-theme=sky],[data-theme=mosaic]) nav .nv .av{width:25px;height:25px}
+html:is([data-theme=sky],[data-theme=mosaic]) #main{padding-bottom:124px}
+
+/* chat floating button = gold, like the reference "+" */
+html:is([data-theme=sky],[data-theme=mosaic]) #cb.fab{bottom:calc(96px + env(safe-area-inset-bottom,0px));width:58px;height:58px;border:3px solid #fff;background:linear-gradient(145deg,#f3d886,#c9972f);color:#fff;box-shadow:0 12px 26px rgba(201,151,47,.5),0 0 0 7px rgba(212,168,67,.18)}
+html:is([data-theme=sky],[data-theme=mosaic]) #cb.fab svg{filter:drop-shadow(0 1px 2px rgba(90,60,0,.35))}
+
+/* funds / events */
+html:is([data-theme=sky],[data-theme=mosaic]) .sum div{background:#fff;border:1px solid var(--gb);box-shadow:0 6px 16px rgba(31,80,130,.07)}
+html:is([data-theme=sky],[data-theme=mosaic]) .bal{background:linear-gradient(135deg,#0f4c6a,#1b86a8 62%,#d9b25c);box-shadow:0 16px 34px rgba(15,95,122,.3)}
+html:is([data-theme=sky],[data-theme=mosaic]) .dt{background:#fff;border-color:var(--gb)}
+html:is([data-theme=sky],[data-theme=mosaic]) .dt i{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a05}
+html:is([data-theme=sky],[data-theme=mosaic]) .cd{background:rgba(15,111,143,.1);color:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) .tp .bar{background:#e3ebf5}
+html:is([data-theme=sky],[data-theme=mosaic]) .plo{background:#fff}
+html:is([data-theme=sky],[data-theme=mosaic]) .plb{background:#e3ebf5}
+html:is([data-theme=sky],[data-theme=mosaic]) .bar span{background:linear-gradient(180deg,#f0d078,#1b8aab)}
+html:is([data-theme=sky],[data-theme=mosaic]) .bar em{color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) .hpv{background-color:var(--soft)}
+
+/* profile */
+html:is([data-theme=sky],[data-theme=mosaic]) .pfx{border:1px solid rgba(255,255,255,.95);background:#fff;box-shadow:var(--gl)}
+html:is([data-theme=sky],[data-theme=mosaic]) .pph{background:#e9f1fa;border-color:var(--gold);color:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) .pphc{border-color:#fff;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a05}
+html:is([data-theme=sky],[data-theme=mosaic]) .pcb.pcm{background:var(--cy);color:#fff}
+html:is([data-theme=sky],[data-theme=mosaic]) .pac,html:is([data-theme=sky],[data-theme=mosaic]) .edc,html:is([data-theme=sky],[data-theme=mosaic]) .pbk{background:#fff;border-color:var(--gb)}
+html:is([data-theme=sky],[data-theme=mosaic]) .pah i{background:linear-gradient(135deg,#1b8aab,#0f5f7a)}
+html:is([data-theme=sky],[data-theme=mosaic]) .bms{color:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) .pmn,html:is([data-theme=sky],[data-theme=mosaic]) .rp,html:is([data-theme=sky],[data-theme=mosaic]) #rxpk{background:#fff;border-color:var(--gb);box-shadow:0 16px 40px rgba(31,80,130,.2)}
+html:is([data-theme=sky],[data-theme=mosaic]) .rxp button{background:var(--soft)}
+html:is([data-theme=sky],[data-theme=mosaic]) .thb{background:#fff;border-color:var(--gb)}
+html:is([data-theme=sky],[data-theme=mosaic]) .thb.on{border-color:var(--cy);box-shadow:0 0 0 2px var(--cy)}
+.sw.sky{background:radial-gradient(60% 90% at 20% 0,#cde5fa,transparent),radial-gradient(50% 80% at 100% 100%,#f0d078,transparent),#f4f8fc;border:1px solid rgba(15,34,54,.08)}
+
+/* chat, dialogs, sheets */
+html:is([data-theme=sky],[data-theme=mosaic]) #cp,html:is([data-theme=sky],[data-theme=mosaic]) .dgw,html:is([data-theme=sky],[data-theme=mosaic]) .phw,html:is([data-theme=sky],[data-theme=mosaic]) #dc,html:is([data-theme=sky],[data-theme=mosaic]) #ma{background:rgba(15,34,54,.38)}
+html:is([data-theme=sky],[data-theme=mosaic]) .cpb,html:is([data-theme=sky],[data-theme=mosaic]) .dg,html:is([data-theme=sky],[data-theme=mosaic]) .phb,html:is([data-theme=sky],[data-theme=mosaic]) .dcb,html:is([data-theme=sky],[data-theme=mosaic]) .mab{background:#fff;border:1px solid rgba(255,255,255,.95);box-shadow:0 24px 60px rgba(15,34,54,.28)}
+html:is([data-theme=sky],[data-theme=mosaic]) .cph .bk{background:var(--soft);border-color:var(--line);color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) .cph .on{background:rgba(18,166,121,.1);color:var(--ok)}
+html:is([data-theme=sky],[data-theme=mosaic]) .rm .ms{background:#f1f6fc}
+html:is([data-theme=sky],[data-theme=mosaic]) .m{background:#fff;border:1px solid var(--gb);color:var(--ink);box-shadow:0 2px 6px rgba(31,80,130,.05)}
+html:is([data-theme=sky],[data-theme=mosaic]) .m.me{background:var(--sig);color:#fff;border:0}
+html:is([data-theme=sky],[data-theme=mosaic]) .m .sn{color:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) .cin{background:#fff}
+html:is([data-theme=sky],[data-theme=mosaic]) .ib2{background:var(--soft);color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) .snd{background:var(--sig);color:#fff}
+html:is([data-theme=sky],[data-theme=mosaic]) .cpr:active{background:var(--soft)}
+html:is([data-theme=sky],[data-theme=mosaic]) .rd .r1,html:is([data-theme=sky],[data-theme=mosaic]) .rd .r2,html:is([data-theme=sky],[data-theme=mosaic]) .rd .r3{border-color:rgba(15,111,143,.22)}
+html:is([data-theme=sky],[data-theme=mosaic]) .rd .sw{background:conic-gradient(from 0deg,transparent 0 290deg,rgba(212,168,67,.4) 359deg,transparent 360deg)}
+html:is([data-theme=sky],[data-theme=mosaic]) .dgi{background:rgba(15,111,143,.1);border-color:rgba(15,111,143,.35);color:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) .dg.dn .dgi{background:#fde8ea;border-color:rgba(229,72,77,.4);color:#d6293e}
+html:is([data-theme=sky],[data-theme=mosaic]) .dgin{background:#f2f6fb;border-color:rgba(15,34,54,.12);color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) .phb h3{color:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) .phr button,html:is([data-theme=sky],[data-theme=mosaic]) .pha button{background:var(--soft);border-color:var(--line);color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) .pha .pri{background:var(--sig);color:#fff}
+html:is([data-theme=sky],[data-theme=mosaic]) #nfp{background:#fff;border:1px solid rgba(15,111,143,.3);box-shadow:0 16px 40px rgba(31,80,130,.25);color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) #nfp::before{display:none}
+html:is([data-theme=sky],[data-theme=mosaic]) #nfp .nfi{background:rgba(15,111,143,.1);border-color:rgba(15,111,143,.35);box-shadow:none;color:var(--cy)}
+html:is([data-theme=sky],[data-theme=mosaic]) #toast{background:#0f2236;color:#fff;border:0;box-shadow:0 10px 28px rgba(15,34,54,.35)}
+
+/* sign-in / setup / loading screens */
+html:is([data-theme=sky],[data-theme=mosaic]) #auth,html:is([data-theme=sky],[data-theme=mosaic]) #wait,html:is([data-theme=sky],[data-theme=mosaic]) #setup,html:is([data-theme=sky],[data-theme=mosaic]) #boot{background-color:#eaf3fc;background-image:radial-gradient(55% 16% at 15% 6%,rgba(255,255,255,.95),transparent 70%),radial-gradient(70% 26% at 50% -4%,rgba(120,185,235,.6),transparent 75%),linear-gradient(180deg,#cde5fa 0,#e6f1fc 300px,#f4f7fb 100%);background-size:100% 100%;color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) .fbl h1{color:var(--ink)}
+html:is([data-theme=sky],[data-theme=mosaic]) .fbl p{color:#33506c}
+html:is([data-theme=sky],[data-theme=mosaic]) .fbl p span{color:var(--mute)}
+html:is([data-theme=sky],[data-theme=mosaic]) .lg.big{box-shadow:0 0 0 12px rgba(255,255,255,.55),0 0 0 26px rgba(255,255,255,.35),0 12px 30px rgba(15,34,54,.2);border:0;background:none}
+html:is([data-theme=sky],[data-theme=mosaic]) .bf{color:var(--mute)}
+html:is([data-theme=sky],[data-theme=mosaic]) .spin{background:linear-gradient(#eaf3fc,#eaf3fc) padding-box,var(--holo) border-box}
+html:is([data-theme=sky],[data-theme=mosaic]) .or:before,html:is([data-theme=sky],[data-theme=mosaic]) .or:after,html:is([data-theme=sky],[data-theme=mosaic]) hr.ln{background:var(--line);border-color:var(--line)}
+
+/* ===== Colorful Mix (mosaic): every tab has its own look ===== */
+.thm{flex-wrap:wrap}.thb{flex:1 1 calc(50% - 6px)}
+.sw.mosaic{background:linear-gradient(110deg,#c9b8ff 0 20%,#ffc9a0 20% 40%,#14173f 40% 60%,#8fe3da 60% 80%,#7f8fff 80%)}
+html[data-theme=mosaic]{transition:background-color .35s}
+html[data-theme=mosaic],html[data-theme=mosaic][data-tab=feed]{--bg:#f0eaff;--cy:#6a45ff;--vi:#b794ff;--gold:#ff8fb8;--gold2:#ffc4dc;--sig:linear-gradient(135deg,#8c6bff,#5a3cf0);--navon:rgba(106,69,255,.12);--navink:#5a3cf0;--holo:conic-gradient(from 200deg,#ffc4dc,#8c6bff,#8fd3ff,#ffc4dc);--gb:rgba(106,69,255,.1);--gl:0 12px 30px rgba(106,69,255,.12),0 1px 0 #fff inset}
+html[data-theme=mosaic][data-tab=mem]{--bg:#fff0e3;--cy:#e8590c;--vi:#ff9f43;--gold:#ff9f43;--gold2:#ffd2a6;--sig:linear-gradient(135deg,#ff9a56,#ff6b35);--navon:rgba(232,89,12,.12);--navink:#e8590c;--holo:conic-gradient(from 200deg,#ffd2a6,#ff9a56,#ffe3a3,#ffd2a6);--gb:rgba(232,89,12,.1);--gl:0 12px 30px rgba(232,89,12,.12),0 1px 0 #fff inset}
+html[data-theme=mosaic][data-tab=fund]{--bg:#e2f6f5;--cy:#0e8f94;--vi:#2ec4b6;--gold:#2ec4b6;--gold2:#9be8df;--sig:linear-gradient(135deg,#19b5b0,#0b7d86);--navon:rgba(14,143,148,.12);--navink:#0e8f94;--holo:conic-gradient(from 200deg,#9be8df,#19b5b0,#8fd3ff,#9be8df);--gb:rgba(14,143,148,.12);--gl:0 12px 30px rgba(14,143,148,.13),0 1px 0 #fff inset}
+html[data-theme=mosaic][data-tab=more]{--bg:#e8eeff;--cy:#3b5bdb;--vi:#6c8cff;--gold:#6c8cff;--gold2:#b9c8ff;--sig:linear-gradient(135deg,#5c7cff,#3b4fd1);--navon:rgba(59,91,219,.12);--navink:#3b5bdb;--holo:conic-gradient(from 200deg,#b9c8ff,#5c7cff,#c4b5fd,#b9c8ff);--gb:rgba(59,91,219,.1);--gl:0 12px 30px rgba(59,91,219,.13),0 1px 0 #fff inset}
+html[data-theme=mosaic][data-tab=me]{--bg:#fdebf2;--cy:#d6336c;--vi:#ff7aa8;--gold:#ff7aa8;--gold2:#ffc2d8;--sig:linear-gradient(135deg,#ff6b9a,#d6336c);--navon:rgba(214,51,108,.11);--navink:#d6336c;--holo:conic-gradient(from 200deg,#ffc2d8,#ff6b9a,#ffd8a8,#ffc2d8);--gb:rgba(214,51,108,.1);--gl:0 12px 30px rgba(214,51,108,.12),0 1px 0 #fff inset}
+html[data-theme=mosaic][data-tab=events]{--bg:#0b0e2e;--gp:#161a45;--panel:#161a45;--cy:#9aa8ff;--vi:#c4b5fd;--gold:#8b9cff;--gold2:#c4b5fd;--sig:linear-gradient(135deg,#6a7bff,#a24dff);--navon:rgba(154,168,255,.2);--navink:#d3d9ff;--holo:conic-gradient(from 200deg,#c4b5fd,#6a7bff,#7dd3fc,#c4b5fd)}
+html[data-theme=mosaic][data-tab=jersey]{--bg:#08090c;--gp:#14161b;--panel:#14161b;--cy:#ff6a2b;--vi:#ffb347;--gold:#ff6a2b;--gold2:#ffa36b;--sig:linear-gradient(135deg,#ff7a1a,#ff3d3d);--navon:rgba(255,106,43,.2);--navink:#ff9a66;--holo:conic-gradient(from 200deg,#ffa36b,#ff3d3d,#ffd166,#ffa36b)}
+html[data-theme=mosaic][data-tab=admin]{--bg:#0e141b;--gp:#17202a;--panel:#17202a;--cy:#4fd1c5;--vi:#7ee0d6;--gold:#4fd1c5;--gold2:#a0efe6;--sig:linear-gradient(135deg,#2bb5a8,#1d7fa3);--navon:rgba(79,209,197,.18);--navink:#8ceae0;--holo:conic-gradient(from 200deg,#a0efe6,#2bb5a8,#7dd3fc,#a0efe6)}
+html[data-theme=mosaic] body::before{background:radial-gradient(60% 22% at 15% 0%,rgba(255,255,255,.95),transparent 70%),radial-gradient(70% 30% at 90% 8%,rgba(176,148,255,.55),transparent 75%),radial-gradient(60% 30% at 0% 100%,rgba(255,170,205,.4),transparent 70%)}
+html[data-theme=mosaic][data-tab=mem] body::before{background:radial-gradient(70% 30% at 92% 0%,rgba(255,165,95,.5),transparent 72%),radial-gradient(60% 30% at 0% 100%,rgba(255,205,160,.75),transparent 70%),radial-gradient(40% 16% at 10% 4%,rgba(255,255,255,.9),transparent 70%)}
+html[data-theme=mosaic][data-tab=fund] body::before{background:radial-gradient(70% 30% at 10% 0%,rgba(60,200,195,.45),transparent 72%),radial-gradient(60% 30% at 100% 90%,rgba(150,225,235,.6),transparent 70%),radial-gradient(40% 16% at 90% 4%,rgba(255,255,255,.85),transparent 70%)}
+html[data-theme=mosaic][data-tab=more] body::before{background:radial-gradient(70% 30% at 90% 0%,rgba(110,140,255,.5),transparent 72%),radial-gradient(60% 30% at 0% 95%,rgba(190,170,255,.5),transparent 70%),radial-gradient(40% 16% at 10% 4%,rgba(255,255,255,.9),transparent 70%)}
+html[data-theme=mosaic][data-tab=me] body::before{background:radial-gradient(70% 30% at 12% 0%,rgba(255,120,165,.42),transparent 72%),radial-gradient(60% 30% at 100% 92%,rgba(255,200,150,.5),transparent 70%),radial-gradient(40% 16% at 90% 4%,rgba(255,255,255,.9),transparent 70%)}
+html[data-theme=mosaic][data-tab=events] body::before{background:radial-gradient(60% 30% at 100% 0%,rgba(139,92,246,.55),transparent 70%),radial-gradient(60% 30% at 0% 92%,rgba(59,130,246,.38),transparent 70%)}
+html[data-theme=mosaic][data-tab=jersey] body::before{background:radial-gradient(55% 24% at 50% 0%,rgba(255,106,40,.3),transparent 70%),radial-gradient(45% 20% at 100% 90%,rgba(255,61,61,.18),transparent 70%),linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/30px 30px,linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px) 0 0/30px 30px}
+html[data-theme=mosaic][data-tab=admin] body::before{background:radial-gradient(55% 24% at 0% 0%,rgba(79,209,197,.28),transparent 70%),radial-gradient(55% 24% at 100% 90%,rgba(56,130,200,.25),transparent 70%)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]){color-scheme:dark;--ink:#f2f4ff;--mute:#a5abd6;--line:rgba(255,255,255,.1);--soft:rgba(255,255,255,.07);--gb:rgba(255,255,255,.14);--gl:0 14px 36px rgba(0,0,0,.4),0 1px 0 rgba(255,255,255,.12) inset}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) header:not(.ph){background:rgba(255,255,255,.07);border-bottom-color:var(--gb);box-shadow:none}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .pg,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .card,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .ig{background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.04));border-color:var(--gb)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .cbtn,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .onp,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .bel,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .bel.on,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .bel.off,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .gbtn,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .sum div,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .dt,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .thb,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .hero>p,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .btn.gr,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .seg button,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .ac button,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .rx>button,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .sh,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .cl p,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .ib2,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .m,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .cin,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .pac,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .edc,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .pbk,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .pfx,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .plo,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .cph .bk,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .phr button,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .pha button,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .rxp button,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .dgin,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .hpv{background:rgba(255,255,255,.08);border-color:var(--gb);color:var(--ink)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .bel i,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .bdg{box-shadow:0 0 0 2px var(--bg)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .m.me,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .snd{background:var(--sig);color:#fff;border:0}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .seg button.on{background:var(--sig);color:#fff;border-color:transparent;box-shadow:none}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .dt i,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .plus,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .gpc .gcam,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .pphc{color:#fff;border-color:var(--bg)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) input,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) textarea,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) select{background:rgba(255,255,255,.08);border-color:var(--gb);color:var(--ink)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) input::placeholder,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) textarea::placeholder{color:rgba(255,255,255,.4)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) input:focus,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) textarea:focus,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) select:focus{background:rgba(255,255,255,.13);border-color:var(--cy);box-shadow:0 0 0 3px rgba(255,255,255,.08)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) select option{background:#1a1d3d;color:#fff}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) nav{background:rgba(18,20,46,.74);border-color:var(--gb);box-shadow:0 14px 36px rgba(0,0,0,.5)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .cpb,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .dg,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .phb,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .dcb,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .mab,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .pmn,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .rp,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) #rxpk,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) #nfp{background:var(--gp);border:1px solid var(--gb);color:var(--ink);box-shadow:0 24px 60px rgba(0,0,0,.55)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .av,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .grp{background:linear-gradient(#262a55,#262a55) padding-box,var(--holo) border-box;color:var(--cy)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .pph{background:#262a55;border-color:var(--gold);color:var(--cy)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .tp .bar,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .plb{background:rgba(255,255,255,.12)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .tgl input[type=checkbox]{background:rgba(255,255,255,.22)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .btn.r.s,html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .bld{background:rgba(229,72,77,.2);color:#ff8d92;border-color:rgba(229,72,77,.35)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .ac button.sel{background:var(--cy);color:#fff}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .thb.on{border-color:var(--cy);box-shadow:0 0 0 2px var(--cy)}
+html[data-theme=mosaic]:is([data-tab=events],[data-tab=jersey],[data-tab=admin]) .spin{background:linear-gradient(var(--bg),var(--bg)) padding-box,var(--holo) border-box}
 </style>
 </head>
 <body>
@@ -671,7 +884,7 @@ auth.onAuthStateChanged(async u=>{clean();if(wu){wu();wu=null}
   }catch(err){console.error(err);show('#auth');er('Sign-in problem: '+msg(err)+' ['+(err.code||err.message||'')+']')}});
  
 // ---------- Presence (online) + chat popup ----------
-var vuU=null;let HP='',hpU=null,_md='',aR=7,aSel='',AD={},GP='',gpU=null,DY=[],dyU=null,dv=null,dvT=null;
+var DT='',dtU=null;var vuU=null;let HP='',hpU=null,_md='',aR=7,aSel='',AD={},GP='',gpU=null,DY=[],dyU=null,dv=null,dvT=null;
 const dk=d=>{d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 function markDay(){if(!me||document.hidden)return;const k=dk();if(_md===k)return;_md=k;db.doc('activity/'+k).set({day:k,users:{[me.id]:Date.now()}},{merge:true}).catch(()=>{_md=''})}
 const fdt=t=>{const d=t.toDate?t.toDate():t,n=new Date(),k=Math.round((new Date(n.getFullYear(),n.getMonth(),n.getDate())-new Date(d.getFullYear(),d.getMonth(),d.getDate()))/864e5);return (k==0?'Today':k==1?'Yesterday':d.toLocaleDateString([],{day:'numeric',month:'short'}))+', '+d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})};
@@ -717,10 +930,10 @@ const ONMS=240000;
 const onl=u=>!!me&&(u.id==me.id||(u.lastSeen&&Date.now()-u.lastSeen.toMillis()<ONMS));
 const avs=u=>`<span class=ava>${av(u.photo,u.name)}${onl(u)?'<i class=dot></i>':''}</span>`;
 function beat(){if(me&&!document.hidden){db.doc('users/'+me.id).update({lastSeen:ts()}).catch(()=>{});markDay()}}
-function startPresence(){stopPresence();hpU=db.doc('settings/header').onSnapshot(d=>{HP=d.exists?(d.data().img||''):'';applyHP()},()=>{});gpU=db.doc('settings/group').onSnapshot(d=>{GP=d.exists?(d.data().img||''):'';gpR()},()=>{});dyStart();pushReg(true);nfInit();beat();hbT=setInterval(beat,90000);tkT=setInterval(upd,30000);
+function startPresence(){stopPresence();dtWatch();hpU=db.doc('settings/header').onSnapshot(d=>{HP=d.exists?(d.data().img||''):'';applyHP()},()=>{});gpU=db.doc('settings/group').onSnapshot(d=>{GP=d.exists?(d.data().img||''):'';gpR()},()=>{});dyStart();pushReg(true);nfInit();beat();hbT=setInterval(beat,90000);tkT=setInterval(upd,30000);
  document.addEventListener('visibilitychange',beat);
  pu=db.collection('users').onSnapshot(s=>{AU=s.docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.approved);const sm=me&&AU.find(u=>u.id==me.id);if(sm){me.role=sm.role;me.perms=sm.perms||[]}upd()},()=>{})}
-function stopPresence(){nfHide();if(hpU){hpU();hpU=null}HP='';applyHP();if(gpU){gpU();gpU=null}GP='';dyStop();unStop();_md='';clearInterval(hbT);clearInterval(tkT);document.removeEventListener('visibilitychange',beat);if(pu)pu();pu=null;AD={};AU=[];$('#cbn')&&($('#cbn').textContent='');$('#hoc')&&($('#hoc').textContent='0')}
+function stopPresence(){if(dtU){dtU();dtU=null}delete document.documentElement.dataset.tab;tcSet();nfHide();if(hpU){hpU();hpU=null}HP='';applyHP();if(gpU){gpU();gpU=null}GP='';dyStop();unStop();_md='';clearInterval(hbT);clearInterval(tkT);document.removeEventListener('visibilitychange',beat);if(pu)pu();pu=null;AD={};AU=[];$('#cbn')&&($('#cbn').textContent='');$('#hoc')&&($('#hoc').textContent='0')}
 function upd(){nfUI();heroR();unSync();const n=AU.filter(onl).length;const hc=$('#hoc');if(hc)hc.textContent=n;const o=$('#ocn');if(o)o.textContent=n+' online';listCP();if(cpm=='act')actR()}
 
 // ---------- Unread message count (chat button) ----------
@@ -875,7 +1088,7 @@ async function cityset(rm){try{let v;if(!rm){v=await askIn('Your city or distric
 
 // ---------- Navigation ----------
 const TABS=[['feed',ic('home'),'Feed'],['events',ic('cal'),'Events'],['jersey',ic('shirt'),'Jersey'],['fund',ic('wallet'),'Funds'],['mem',ic('img'),'Photos'],['more',ic('brief'),'More'],['me',ic('user'),'Profile']];
-function go(t){tab=t;clean();$('#nav').innerHTML=(isAdm()?[...TABS,['admin',ic('shield'),'Admin']]:TABS).map(([k,i,l])=>`<button aria-label="${l}" class="${k==t?'on':''}" onclick="go('${k}')"><b>${k=='me'?`<span class=nv>${av(me.photo,me.name)}</span>`:i}</b></button>`).join('');({feed,events,jersey,fund,mem,more,me:profile,admin})[t]()}
+function go(t){tab=t;document.documentElement.dataset.tab=t;tcSet();clean();$('#nav').innerHTML=(isAdm()?[...TABS,['admin',ic('shield'),'Admin']]:TABS).map(([k,i,l])=>`<button aria-label="${l}" class="${k==t?'on':''}" onclick="go('${k}')"><b>${k=='me'?`<span class=nv>${av(me.photo,me.name)}</span>`:i}</b><span>${l}</span></button>`).join('');({feed,events,jersey,fund,mem,more,me:profile,admin})[t]()}
 
 // ---------- Feed ----------
 function feed(){
@@ -1101,14 +1314,24 @@ async function jAdmClr(id){if(!await ask('Clear this jersey entry?',{ok:'Clear',
 
 // ---------- Themes + Admin tab ----------
 const isAdm=()=>!!me&&(me.role=='admin'||me.role=='sub');
-function setTheme(k){try{localStorage.setItem('lavTheme',k)}catch(e){}document.documentElement.dataset.theme=k;const m=document.querySelector('meta[name=theme-color]');if(m)m.content=k=='neon'?'#05060a':'#070b24';document.querySelectorAll('.thb').forEach(b=>b.classList.toggle('on',b.dataset.t==k))}
-const themeH=()=>{const c=document.documentElement.dataset.theme||'aurora';return `<h2>Theme</h2><div class=pg><div class=thm>${[['aurora','Aurora Glass'],['neon','Obsidian Neon']].map(([k,l])=>`<button class="thb ${c==k?'on':''}" data-t="${k}" onclick="setTheme('${k}')"><i class="sw ${k}"></i><span>${l}</span></button>`).join('')}</div></div>`};
+const THEMES=[['sky','Sky Clean'],['aurora','Aurora Glass'],['neon','Obsidian Neon'],['mosaic','Colorful Mix']],MZ={feed:'#f0eaff',mem:'#fff0e3',fund:'#e2f6f5',more:'#e8eeff',me:'#fdebf2',events:'#0b0e2e',jersey:'#08090c',admin:'#0e141b'};
+function tcol(){const e=document.documentElement.dataset,k=e.theme;return k=='mosaic'?(MZ[e.tab]||MZ.feed):k=='sky'?'#eaf3fc':k=='neon'?'#05060a':'#070b24'}
+function tcSet(){const m=document.querySelector('meta[name=theme-color]');if(m)m.content=tcol()}
+function applyTheme(k){document.documentElement.dataset.theme=k;tcSet();document.querySelectorAll('.thb[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t==k))}
+function setTheme(k){try{localStorage.setItem('lavTheme3',k)}catch(e){}applyTheme(k)}
+// admin-chosen default theme (settings/theme): used for anyone who has not picked their own
+function dtWatch(){dtU=db.doc('settings/theme').onSnapshot(d=>{const x=d.exists?d.data():{};DT=THEMES.some(t=>t[0]==x.def)?x.def:'';let seen=0,mine='';try{localStorage.setItem('lavDefTheme',DT);seen=+localStorage.getItem('lavForceSeen')||0;mine=localStorage.getItem('lavTheme3')||''}catch(e){}
+ const f=+x.force||0;if(f&&f>seen&&DT){try{localStorage.setItem('lavForceSeen',f);localStorage.removeItem('lavTheme3')}catch(e){}applyTheme(DT)}else if(!mine)applyTheme(DT||'sky');dtR()},()=>{})}
+function dtR(){const g=$('#dtg');if(!g)return;const c=DT||'sky';g.innerHTML=`<small style="color:var(--mute);display:block;margin:0 0 10px">The theme everyone sees first. Members can still pick their own from the theme menu.</small><div class=thm>${THEMES.map(([k,l])=>`<button class="thb ${c==k?'on':''}" onclick="dtSet('${k}')"><i class="sw ${k}"></i><span>${l}${c==k?' (default)':''}</span></button>`).join('')}</div><div class=bt style="margin-top:12px;flex-wrap:wrap"><button class="btn gr s" onclick="dtForce()">Apply default to everyone now</button></div>`}
+async function dtSet(k){try{await db.doc('settings/theme').set({def:k,at:Date.now()},{merge:true});toast('Default theme saved')}catch(e){toast(eMsg(e))}}
+async function dtForce(){if(!await ask('Switch every member to the default theme now?',{ok:'Apply'}))return;try{await db.doc('settings/theme').set({def:DT||'sky',force:Date.now(),at:Date.now()},{merge:true});toast('Applied to everyone')}catch(e){toast(eMsg(e))}}
+const themeH=()=>{const c=document.documentElement.dataset.theme||'sky';return `<h2>Theme</h2><div class=pg><div class=thm>${THEMES.map(([k,l])=>`<button class="thb ${c==k?'on':''}" data-t="${k}" onclick="setTheme('${k}')"><i class="sw ${k}"></i><span>${l}</span></button>`).join('')}</div></div>`};
 const pendH=U=>U.filter(u=>!u.approved).map(u=>`<div class=li><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${esc(u.email||'')} ${u.phone?'| '+esc(u.phone):''}</small></span><span><button class="btn g s" onclick="db.doc('users/${u.id}').update({approved:true})">Approve</button> <button class="btn r s" onclick="db.doc('users/${u.id}').delete()">Reject</button></span></div>`).join('')||'<div class=empty>No one is waiting.</div>';
 function admin(){if(!isAdm())return go('feed');
  const PL=me.role=='admin'?PERMS:PERMS.filter(x=>(me.perms||[]).includes(x[0])),
  J=[['events','Events',can('events')],['fund','Funds and PDFs',can('ledger')||can('archive')],['jersey','Jersey',can('jersey')],['feed','Feed (delete posts)',can('posts')]].filter(x=>x[2]);
  $('#main').innerHTML=`<h2>Admin</h2><div class=pg><b>${isMain(me)?'Main Admin':me.role=='admin'?'Admin':'Admin (limited)'}</b><small style="display:block;color:var(--mute);margin:2px 0 10px">${isMain(me)?'You have every power and no one can remove you.':'What the Main Admin allowed you to do:'}</small><div class=chips>${(isMain(me)?[['all','Everything']]:PL).map(x=>`<span>${esc(x[1])}</span>`).join('')||'<span>Nothing yet</span>'}</div>${J.length?`<div class=bt style="margin-top:12px;flex-wrap:wrap">${J.map(([k,l])=>`<button class="btn gr s" onclick="go('${k}')">${l}</button>`).join('')}</div>`:''}</div>
- ${can('approve')?'<h2>Waiting for approval</h2><div class=pg id=pe></div>':''}${me.role=='admin'?'<h2>Admins</h2><div class=pg id=adl></div>':''}${me.role=='admin'?'<h2>Header photo</h2><div class=pg id=hpg></div><h2>Group photo</h2><div class=pg id=gpg></div>':''}`;hpR();gpR();
+ ${can('approve')?'<h2>Waiting for approval</h2><div class=pg id=pe></div>':''}${me.role=='admin'?'<h2>Admins</h2><div class=pg id=adl></div>':''}${me.role=='admin'?'<h2>Header photo</h2><div class=pg id=hpg></div><h2>Group photo</h2><div class=pg id=gpg></div><h2>Default theme</h2><div class=pg id=dtg></div>':''}`;hpR();gpR();dtR();
  unsubs.push(db.collection('users').onSnapshot(s=>{const U=s.docs.map(d=>({id:d.id,...d.data()}));window.UL=U;admR(U);const pe=$('#pe');if(pe)pe.innerHTML=pendH(U)},()=>{}))}
 
 
