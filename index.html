@@ -493,6 +493,7 @@ rules_version='2';service cloud.firestore{match /databases/{d}/documents{
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
 <script>
 // 1) Replace with your Firebase web app config
 const CFG={apiKey:"AIzaSyDqepmd4MjXKQRHghR6o7h4k7JUmTbrZ-k",authDomain:"batch-2012-34afd.firebaseapp.com",projectId:"batch-2012-34afd",storageBucket:"batch-2012-34afd.firebasestorage.app",messagingSenderId:"71429753691",appId:"1:71429753691:web:1534d9238ddfb39c77687e"};
@@ -656,7 +657,7 @@ const ONMS=240000;
 const onl=u=>!!me&&(u.id==me.id||(u.lastSeen&&Date.now()-u.lastSeen.toMillis()<ONMS));
 const avs=u=>`<span class=ava>${av(u.photo,u.name)}${onl(u)?'<i class=dot></i>':''}</span>`;
 function beat(){if(me&&!document.hidden){db.doc('users/'+me.id).update({lastSeen:ts()}).catch(()=>{});markDay()}}
-function startPresence(){stopPresence();hpU=db.doc('settings/header').onSnapshot(d=>{HP=d.exists?(d.data().img||''):'';applyHP()},()=>{});gpU=db.doc('settings/group').onSnapshot(d=>{GP=d.exists?(d.data().img||''):'';gpR()},()=>{});dyStart();beat();hbT=setInterval(beat,90000);tkT=setInterval(upd,30000);
+function startPresence(){stopPresence();hpU=db.doc('settings/header').onSnapshot(d=>{HP=d.exists?(d.data().img||''):'';applyHP()},()=>{});gpU=db.doc('settings/group').onSnapshot(d=>{GP=d.exists?(d.data().img||''):'';gpR()},()=>{});dyStart();pushReg(true);beat();hbT=setInterval(beat,90000);tkT=setInterval(upd,30000);
  document.addEventListener('visibilitychange',beat);
  pu=db.collection('users').onSnapshot(s=>{AU=s.docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.approved);const sm=me&&AU.find(u=>u.id==me.id);if(sm){me.role=sm.role;me.perms=sm.perms||[]}upd()},()=>{})}
 function stopPresence(){if(hpU){hpU();hpU=null}HP='';applyHP();if(gpU){gpU();gpU=null}GP='';dyStop();unStop();_md='';clearInterval(hbT);clearInterval(tkT);document.removeEventListener('visibilitychange',beat);if(pu)pu();pu=null;AU=[];$('#cbn')&&($('#cbn').textContent='');$('#hoc')&&($('#hoc').textContent='0')}
@@ -706,16 +707,16 @@ function openRoom(id){cpm='room';rp=null;room=id=='all'?'all':rid(id);stopRoom()
    MS[d.id]=m;return `<div class="m ${mine?'me':''}" onclick="mAct('${d.id}')">${m.re?`<div class=rp><b>${esc(m.re.n)}</b>${esc(m.re.t)}</div>`:''}${!mine&&room=='all'?`<small class=sn>${esc(m.name)}</small>`:''}${m.img?`<img class=mimg src="${esc(m.img)}" alt="">`:''}${m.aud?`<audio controls preload=none src="${esc(m.aud)}" onclick="event.stopPropagation()"></audio>`:''}${m.text?esc(m.text):''}${rxH(m)}<small class=tm>${t?t.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+' | '+t.toLocaleDateString([],{day:'numeric',month:'short'}):''}</small></div>`}).join('')||'<div class=empty>No messages yet. Say hello.</div>';
   b.scrollTop=b.scrollHeight;const ld=s.docs[s.docs.length-1];if(ld){const lm=ld.data({serverTimestamps:'estimate'});if(lm.createdAt){const lt=lm.createdAt.toMillis();if(lt>lrG(room)){lrS(room,lt);unB()}}}},()=>{})}
 async function sm(e){e.preventDefault();const i=$('#mi'),t=i.value.trim();if(!t)return false;i.value='';
- try{await db.collection('rooms/'+room+'/m').add({uid:me.id,name:me.name,text:t,...(rp?{re:rp}:{}),createdAt:ts()});rp=null;rpR()}catch(err){console.error(err);toast('Could not send')}return false}
+ try{await db.collection('rooms/'+room+'/m').add({uid:me.id,name:me.name,text:t,...(rp?{re:rp}:{}),createdAt:ts()});rp=null;rpR();pushMsg(t)}catch(err){console.error(err);toast('Could not send')}return false}
 async function sendImg(inp){const f=inp.files[0];if(!f)return;
- try{const im=await img(f,640);await db.collection('rooms/'+room+'/m').add({uid:me.id,name:me.name,text:'',img:im,createdAt:ts()})}catch(err){console.error(err);toast('Could not send photo')}inp.value=''}
+ try{const im=await img(f,640);await db.collection('rooms/'+room+'/m').add({uid:me.id,name:me.name,text:'',img:im,createdAt:ts()});pushMsg('📷 Photo')}catch(err){console.error(err);toast('Could not send photo')}inp.value=''}
 $('#cb').innerHTML='<svg viewBox="0 0 24 24"><path fill="#fff" d="M6 3h12a4 4 0 014 4v7a4 4 0 01-4 4h-5.6L8 21.6V18H6a4 4 0 01-4-4V7a4 4 0 014-4z"/><circle cx="8" cy="10.5" r="1.4" fill="#3b7bff"/><circle cx="12" cy="10.5" r="1.4" fill="#3b7bff"/><circle cx="16" cy="10.5" r="1.4" fill="#3b7bff"/></svg>'+'<em id="cbn" class="bdg"></em>';
 $('#cb').onclick=openCP;$('#hon').onclick=openAct;$('#cp').onclick=e=>{if(e.target.id=='cp')closeCP()};
 
 
 // ---------- Chat extras: reply, reactions, delete, voice ----------
 let MS={},rp=null,rec=null,bU=null,bI=0;
-const ntf=(t,b)=>{try{if(window.Notification&&Notification.permission=='granted'&&document.hidden)new Notification(t,{body:b,icon:'apple-touch-icon.png'})}catch(e){}};
+const ntf=(t,b)=>{try{if(/^https:/.test(PUSH_URL))return;if(window.Notification&&Notification.permission=='granted'&&document.hidden)new Notification(t,{body:b,icon:'apple-touch-icon.png'})}catch(e){}};
 const RXE=['👍','❤️','😂','😮','😢','🙏'];
 const rxH=m=>{const c={};Object.values(m.rx||{}).forEach(e=>c[e]=(c[e]||0)+1);const k=Object.keys(c);return k.length?`<span class=rxr>${k.map(e=>e+(c[e]>1?' '+c[e]:'')).join(' ')}</span>`:''};
 function mAct(id){const m=MS[id];if(!m)return;maC();const o=document.createElement('div');o.id='ma';o.onclick=e=>{if(e.target.id=='ma')o.remove()};
@@ -731,7 +732,7 @@ async function vr(){if(rec){rec.stop();return}
   r.ondataavailable=e=>ch.push(e.data);
   r.onstop=()=>{clearTimeout(tm);st.getTracks().forEach(x=>x.stop());rec=null;const bb=$('#mic');if(bb){bb.textContent='🎤';bb.classList.remove('rc')}
    if(Date.now()-t0<700)return;const bl=new Blob(ch,{type:r.mimeType});if(bl.size>700000)return toast('Voice message too long');
-   const fr=new FileReader();fr.onload=async()=>{try{await db.collection('rooms/'+rm+'/m').add({uid:me.id,name:me.name,text:'',aud:fr.result,createdAt:ts()})}catch(er){toast('Could not send')}};fr.readAsDataURL(bl)};
+   const fr=new FileReader();fr.onload=async()=>{try{await db.collection('rooms/'+rm+'/m').add({uid:me.id,name:me.name,text:'',aud:fr.result,createdAt:ts()});pushMsg('🎤 Voice message',rm)}catch(er){toast('Could not send')}};fr.readAsDataURL(bl)};
   r.start()}catch(er){toast('Microphone not allowed')}}
 
 // ---------- More hub: polls, blood, chada, RSVP, jobs, map ----------
@@ -740,7 +741,17 @@ const mcl=()=>{mUn.forEach(f=>f());mUn=[]};
 const MSEC=[['polls','Polls'],['blood','Blood'],['chada','Chada'],['rsvp','RSVP'],['jobs','Jobs'],['map','Map']];
 function more(){$('#main').innerHTML=`<h2>More</h2><div class=bt id=mtb style="flex-wrap:wrap;margin:0 12px 8px"></div><div id=mb2></div>`;unsubs.push(mcl);mSec(mK)}
 function mSec(k){mcl();mK=k;$('#mtb').innerHTML=MSEC.map(([a,l])=>`<button class="btn s ${a==k?'':'gr'}" onclick="mSec('${a}')">${l}</button>`).join('')+`<button class="btn s gr" onclick="nfAsk()" aria-label="Notifications">🔔</button>`;({polls:mPolls,blood:mBlood,chada:mChada,rsvp:mRsvp,jobs:mJobs,map:mMap})[k]()}
-async function nfAsk(){try{const p=await Notification.requestPermission();toast(p=='granted'?'Notifications on':'Notifications blocked')}catch(e){toast('Not supported on this browser')}}
+const PUSH_URL='https://lav-push.shironamhinantor.workers.dev/',VAPID='BMNNlkEP0Bg5xgO_Qma_giSRUSFNifDqOCeZmvKszHkhy6M6lxncBz6XaIjBfLNFagUPGWqZ42AjowqFuxRIz6w';
+async function nfAsk(){await pushReg(false)}
+async function pushReg(silent){try{if(!('serviceWorker' in navigator)||!window.Notification||!firebase.messaging.isSupported()){if(!silent)toast('Push is not supported on this browser');return}
+ if(Notification.permission!='granted'){if(silent)return;if(await Notification.requestPermission()!='granted')return toast('Notifications blocked')}
+ const reg=await navigator.serviceWorker.register('firebase-messaging-sw.js',{scope:'./fcm-push/'});
+ if(!reg.active)await new Promise(r=>{const w=reg.installing||reg.waiting;if(!w)return r();w.addEventListener('statechange',()=>w.state=='activated'&&r())});
+ const tk=await firebase.messaging().getToken({vapidKey:VAPID,serviceWorkerRegistration:reg});if(!tk)return;
+ await db.doc('users/'+me.id+'/priv/push').set({tokens:FV.arrayUnion(tk),at:ts()},{merge:true});if(!silent)toast('Push notifications on')}catch(e){console.error(e);if(!silent)toast('Could not turn on push')}}
+async function pushSend(to,title,body,tag){if(!/^https:/.test(PUSH_URL)||!me)return;try{const tk=await auth.currentUser.getIdToken();fetch(PUSH_URL,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tk},body:JSON.stringify({to,title,body:String(body||'').slice(0,120),tag})}).catch(()=>{})}catch(e){}}
+const pushMsg=(txt,r=room)=>pushSend(r=='all'?'all':[r.split('_').find(x=>x!=me.id)],r=='all'?'Everyone: '+(me.name||''):(me.name||'LAV Batch 2012'),txt,'chat-'+r);
+const pushBlood=(g,a)=>{const m=AU.filter(u=>u.blood==g&&u.id!=me.id).map(u=>u.id);pushSend(m.length?m:'all','🩸 Blood needed: '+g,a,'blood')};
 // polls (incl. jersey design vote with photos)
 function mPolls(){$('#mb2').innerHTML=`${can('events')?'<div class=pg><button class=btn onclick="plNew()">+ New poll / jersey vote</button></div>':''}<div id=pll></div>`;
  mUn.push(db.collection('polls').orderBy('createdAt','desc').limit(30).onSnapshot(s=>{$('#pll').innerHTML=s.docs.map(d=>{const p=d.data(),v=p.votes||{},n=Object.keys(v).length,my=v[me.id];
@@ -751,7 +762,7 @@ function plNew(){plI=[];dcClose();const d=document.createElement('div');d.id='dc
  d.onclick=e=>{if(e.target.id=='dc')dcClose()};document.body.append(d)}
 async function plPick(i,el){const f=el.files[0];el.value='';if(!f)return;plI[i]=await img(f,640);$('#plp'+i).textContent='✓'}
 async function plPost(){const q=$('#plq').value.trim(),o=[0,1,2,3].map(i=>({t:$('#plt'+i).value.trim(),img:plI[i]||''})).filter(x=>x.t||x.img);if(!q||o.length<2)return toast('Add a question and at least 2 options');$('#plgo').disabled=true;
- try{await db.collection('polls').add({q,opts:o,votes:{},by:me.id,createdAt:ts()});dcClose();toast('Poll created')}catch(e){$('#plgo').disabled=false;toast(eMsg(e))}}
+ try{await db.collection('polls').add({q,opts:o,votes:{},by:me.id,createdAt:ts()});pushSend('all','🗳 New poll',q,'poll');dcClose();toast('Poll created')}catch(e){$('#plgo').disabled=false;toast(eMsg(e))}}
 const plVote=async(id,i)=>{try{await db.doc('polls/'+id).update({['votes.'+me.id]:i})}catch(e){toast(eMsg(e))}};
 const plDel=async id=>{if(await ask('Delete this poll?',{ok:'Delete',danger:1}))db.doc('polls/'+id).delete().catch(e=>toast(eMsg(e)))};
 // blood
@@ -759,14 +770,14 @@ const BG=['A+','A-','B+','B-','O+','O-','AB+','AB-'];
 function mBlood(){const mb=(AU.find(u=>u.id==me.id)||me).blood||'';
  $('#mb2').innerHTML=`<div class=pg><b>🩸 Blood request</b><select id=blg>${BG.map(g=>`<option>${g}</option>`).join('')}</select><input id=bla placeholder="Area / hospital"><input id=blp placeholder="Phone" value="${esc(me.phone||'')}"><input id=bln placeholder="Note (optional)"><div class=bt><button class="btn r" onclick="blPost()">Send request</button></div><small style="color:var(--mute)">Batchmates with this blood group get an alert while their app is open.</small></div><div id=bll></div>`;
  mUn.push(db.collection('blood').orderBy('createdAt','desc').limit(30).onSnapshot(s=>{$('#bll').innerHTML=s.docs.map(d=>{const r=d.data(),m=r.group==mb&&!r.done;return `<div class=pg style="${m?'border-color:#ff4d6d':''}"><b>${esc(r.group)}</b> ${esc(r.area||'')} ${r.done?'<span class=chips><span>Done</span></span>':''}<small style="display:block;color:var(--mute)">${esc(r.note||'')} | ${esc(r.name||'')} | ${ago(r.createdAt)}${m?' | matches your group':''}</small><div class=bt>${r.phone&&!r.done?`<a class="btn s" href="tel:${esc(r.phone)}">Call</a>`:''}${r.uid==me.id&&!r.done?`<button class="btn gr s" onclick="blDone('${d.id}')">Mark done</button>`:''}${r.uid==me.id||can('posts')?`<button class="btn r s" onclick="blDel('${d.id}')">Delete</button>`:''}</div></div>`}).join('')||'<div class=empty>No requests.</div>'},()=>{}))}
-async function blPost(){const a=$('#bla').value.trim();if(!a)return toast('Add the area or hospital');try{await db.collection('blood').add({uid:me.id,name:me.name||'',group:$('#blg').value,area:a,phone:$('#blp').value.trim(),note:$('#bln').value.trim(),done:false,createdAt:ts()});$('#bla').value=$('#bln').value='';toast('Request sent')}catch(e){toast(eMsg(e))}}
+async function blPost(){const a=$('#bla').value.trim();if(!a)return toast('Add the area or hospital');try{await db.collection('blood').add({uid:me.id,name:me.name||'',group:$('#blg').value,area:a,phone:$('#blp').value.trim(),note:$('#bln').value.trim(),done:false,createdAt:ts()});pushBlood($('#blg').value,a);$('#bla').value=$('#bln').value='';toast('Request sent')}catch(e){toast(eMsg(e))}}
 const blDone=id=>db.doc('blood/'+id).update({done:true}).catch(e=>toast(eMsg(e)));
 const blDel=async id=>{if(await ask('Delete this request?',{ok:'Delete',danger:1}))db.doc('blood/'+id).delete().catch(e=>toast(eMsg(e)))};
 // chada tracker
 function mChada(){mUn.push(db.collection('chada').orderBy('createdAt','desc').limit(20).onSnapshot(s=>{const adm=can('ledger');
  $('#mb2').innerHTML=(adm?'<div class=pg><button class=btn onclick="cdNew()">+ New chada</button></div>':'')+(s.docs.map(d=>{const c=d.data(),sb=c.sub||{},ok=c.ok||{},my=ok[me.id]?'paid':sb[me.id]?'pending':'due',np=AU.filter(u=>ok[u.id]).length;
   return `<div class=pg><b>${esc(c.title)}</b> <span class=chips><span><b>Tk ${c.amount}</b> each</span><span>${np}/${AU.length} paid</span></span><p style="margin:8px 0">${my=='paid'?'✅ You paid':my=='pending'?'⏳ Waiting for admin to verify':'❗ You have not paid yet'}</p>${my=='due'?`<div class=bt><button class=btn onclick="cdPay('${d.id}')">I paid (enter TrxID)</button></div>`:''}${adm?`<details style="margin-top:8px"><summary style="cursor:pointer">Members</summary>${AU.map(u=>`<div class=li><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${ok[u.id]?'Paid':sb[u.id]?'TrxID '+esc(sb[u.id].trx):'Not paid'}</small></span>${sb[u.id]&&!ok[u.id]?`<span><button class="btn g s" onclick="cdOk('${d.id}','${u.id}',1)">Verify</button> <button class="btn r s" onclick="cdOk('${d.id}','${u.id}',0)">Reject</button></span>`:!ok[u.id]?`<button class="btn gr s" onclick="cdOk('${d.id}','${u.id}',1)">Mark paid</button>`:''}</div>`).join('')}<div class=bt><button class="btn r s" onclick="cdDel('${d.id}')">Delete</button></div></details>`:''}</div>`}).join('')||'<div class=empty>No chada yet.</div>')},()=>{}))}
-async function cdNew(){const t=await askIn('Chada title',{ph:'e.g. December monthly chada'});if(!t||!t.trim())return;const a=await askIn('Amount per person (Tk)',{ph:'e.g. 100',type:'number'});if(!a||!+a)return;try{await db.collection('chada').add({title:t.trim(),amount:+a,sub:{},ok:{},createdAt:ts()})}catch(e){toast(eMsg(e))}}
+async function cdNew(){const t=await askIn('Chada title',{ph:'e.g. December monthly chada'});if(!t||!t.trim())return;const a=await askIn('Amount per person (Tk)',{ph:'e.g. 100',type:'number'});if(!a||!+a)return;try{await db.collection('chada').add({title:t.trim(),amount:+a,sub:{},ok:{},createdAt:ts()});pushSend('all','New chada: '+t.trim(),'Tk '+a+' each','chada')}catch(e){toast(eMsg(e))}}
 async function cdPay(id){const v=await askIn('bKash / Nagad TrxID',{ph:'e.g. 8N7A6D5E4C'});if(!v||!v.trim())return;try{await db.doc('chada/'+id).update({['sub.'+me.id]:{trx:v.trim().slice(0,30),at:Date.now()}});toast('Sent for verification')}catch(e){toast(eMsg(e))}}
 const cdOk=(id,u,y)=>db.doc('chada/'+id).update(y?{['ok.'+u]:true}:{['sub.'+u]:FV.delete()}).catch(e=>toast(eMsg(e)));
 const cdDel=async id=>{if(await ask('Delete this chada?',{ok:'Delete',danger:1}))db.doc('chada/'+id).delete().catch(e=>toast(eMsg(e)))};
@@ -983,7 +994,7 @@ function dyNew(){dcImg='';dcClose();const d=document.createElement('div');d.id='
 function dcClose(){const d=$('#dc');if(d)d.remove()}
 async function dcPick(i){const f=i.files[0];i.value='';if(!f)return;try{dcImg=await img(f,800);const p=$('#dcp');if(p){p.style.backgroundImage="url('"+dcImg+"')";p.classList.add('h')}}catch(err){console.error(err);toast('Could not read photo')}}
 async function dcPost(){const t=(($('#dct')||{}).value||'').trim();if(!dcImg&&!t)return toast('Add a photo or write something');const b=$('#dcs');b.disabled=true;
- try{await db.collection('days').add({uid:me.id,text:t,img:dcImg,createdAt:ts()});dcClose();toast('Day shared')}catch(err){console.error(err);b.disabled=false;toast(eMsg(err))}}
+ try{await db.collection('days').add({uid:me.id,text:t,img:dcImg,createdAt:ts()});pushSend('all',(me.name||'Someone')+' added a Day',t||'Tap to view','day');dcClose();toast('Day shared')}catch(err){console.error(err);b.disabled=false;toast(eMsg(err))}}
 function dyOpen(id){const us=[...new Set(dyAct().map(d=>d.uid))].filter(x=>x!=id);dv={g:[id,...us],gi:0,ii:0};const l=dyOf(id),k=l.findIndex(d=>!dvSeen.has(d.id));dv.ii=k<0?0:k;dvShow()}
 function dvShow(){clearTimeout(dvT);if(!dv)return;const uid=dv.g[dv.gi],list=dyOf(uid);if(!list.length)return dvNext(1);if(dv.ii>=list.length)dv.ii=list.length-1;
  const d=list[dv.ii],u=AU.find(x=>x.id==uid)||(uid==me.id?me:{name:'',photo:''});dvSee(d.id);
