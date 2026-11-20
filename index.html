@@ -383,6 +383,18 @@ header.ph h1,header.ph h1 small{color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.75)
 .dvm img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}.dvt{position:relative;z-index:1;margin:0;padding:18px 22px;max-width:92%;text-align:center;color:#fff;font:700 24px/1.35 var(--disp);text-shadow:0 2px 12px rgba(0,0,0,.6);word-break:break-word}
 .dvm img+.dvt{position:absolute;left:0;right:0;bottom:calc(24px + env(safe-area-inset-bottom,0px));max-width:none;font-size:18px;background:linear-gradient(transparent,rgba(0,0,0,.65))}
 .dvl,.dvr{position:absolute;top:0;bottom:0;border:0;background:none;z-index:2}.dvl{left:0;width:35%}.dvr{right:0;width:65%}
+
+/* ===== More hub + chat extras ===== */
+.rp{font-size:12px;border-left:3px solid var(--cy);padding:2px 8px;margin-bottom:4px;opacity:.85}.rp b{display:block}
+.rxr{display:block;margin-top:3px;font-size:14px}.m audio{display:block;max-width:210px;height:34px}
+.rpq{display:flex;align-items:center;gap:6px;padding:6px 12px;font-size:13px;color:var(--mute);border-top:1px solid var(--line)}.rpq .x{margin-left:auto}
+.ib2.mic{border:0;border-radius:12px;font-size:17px;padding:0 10px}.ib2.rc{background:#e11d48;animation:pl 1s infinite}@keyframes pl{50%{opacity:.5}}
+#ma{position:fixed;inset:0;z-index:50;background:rgba(2,3,12,.6);display:flex;align-items:flex-end;justify-content:center}.mab{width:100%;max-width:480px;background:var(--panel);border-radius:22px 22px 0 0;padding:14px 16px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:10px}
+.rxp{display:flex;justify-content:space-around}.rxp button{border:0;background:rgba(255,255,255,.08);border-radius:50%;width:46px;height:46px;font-size:24px}
+.plo{border:1px solid var(--line);border-radius:14px;padding:8px;margin-top:8px;cursor:pointer;overflow:hidden}.plo.on{border-color:var(--cy)}.plo img{width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:6px}
+.plt{display:flex;justify-content:space-between;font-weight:600}.plt em{font-style:normal;color:var(--mute);font-weight:500}.plb{height:6px;border-radius:3px;background:rgba(255,255,255,.1);margin-top:6px}.plb i{display:block;height:100%;border-radius:3px;background:var(--sig)}
+.plr{display:flex;align-items:center;gap:8px;margin-top:8px}.plr input[type=text],.plr input:not([type]){flex:1}
+#mb2 .pg input,#mb2 .pg select,#mb2 .pg textarea{margin-top:8px}
 </style>
 </head>
 <body>
@@ -415,6 +427,10 @@ rules_version='2';service cloud.firestore{match /databases/{d}/documents{
  match /activity/{d}{allow read:if ok()&&me().role in ['admin','sub'];allow create,update:if ok()}
  match /settings/{s}{allow read:if ok();allow write:if adm()}
  match /days/{d}{allow read,create:if ok();allow delete:if ok()&&(resource.data.uid==request.auth.uid||can('posts'))}
+ match /polls/{p}{allow read:if ok();allow create,delete:if can('events');allow update:if ok()&&request.resource.data.diff(resource.data).affectedKeys().hasOnly(['votes'])}
+ match /blood/{b}{allow read,create:if ok();allow update:if ok()&&resource.data.uid==request.auth.uid;allow delete:if ok()&&(resource.data.uid==request.auth.uid||can('posts'))}
+ match /chada/{c}{allow read:if ok();allow create,delete:if can('ledger');allow update:if can('ledger')||(ok()&&request.resource.data.diff(resource.data).affectedKeys().hasOnly(['sub']))}
+ match /jobs/{j}{allow read,create:if ok();allow delete:if ok()&&(resource.data.uid==request.auth.uid||can('posts'))}
  match /rooms/{r}/m/{x}{allow read,write:if ok()}}}
 -->
 <div id="boot"><img class="lgx bl" alt=""><span class="bf">LAV Batch 2012</span></div>
@@ -647,14 +663,14 @@ function stopPresence(){if(hpU){hpU();hpU=null}HP='';applyHP();if(gpU){gpU();gpU
 function upd(){heroR();unSync();const n=AU.filter(onl).length;const hc=$('#hoc');if(hc)hc.textContent=n;const o=$('#ocn');if(o)o.textContent=n+' online';listCP();if(cpm=='act')actR()}
 
 // ---------- Unread message count (chat button) ----------
-let unL={},unD={};
+let unL={},unD={},unI={};
 const lrK=r=>'lavLR_'+(me?me.id:'')+'_'+r;
 const lrG=r=>{try{return +localStorage.getItem(lrK(r))||0}catch(e){return 0}};
 const lrS=(r,t)=>{try{localStorage.setItem(lrK(r),String(t))}catch(e){}};
 function unB(){let n=0;if(me)Object.keys(unD).forEach(r=>{const l=lrG(r);n+=unD[r].filter(m=>m.uid!=me.id&&m.t>l).length});const b=$('#cbn');if(b)b.textContent=n?(n>99?'99+':n):''}
 function unSync(){if(!me)return;['all',...AU.filter(u=>u.id!=me.id).map(u=>rid(u.id))].forEach(r=>{if(unL[r])return;if(!lrG(r))lrS(r,Date.now());
- unL[r]=db.collection('rooms/'+r+'/m').where('createdAt','>',firebase.firestore.Timestamp.fromMillis(lrG(r))).orderBy('createdAt').onSnapshot(s=>{unD[r]=s.docs.map(d=>{const m=d.data({serverTimestamps:'estimate'});return{uid:m.uid,t:m.createdAt?m.createdAt.toMillis():Date.now()}});unB()},()=>{})})}
-function unStop(){Object.values(unL).forEach(f=>f());unL={};unD={};const b=$('#cbn');if(b)b.textContent=''}
+ unL[r]=db.collection('rooms/'+r+'/m').where('createdAt','>',firebase.firestore.Timestamp.fromMillis(lrG(r))).orderBy('createdAt').onSnapshot(s=>{s.docChanges().forEach(c=>{if(unI[r]&&c.type=='added'){const m=c.doc.data();if(m.uid!=me.id)ntf(m.name||'LAV Batch 2012',m.text||(m.aud?'Voice message':'Photo'))}});unI[r]=1;unD[r]=s.docs.map(d=>{const m=d.data({serverTimestamps:'estimate'});return{uid:m.uid,t:m.createdAt?m.createdAt.toMillis():Date.now()}});unB()},()=>{})})}
+function unStop(){Object.values(unL).forEach(f=>f());unL={};unD={};unI={};const b=$('#cbn');if(b)b.textContent=''}
 const lastSeen=u=>u.lastSeen?'Last seen '+ago(u.lastSeen)+' | '+fdt(u.lastSeen):'Offline';
 let cq='',lmL={},lmD={},rmUn=null;
 const tf=t=>{if(!t)return'';const d=t.toDate?t.toDate():t;return d.toDateString()==new Date().toDateString()?d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):d.toLocaleDateString([],{day:'numeric',month:'short'})};
@@ -679,26 +695,100 @@ function renderCP(){cpm='chat';const bx=$('#cp .cpb');bx.classList.remove('rm');
 function openCP(){stopRoom();$('#cp').classList.remove('hide');renderCP()}
 function closeCP(){stopRoom();stopLM();cq='';$('#cp').classList.add('hide');$('#cp .cpb').classList.remove('rm')}
 const chatWith=id=>openRoom(id);
-function openRoom(id){cpm='room';room=id=='all'?'all':rid(id);stopRoom();
+function openRoom(id){cpm='room';rp=null;room=id=='all'?'all':rid(id);stopRoom();
  const u=id=='all'?null:AU.find(x=>x.id==id),on=AU.filter(onl).length,bx=$('#cp .cpb');bx.classList.add('rm');
  bx.innerHTML=`<div class=cph><button class=bk onclick="openCP()" aria-label="Back">${ic('back')}</button><span class=gh>${u?avs(u):grpH()}</span><span class=nm><b>${u?esc(u.name):'Everyone'}</b><small>${u?(onl(u)?'Active now':lastSeen(u)):AU.length+' members | '+on+' online'}</small></span><button class=x onclick="closeCP()">${ic('x')}</button></div>
  <div class=ms id=ms></div>
- <form class=cin onsubmit="return sm(event)"><label class=ib2>${ic('camera')}<input type=file accept="image/*" hidden onchange="sendImg(this)"></label><input id=mi placeholder="Type a message..." required autocomplete=off><button class=snd aria-label="Send">${ic('send')}</button></form>`;
+ <div id=rpb></div><form class=cin onsubmit="return sm(event)"><label class=ib2>${ic('camera')}<input type=file accept="image/*" hidden onchange="sendImg(this)"></label><button type=button class="ib2 mic" id=mic onclick="vr()">🎤</button><input id=mi placeholder="Type a message..." required autocomplete=off><button class=snd aria-label="Send">${ic('send')}</button></form>`;
  $('#cp').classList.remove('hide');
  rmUn=db.collection('rooms/'+room+'/m').orderBy('createdAt').limitToLast(80).onSnapshot(s=>{const b=$('#ms');if(!b)return;
   b.innerHTML=s.docs.map(d=>{const m=d.data({serverTimestamps:'estimate'}),mine=m.uid==me.id,t=m.createdAt?m.createdAt.toDate():null;
-   return `<div class="m ${mine?'me':''}">${!mine&&room=='all'?`<small class=sn>${esc(m.name)}</small>`:''}${m.img?`<img class=mimg src="${esc(m.img)}" alt="">`:''}${m.text?esc(m.text):''}<small class=tm>${t?t.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+' | '+t.toLocaleDateString([],{day:'numeric',month:'short'}):''}</small></div>`}).join('')||'<div class=empty>No messages yet. Say hello.</div>';
+   MS[d.id]=m;return `<div class="m ${mine?'me':''}" onclick="mAct('${d.id}')">${m.re?`<div class=rp><b>${esc(m.re.n)}</b>${esc(m.re.t)}</div>`:''}${!mine&&room=='all'?`<small class=sn>${esc(m.name)}</small>`:''}${m.img?`<img class=mimg src="${esc(m.img)}" alt="">`:''}${m.aud?`<audio controls preload=none src="${esc(m.aud)}" onclick="event.stopPropagation()"></audio>`:''}${m.text?esc(m.text):''}${rxH(m)}<small class=tm>${t?t.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+' | '+t.toLocaleDateString([],{day:'numeric',month:'short'}):''}</small></div>`}).join('')||'<div class=empty>No messages yet. Say hello.</div>';
   b.scrollTop=b.scrollHeight;const ld=s.docs[s.docs.length-1];if(ld){const lm=ld.data({serverTimestamps:'estimate'});if(lm.createdAt){const lt=lm.createdAt.toMillis();if(lt>lrG(room)){lrS(room,lt);unB()}}}},()=>{})}
 async function sm(e){e.preventDefault();const i=$('#mi'),t=i.value.trim();if(!t)return false;i.value='';
- try{await db.collection('rooms/'+room+'/m').add({uid:me.id,name:me.name,text:t,createdAt:ts()})}catch(err){console.error(err);toast('Could not send')}return false}
+ try{await db.collection('rooms/'+room+'/m').add({uid:me.id,name:me.name,text:t,...(rp?{re:rp}:{}),createdAt:ts()});rp=null;rpR()}catch(err){console.error(err);toast('Could not send')}return false}
 async function sendImg(inp){const f=inp.files[0];if(!f)return;
  try{const im=await img(f,640);await db.collection('rooms/'+room+'/m').add({uid:me.id,name:me.name,text:'',img:im,createdAt:ts()})}catch(err){console.error(err);toast('Could not send photo')}inp.value=''}
 $('#cb').innerHTML='<svg viewBox="0 0 24 24"><path fill="#fff" d="M6 3h12a4 4 0 014 4v7a4 4 0 01-4 4h-5.6L8 21.6V18H6a4 4 0 01-4-4V7a4 4 0 014-4z"/><circle cx="8" cy="10.5" r="1.4" fill="#3b7bff"/><circle cx="12" cy="10.5" r="1.4" fill="#3b7bff"/><circle cx="16" cy="10.5" r="1.4" fill="#3b7bff"/></svg>'+'<em id="cbn" class="bdg"></em>';
 $('#cb').onclick=openCP;$('#hon').onclick=openAct;$('#cp').onclick=e=>{if(e.target.id=='cp')closeCP()};
 
+
+// ---------- Chat extras: reply, reactions, delete, voice ----------
+let MS={},rp=null,rec=null,bU=null,bI=0;
+const ntf=(t,b)=>{try{if(window.Notification&&Notification.permission=='granted'&&document.hidden)new Notification(t,{body:b,icon:'apple-touch-icon.png'})}catch(e){}};
+const RXE=['👍','❤️','😂','😮','😢','🙏'];
+const rxH=m=>{const c={};Object.values(m.rx||{}).forEach(e=>c[e]=(c[e]||0)+1);const k=Object.keys(c);return k.length?`<span class=rxr>${k.map(e=>e+(c[e]>1?' '+c[e]:'')).join(' ')}</span>`:''};
+function mAct(id){const m=MS[id];if(!m)return;maC();const o=document.createElement('div');o.id='ma';o.onclick=e=>{if(e.target.id=='ma')o.remove()};
+ o.innerHTML=`<div class=mab><div class=rxp>${RXE.map(e=>`<button onclick="mRx('${id}','${e}')">${e}</button>`).join('')}</div><button class="btn gr" onclick="mRp('${id}')">Reply</button>${m.uid==me.id||can('posts')?`<button class="btn r" onclick="mDel('${id}')">Delete</button>`:''}</div>`;document.body.append(o)}
+const maC=()=>{const o=$('#ma');o&&o.remove()};
+async function mRx(id,e){maC();const m=MS[id]||{};try{await db.doc('rooms/'+room+'/m/'+id).update({['rx.'+me.id]:(m.rx||{})[me.id]==e?FV.delete():e})}catch(er){toast(eMsg(er))}}
+function mRp(id){maC();const m=MS[id];rp={n:m.name||'',t:(m.text||(m.aud?'Voice message':'Photo')).slice(0,60)};rpR();const i=$('#mi');i&&i.focus()}
+function rpR(){const b=$('#rpb');if(b)b.innerHTML=rp?`<div class=rpq>↩ <b>${esc(rp.n)}</b> ${esc(rp.t)}<button type=button class=x onclick="rp=null;rpR()">${ic('x')}</button></div>`:''}
+async function mDel(id){maC();if(!await ask('Delete this message?',{ok:'Delete',danger:1}))return;try{await db.doc('rooms/'+room+'/m/'+id).delete()}catch(er){toast(eMsg(er))}}
+async function vr(){if(rec){rec.stop();return}
+ try{const st=await navigator.mediaDevices.getUserMedia({audio:true}),mt=['audio/webm;codecs=opus','audio/mp4'].find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t)),ch=[],r=new MediaRecorder(st,mt?{mimeType:mt,audioBitsPerSecond:24000}:{audioBitsPerSecond:24000}),t0=Date.now(),rm=room;rec=r;const b=$('#mic');b.textContent='⏹';b.classList.add('rc');
+  const tm=setTimeout(()=>r.state=='recording'&&r.stop(),45000);
+  r.ondataavailable=e=>ch.push(e.data);
+  r.onstop=()=>{clearTimeout(tm);st.getTracks().forEach(x=>x.stop());rec=null;const bb=$('#mic');if(bb){bb.textContent='🎤';bb.classList.remove('rc')}
+   if(Date.now()-t0<700)return;const bl=new Blob(ch,{type:r.mimeType});if(bl.size>700000)return toast('Voice message too long');
+   const fr=new FileReader();fr.onload=async()=>{try{await db.collection('rooms/'+rm+'/m').add({uid:me.id,name:me.name,text:'',aud:fr.result,createdAt:ts()})}catch(er){toast('Could not send')}};fr.readAsDataURL(bl)};
+  r.start()}catch(er){toast('Microphone not allowed')}}
+
+// ---------- More hub: polls, blood, chada, RSVP, jobs, map ----------
+let mUn=[],mK='polls';
+const mcl=()=>{mUn.forEach(f=>f());mUn=[]};
+const MSEC=[['polls','Polls'],['blood','Blood'],['chada','Chada'],['rsvp','RSVP'],['jobs','Jobs'],['map','Map']];
+function more(){$('#main').innerHTML=`<h2>More</h2><div class=bt id=mtb style="flex-wrap:wrap;margin:0 12px 8px"></div><div id=mb2></div>`;unsubs.push(mcl);mSec(mK)}
+function mSec(k){mcl();mK=k;$('#mtb').innerHTML=MSEC.map(([a,l])=>`<button class="btn s ${a==k?'':'gr'}" onclick="mSec('${a}')">${l}</button>`).join('')+`<button class="btn s gr" onclick="nfAsk()" aria-label="Notifications">🔔</button>`;({polls:mPolls,blood:mBlood,chada:mChada,rsvp:mRsvp,jobs:mJobs,map:mMap})[k]()}
+async function nfAsk(){try{const p=await Notification.requestPermission();toast(p=='granted'?'Notifications on':'Notifications blocked')}catch(e){toast('Not supported on this browser')}}
+// polls (incl. jersey design vote with photos)
+function mPolls(){$('#mb2').innerHTML=`${can('events')?'<div class=pg><button class=btn onclick="plNew()">+ New poll / jersey vote</button></div>':''}<div id=pll></div>`;
+ mUn.push(db.collection('polls').orderBy('createdAt','desc').limit(30).onSnapshot(s=>{$('#pll').innerHTML=s.docs.map(d=>{const p=d.data(),v=p.votes||{},n=Object.keys(v).length,my=v[me.id];
+  return `<div class=pg><b>${esc(p.q)}</b>${p.opts.map((o,i)=>{const c=Object.values(v).filter(x=>x===i).length,pc=n?Math.round(c/n*100):0;return `<div class="plo ${my===i?'on':''}" onclick="plVote('${d.id}',${i})">${o.img?`<img src="${esc(o.img)}" alt="" onclick="event.stopPropagation();lb(this.src)">`:''}<div class=plt><span>${esc(o.t||'Design '+(i+1))}</span><em>${c} (${pc}%)</em></div><div class=plb><i style="width:${pc}%"></i></div></div>`}).join('')}<small style="color:var(--mute);display:block;margin-top:6px">${n} vote${n==1?'':'s'} | ${my===undefined?'tap an option to vote':'tap another to change your vote'}</small>${can('events')?`<div class=bt><button class="btn r s" onclick="plDel('${d.id}')">Delete</button></div>`:''}</div>`}).join('')||'<div class=empty>No polls yet.</div>'},()=>{}))}
+let plI=[];
+function plNew(){plI=[];dcClose();const d=document.createElement('div');d.id='dc';
+ d.innerHTML=`<div class=dcb style="max-height:92vh;overflow:auto"><div class=dch><b>New poll</b><button type=button class=x onclick="dcClose()">${ic('x')}</button></div><input id=plq placeholder="Question (e.g. Jersey design vote)"><small class=dcn>Add 2 to 4 options. A photo (like a jersey design) is optional.</small>${[0,1,2,3].map(i=>`<div class=plr><input id=plt${i} placeholder="Option ${i+1}"><label class="btn gr s" style="cursor:pointer">${ic('camera')}<input type=file accept="image/*" hidden onchange="plPick(${i},this)"></label><span id=plp${i}></span></div>`).join('')}<div class=bt><button class=btn id=plgo type=button onclick="plPost()">Create poll</button></div></div>`;
+ d.onclick=e=>{if(e.target.id=='dc')dcClose()};document.body.append(d)}
+async function plPick(i,el){const f=el.files[0];el.value='';if(!f)return;plI[i]=await img(f,640);$('#plp'+i).textContent='✓'}
+async function plPost(){const q=$('#plq').value.trim(),o=[0,1,2,3].map(i=>({t:$('#plt'+i).value.trim(),img:plI[i]||''})).filter(x=>x.t||x.img);if(!q||o.length<2)return toast('Add a question and at least 2 options');$('#plgo').disabled=true;
+ try{await db.collection('polls').add({q,opts:o,votes:{},by:me.id,createdAt:ts()});dcClose();toast('Poll created')}catch(e){$('#plgo').disabled=false;toast(eMsg(e))}}
+const plVote=async(id,i)=>{try{await db.doc('polls/'+id).update({['votes.'+me.id]:i})}catch(e){toast(eMsg(e))}};
+const plDel=async id=>{if(await ask('Delete this poll?',{ok:'Delete',danger:1}))db.doc('polls/'+id).delete().catch(e=>toast(eMsg(e)))};
+// blood
+const BG=['A+','A-','B+','B-','O+','O-','AB+','AB-'];
+function mBlood(){const mb=(AU.find(u=>u.id==me.id)||me).blood||'';
+ $('#mb2').innerHTML=`<div class=pg><b>🩸 Blood request</b><select id=blg>${BG.map(g=>`<option>${g}</option>`).join('')}</select><input id=bla placeholder="Area / hospital"><input id=blp placeholder="Phone" value="${esc(me.phone||'')}"><input id=bln placeholder="Note (optional)"><div class=bt><button class="btn r" onclick="blPost()">Send request</button></div><small style="color:var(--mute)">Batchmates with this blood group get an alert while their app is open.</small></div><div id=bll></div>`;
+ mUn.push(db.collection('blood').orderBy('createdAt','desc').limit(30).onSnapshot(s=>{$('#bll').innerHTML=s.docs.map(d=>{const r=d.data(),m=r.group==mb&&!r.done;return `<div class=pg style="${m?'border-color:#ff4d6d':''}"><b>${esc(r.group)}</b> ${esc(r.area||'')} ${r.done?'<span class=chips><span>Done</span></span>':''}<small style="display:block;color:var(--mute)">${esc(r.note||'')} | ${esc(r.name||'')} | ${ago(r.createdAt)}${m?' | matches your group':''}</small><div class=bt>${r.phone&&!r.done?`<a class="btn s" href="tel:${esc(r.phone)}">Call</a>`:''}${r.uid==me.id&&!r.done?`<button class="btn gr s" onclick="blDone('${d.id}')">Mark done</button>`:''}${r.uid==me.id||can('posts')?`<button class="btn r s" onclick="blDel('${d.id}')">Delete</button>`:''}</div></div>`}).join('')||'<div class=empty>No requests.</div>'},()=>{}))}
+async function blPost(){const a=$('#bla').value.trim();if(!a)return toast('Add the area or hospital');try{await db.collection('blood').add({uid:me.id,name:me.name||'',group:$('#blg').value,area:a,phone:$('#blp').value.trim(),note:$('#bln').value.trim(),done:false,createdAt:ts()});$('#bla').value=$('#bln').value='';toast('Request sent')}catch(e){toast(eMsg(e))}}
+const blDone=id=>db.doc('blood/'+id).update({done:true}).catch(e=>toast(eMsg(e)));
+const blDel=async id=>{if(await ask('Delete this request?',{ok:'Delete',danger:1}))db.doc('blood/'+id).delete().catch(e=>toast(eMsg(e)))};
+// chada tracker
+function mChada(){mUn.push(db.collection('chada').orderBy('createdAt','desc').limit(20).onSnapshot(s=>{const adm=can('ledger');
+ $('#mb2').innerHTML=(adm?'<div class=pg><button class=btn onclick="cdNew()">+ New chada</button></div>':'')+(s.docs.map(d=>{const c=d.data(),sb=c.sub||{},ok=c.ok||{},my=ok[me.id]?'paid':sb[me.id]?'pending':'due',np=AU.filter(u=>ok[u.id]).length;
+  return `<div class=pg><b>${esc(c.title)}</b> <span class=chips><span><b>Tk ${c.amount}</b> each</span><span>${np}/${AU.length} paid</span></span><p style="margin:8px 0">${my=='paid'?'✅ You paid':my=='pending'?'⏳ Waiting for admin to verify':'❗ You have not paid yet'}</p>${my=='due'?`<div class=bt><button class=btn onclick="cdPay('${d.id}')">I paid (enter TrxID)</button></div>`:''}${adm?`<details style="margin-top:8px"><summary style="cursor:pointer">Members</summary>${AU.map(u=>`<div class=li><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${ok[u.id]?'Paid':sb[u.id]?'TrxID '+esc(sb[u.id].trx):'Not paid'}</small></span>${sb[u.id]&&!ok[u.id]?`<span><button class="btn g s" onclick="cdOk('${d.id}','${u.id}',1)">Verify</button> <button class="btn r s" onclick="cdOk('${d.id}','${u.id}',0)">Reject</button></span>`:!ok[u.id]?`<button class="btn gr s" onclick="cdOk('${d.id}','${u.id}',1)">Mark paid</button>`:''}</div>`).join('')}<div class=bt><button class="btn r s" onclick="cdDel('${d.id}')">Delete</button></div></details>`:''}</div>`}).join('')||'<div class=empty>No chada yet.</div>')},()=>{}))}
+async function cdNew(){const t=await askIn('Chada title',{ph:'e.g. December monthly chada'});if(!t||!t.trim())return;const a=await askIn('Amount per person (Tk)',{ph:'e.g. 100',type:'number'});if(!a||!+a)return;try{await db.collection('chada').add({title:t.trim(),amount:+a,sub:{},ok:{},createdAt:ts()})}catch(e){toast(eMsg(e))}}
+async function cdPay(id){const v=await askIn('bKash / Nagad TrxID',{ph:'e.g. 8N7A6D5E4C'});if(!v||!v.trim())return;try{await db.doc('chada/'+id).update({['sub.'+me.id]:{trx:v.trim().slice(0,30),at:Date.now()}});toast('Sent for verification')}catch(e){toast(eMsg(e))}}
+const cdOk=(id,u,y)=>db.doc('chada/'+id).update(y?{['ok.'+u]:true}:{['sub.'+u]:FV.delete()}).catch(e=>toast(eMsg(e)));
+const cdDel=async id=>{if(await ask('Delete this chada?',{ok:'Delete',danger:1}))db.doc('chada/'+id).delete().catch(e=>toast(eMsg(e)))};
+// event RSVP + cost split
+function mRsvp(){mUn.push(db.collection('events').orderBy('date').onSnapshot(s=>{const t=new Date().toISOString().slice(0,10);
+ $('#mb2').innerHTML=s.docs.filter(d=>d.data().date>=t).map(d=>{const e=d.data(),r=e.rsvp||{},ys=Object.keys(r).filter(k=>r[k]=='yes'),y=ys.length,my=r[me.id],pp=e.cost&&y?Math.ceil(e.cost/y):0;
+  return `<div class=pg><b>${esc(e.title)}</b><small style="display:block;color:var(--mute)">${esc(e.date)}</small><div class=chips><span><b>${y}</b> coming</span><span><b>${Object.keys(r).length-y}</b> not coming</span>${e.cost?`<span>Total Tk ${e.cost}</span>`:''}${pp?`<span><b>Tk ${pp}</b> per person</span>`:''}</div><div class=bt><button class="btn s ${my=='yes'?'g':'gr'}" onclick="rsv('${d.id}','yes')">I'm coming</button><button class="btn s ${my=='no'?'r':'gr'}" onclick="rsv('${d.id}','no')">Can't come</button>${can('events')?`<button class="btn gr s" onclick="rsvCost('${d.id}')">Set total cost</button>`:''}</div><small style="color:var(--mute);display:block;margin-top:6px">${ys.map(k=>esc((AU.find(u=>u.id==k)||{}).name||'')).join(', ')}</small></div>`}).join('')||'<div class=empty>No upcoming events.</div>'},()=>{}))}
+const rsv=(id,v)=>db.doc('events/'+id).update({['rsvp.'+me.id]:v}).catch(e=>toast(eMsg(e)));
+async function rsvCost(id){const v=await askIn('Total cost (Tk)',{ph:'e.g. 25000',type:'number'});if(!v||!+v)return;db.doc('events/'+id).update({cost:+v}).catch(e=>toast(eMsg(e)))}
+// business & job board
+function mJobs(){$('#mb2').innerHTML=`<div class=pg><b>Post a business or job</b><select id=jbt><option value=business>My business</option><option value=job>Job opening</option><option value=seek>Looking for a job</option></select><input id=jbh placeholder="Title (e.g. Bike repair shop)"><textarea id=jbd rows=3 placeholder="Details"></textarea><input id=jbc placeholder="Contact phone / link" value="${esc(me.phone||'')}"><div class=bt><button class=btn onclick="jbPost()">Post</button></div></div><div id=jbl></div>`;
+ mUn.push(db.collection('jobs').orderBy('createdAt','desc').limit(40).onSnapshot(s=>{const L={business:'Business',job:'Job opening',seek:'Looking for work'};$('#jbl').innerHTML=s.docs.map(d=>{const j=d.data();return `<div class=pg><span class=chips><span>${L[j.type]||''}</span></span> <b>${esc(j.title)}</b><p style="margin:6px 0">${esc(j.desc||'')}</p><small style="color:var(--mute)">${esc(j.name||'')} | ${esc(j.contact||'')} | ${ago(j.createdAt)}</small>${j.uid==me.id||can('posts')?`<div class=bt><button class="btn r s" onclick="jbDel('${d.id}')">Delete</button></div>`:''}</div>`}).join('')||'<div class=empty>Nothing posted yet.</div>'},()=>{}))}
+async function jbPost(){const t=$('#jbh').value.trim();if(!t)return toast('Add a title');try{await db.collection('jobs').add({uid:me.id,name:me.name||'',type:$('#jbt').value,title:t,desc:$('#jbd').value.trim(),contact:$('#jbc').value.trim(),createdAt:ts()});$('#jbh').value=$('#jbd').value='';toast('Posted')}catch(e){toast(eMsg(e))}}
+const jbDel=async id=>{if(await ask('Delete this post?',{ok:'Delete',danger:1}))db.doc('jobs/'+id).delete().catch(e=>toast(eMsg(e)))};
+// batch map (city level, optional)
+function mMap(){const mine=AU.find(u=>u.id==me.id)||me,G={};AU.filter(u=>u.city).forEach(u=>{const c=u.city.trim();(G[c]=G[c]||[]).push(u)});
+ $('#mb2').innerHTML=`<div class=pg><b>Where are you now?</b><small style="display:block;color:var(--mute);margin:4px 0">Only your city or district. Optional, and you can hide it any time.</small><div class=bt><button class=btn onclick="cityset()">${mine.city?'Change: '+esc(mine.city):'Add my city'}</button>${mine.city?'<button class="btn gr" onclick="cityset(1)">Hide me</button>':''}</div></div>`+(Object.keys(G).sort().map(c=>`<div class=pg><b>📍 ${esc(c)}</b> <span class=chips><span>${G[c].length}</span></span>${G[c].map(u=>`<div class=hd style="cursor:pointer" onclick="viewU('${u.id}')">${avs(u)}<div><b>${esc(u.name)}</b></div></div>`).join('')}</div>`).join('')||'<div class=empty>No one has added a city yet.</div>')}
+async function cityset(rm){try{let v;if(!rm){v=await askIn('Your city or district',{ph:'e.g. Dhaka'});if(!v||!v.trim())return}await db.doc('users/'+me.id).update({city:rm?FV.delete():v.trim().slice(0,40)});toast(rm?'Removed':'Saved');setTimeout(()=>{if(tab=='more'&&mK=='map')mMap()},700)}catch(e){toast(eMsg(e))}}
+
 // ---------- Navigation ----------
-const TABS=[['feed',ic('home'),'Feed'],['events',ic('cal'),'Events'],['jersey',ic('shirt'),'Jersey'],['fund',ic('wallet'),'Funds'],['mem',ic('img'),'Photos'],['me',ic('user'),'Profile']];
-function go(t){tab=t;clean();$('#nav').innerHTML=(isAdm()?[...TABS,['admin',ic('shield'),'Admin']]:TABS).map(([k,i,l])=>`<button aria-label="${l}" class="${k==t?'on':''}" onclick="go('${k}')"><b>${k=='me'?`<span class=nv>${av(me.photo,me.name)}</span>`:i}</b></button>`).join('');({feed,events,jersey,fund,mem,me:profile,admin})[t]()}
+const TABS=[['feed',ic('home'),'Feed'],['events',ic('cal'),'Events'],['jersey',ic('shirt'),'Jersey'],['fund',ic('wallet'),'Funds'],['mem',ic('img'),'Photos'],['more',ic('brief'),'More'],['me',ic('user'),'Profile']];
+function go(t){tab=t;clean();$('#nav').innerHTML=(isAdm()?[...TABS,['admin',ic('shield'),'Admin']]:TABS).map(([k,i,l])=>`<button aria-label="${l}" class="${k==t?'on':''}" onclick="go('${k}')"><b>${k=='me'?`<span class=nv>${av(me.photo,me.name)}</span>`:i}</b></button>`).join('');({feed,events,jersey,fund,mem,more,me:profile,admin})[t]()}
 
 // ---------- Feed ----------
 function feed(){
@@ -881,9 +971,10 @@ const dyOf=id=>dyAct().filter(d=>d.uid==id);
 let dvSeen=new Set();try{dvSeen=new Set(JSON.parse(localStorage.getItem('lavDV')||'[]'))}catch(e){}
 const dvSee=id=>{if(dvSeen.has(id))return;dvSeen.add(id);try{localStorage.setItem('lavDV',JSON.stringify([...dvSeen].slice(-300)))}catch(e){}};
 function dyStart(){dyStop();if(!me)return;
+ bU=db.collection('blood').orderBy('createdAt','desc').limit(10).onSnapshot(s=>{if(bI)s.docChanges().forEach(c=>{const r=c.doc.data(),mb=(AU.find(u=>u.id==me.id)||{}).blood;if(c.type=='added'&&r.uid!=me.id&&!r.done&&mb&&mb==r.group){toast('🩸 '+r.group+' blood needed: '+(r.area||''));ntf('Blood needed: '+r.group,r.area||'')}});bI=1},()=>{});
  dyU=db.collection('days').where('createdAt','>',firebase.firestore.Timestamp.fromMillis(Date.now()-DYMS)).orderBy('createdAt').onSnapshot(s=>{DY=s.docs.map(d=>({id:d.id,...d.data({serverTimestamps:'estimate'})}));heroR()},()=>{});
  db.collection('days').where('uid','==',me.id).get().then(s=>s.docs.forEach(d=>{const c=d.data().createdAt;if(c&&Date.now()-c.toMillis()>=DYMS)d.ref.delete().catch(()=>{})})).catch(()=>{})}
-function dyStop(){if(dyU){dyU();dyU=null}DY=[];dvClose()}
+function dyStop(){if(bU){bU();bU=null}bI=0;if(dyU){dyU();dyU=null}DY=[];dvClose()}
 function dyTap(id){if(dyOf(id).length)dyOpen(id);else if(id==me.id)dyNew();else openRoom(id)}
 let dcImg='';
 function dyNew(){dcImg='';dcClose();const d=document.createElement('div');d.id='dc';
