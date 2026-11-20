@@ -354,7 +354,7 @@ header h1 small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pmn{position:absolute;top:60px;right:12px;z-index:5;min-width:200px;padding:6px;border-radius:16px;background:var(--panel,#0b0f2a);border:1px solid var(--line);box-shadow:0 16px 44px rgba(0,0,0,.6)}
 .pmn button{display:block;width:100%;text-align:left;padding:12px;border:0;border-radius:10px;background:none;color:var(--ink);font:600 14.5px var(--disp)}.pmn button:active{background:rgba(255,255,255,.08)}
 .pin{padding:0 16px 16px}.pphw{position:relative;width:104px;margin-top:-52px}
-.pph{display:grid;place-items:center;width:104px;height:104px;border-radius:30px;overflow:hidden;border:3px solid #8b6bff;background:#10153a;font:700 40px var(--disp);box-shadow:0 8px 24px rgba(0,0,0,.45)}.pph img{width:100%;height:100%;object-fit:cover}
+.pph{display:grid;place-items:center;width:104px;height:104px;border-radius:30px;overflow:hidden;border:3px solid #8b6bff;background:#10153a;font:700 40px var(--disp);box-shadow:0 8px 24px rgba(0,0,0,.45)}.pph img{width:100%;height:100%;object-fit:contain}
 .pphc{position:absolute;right:-6px;bottom:-6px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;padding:0;border:3px solid #0b0f2a;background:#8b6bff;color:#fff}.pphc .ic{width:17px;height:17px}
 .pnm{margin:12px 0 0;font:700 22px/1.25 var(--disp)}.prl{color:var(--mute)}
 .pac{margin:12px;border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.03);overflow:hidden}
@@ -362,6 +362,9 @@ header h1 small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pah i{flex:none;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff}.pah i .ic{width:20px;height:20px}
 .pac.on .pah>span{transform:rotate(180deg)}.pab{display:none;padding:0 14px 14px}.pac.on .pab{display:block}
 .pbk{padding:14px;margin-top:10px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.04)}.pbk b{display:block;font:700 16px var(--disp)}.pbk small{display:block;margin:2px 0 10px;color:var(--mute)}.pbk .bt{flex-wrap:wrap}
+.bmh{display:flex;align-items:center;justify-content:space-between;margin:12px 14px 0}.bmh h2{margin:0}.bms{background:none;border:0;color:#38bdf8;font:600 16px var(--disp);padding:6px 0 6px 12px}
+.bmr{display:flex;gap:12px;overflow-x:auto;padding:12px 14px;-webkit-overflow-scrolling:touch}.bmr button{flex:none;width:84px;padding:0;background:none;border:0;color:var(--ink);text-align:center;font:600 13px/1.25 var(--disp)}
+.bmr .ava{position:relative;display:inline-block}.bmr .av{width:76px;height:76px;font-size:28px}.bmr button>span:last-child{display:block;margin-top:6px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .ucv{height:110px;background:linear-gradient(135deg,#312e81,#1d4ed8 60%,#06b6d4) center/cover no-repeat}
 .phw{position:fixed;inset:0;z-index:58;display:flex;align-items:flex-end;justify-content:center;background:rgba(2,3,12,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .phb{width:100%;max-width:460px;max-height:94vh;overflow-y:auto;box-sizing:border-box;padding:16px 16px calc(14px + env(safe-area-inset-bottom,0px));border-radius:26px 26px 0 0;background:var(--panel,#0b0f2a);border:1px solid rgba(255,255,255,.14);text-align:center;animation:dgp .24s ease}
@@ -688,12 +691,12 @@ async function hpDel(){if(!await ask('Remove the header photo?',{ok:'Remove',dan
 function openAct(){stopRoom();$('#cp').classList.remove('hide');renderAct()}
 function renderAct(){cpm='act';aSel=aSel||dk();const bx=$('#cp .cpb');bx.classList.add('rm');
  bx.innerHTML=`<div class=cph><button class=bk onclick="openCP()" aria-label="Back">${ic('back')}</button><b>Active members</b><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=cpl id=act></div>`;actR();loadAct()}
-function loadAct(){if(!isAdm())return;db.collection('activity').where('day','>=',dk(new Date(Date.now()-40*864e5))).get().then(q=>{AD={};q.docs.forEach(d=>AD[d.id]=d.data().users||{});actR()}).catch(err=>{console.error(err);AD=null;actR()})}
+function loadAct(){if(!isGA())return;db.collection('activity').where('day','>=',dk(new Date(Date.now()-40*864e5))).get().then(q=>{AD={};q.docs.forEach(d=>AD[d.id]=d.data().users||{});actR()}).catch(err=>{console.error(err);AD=null;actR()})}
 function actR(){const L=$('#act');if(!L||cpm!='act'||$('#cp').classList.contains('hide'))return;const st=L.scrollTop;
  const on=AU.filter(onl).sort((a,b)=>(b.id==me.id)-(a.id==me.id)||(a.name||'').localeCompare(b.name||'')),
  off=AU.filter(u=>!onl(u)).sort((a,b)=>(b.lastSeen?b.lastSeen.toMillis():0)-(a.lastSeen?a.lastSeen.toMillis():0)),
  row=(u,r1,r2,go)=>`<button class=cpr ${go?`onclick="openRoom('${u.id}')"`:'style="cursor:default"'}>${avs(u)}<span class=nm><b>${esc(u.name||'')}${u.id==me.id?' (you)':''}</b></span><span class=tt2>${r1}${r2?`<small>${r2}</small>`:''}</span></button>`;
- L.innerHTML=`<div class=abn><i class=dot2></i><b>${on.length} online now</b></div><h4 class=ah>Online now</h4>${on.map(u=>row(u,'Online now','',u.id!=me.id)).join('')}<h4 class=ah>Last seen</h4>${off.map(u=>u.lastSeen?row(u,ago(u.lastSeen),fdt(u.lastSeen),1):row(u,'Never opened','',1)).join('')||'<div class=empty>Everyone is online.</div>'}${isAdm()?graphH():''}`;L.scrollTop=st}
+ L.innerHTML=`<div class=abn><i class=dot2></i><b>${on.length} online now</b></div><h4 class=ah>Online now</h4>${on.map(u=>row(u,'Online now','',u.id!=me.id)).join('')}<h4 class=ah>Last seen</h4>${off.map(u=>u.lastSeen?row(u,ago(u.lastSeen),fdt(u.lastSeen),1):row(u,'Never opened','',1)).join('')||'<div class=empty>Everyone is online.</div>'}${isGA()?graphH():''}`;L.scrollTop=st}
 function graphH(){
  if(AD===null)return '<h4 class=ah>How many came</h4><div class=empty>Could not load. Publish the latest Firestore rules (see the comment at the top of this file).</div>';
  const days=[];for(let i=aR-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push({k:dk(d),d})}
@@ -714,18 +717,21 @@ function beat(){if(me&&!document.hidden){db.doc('users/'+me.id).update({lastSeen
 function startPresence(){stopPresence();hpU=db.doc('settings/header').onSnapshot(d=>{HP=d.exists?(d.data().img||''):'';applyHP()},()=>{});gpU=db.doc('settings/group').onSnapshot(d=>{GP=d.exists?(d.data().img||''):'';gpR()},()=>{});dyStart();pushReg(true);nfInit();beat();hbT=setInterval(beat,90000);tkT=setInterval(upd,30000);
  document.addEventListener('visibilitychange',beat);
  pu=db.collection('users').onSnapshot(s=>{AU=s.docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.approved);const sm=me&&AU.find(u=>u.id==me.id);if(sm){me.role=sm.role;me.perms=sm.perms||[]}upd()},()=>{})}
-function stopPresence(){nfHide();if(hpU){hpU();hpU=null}HP='';applyHP();if(gpU){gpU();gpU=null}GP='';dyStop();unStop();_md='';clearInterval(hbT);clearInterval(tkT);document.removeEventListener('visibilitychange',beat);if(pu)pu();pu=null;AU=[];$('#cbn')&&($('#cbn').textContent='');$('#hoc')&&($('#hoc').textContent='0')}
+function stopPresence(){nfHide();if(hpU){hpU();hpU=null}HP='';applyHP();if(gpU){gpU();gpU=null}GP='';dyStop();unStop();_md='';clearInterval(hbT);clearInterval(tkT);document.removeEventListener('visibilitychange',beat);if(pu)pu();pu=null;AD={};AU=[];$('#cbn')&&($('#cbn').textContent='');$('#hoc')&&($('#hoc').textContent='0')}
 function upd(){nfUI();heroR();unSync();const n=AU.filter(onl).length;const hc=$('#hoc');if(hc)hc.textContent=n;const o=$('#ocn');if(o)o.textContent=n+' online';listCP();if(cpm=='act')actR()}
 
 // ---------- Unread message count (chat button) ----------
-let unL={},unD={},unI={};
+let unL={},unD={},unI={},LR={},LRL=0,LRU=null,LRT=null;
 const lrK=r=>'lavLR_'+(me?me.id:'')+'_'+r;
-const lrG=r=>{try{return +localStorage.getItem(lrK(r))||0}catch(e){return 0}};
-const lrS=(r,t)=>{try{localStorage.setItem(lrK(r),String(t))}catch(e){}};
+const lrG=r=>{let v=0;try{v=+localStorage.getItem(lrK(r))||0}catch(e){}return Math.max(v,LR[r]||0)};
+const lrS=(r,t)=>{if(t<=lrG(r))return;LR[r]=t;try{localStorage.setItem(lrK(r),String(t))}catch(e){}
+ clearTimeout(LRT);LRT=setTimeout(()=>{if(me)db.doc('users/'+me.id+'/priv/reads').set(LR,{merge:true}).catch(()=>{})},1500)};
 function unB(){let n=0;if(me)Object.keys(unD).forEach(r=>{const l=lrG(r);n+=unD[r].filter(m=>m.uid!=me.id&&m.t>l).length});const b=$('#cbn');if(b)b.textContent=n?(n>99?'99+':n):''}
-function unSync(){if(!me)return;['all',...AU.filter(u=>u.id!=me.id).map(u=>rid(u.id))].forEach(r=>{if(unL[r])return;if(!lrG(r))lrS(r,Date.now());
+function unSync(){if(!me)return;
+ if(!LRU){LRU=db.doc('users/'+me.id+'/priv/reads').onSnapshot(d=>{const v=d.exists?d.data():{};Object.keys(v).forEach(k=>{if(typeof v[k]=='number'&&v[k]>(LR[k]||0))LR[k]=v[k]});const first=!LRL;LRL=1;if(first)unSync();else unB()},()=>{LRL=1;unSync()})}
+ if(!LRL)return;['all',...AU.filter(u=>u.id!=me.id).map(u=>rid(u.id))].forEach(r=>{if(unL[r])return;if(!lrG(r))lrS(r,Date.now());
  unL[r]=db.collection('rooms/'+r+'/m').where('createdAt','>',firebase.firestore.Timestamp.fromMillis(lrG(r))).orderBy('createdAt').onSnapshot(s=>{s.docChanges().forEach(c=>{if(unI[r]&&c.type=='added'){const m=c.doc.data();if(m.uid!=me.id)ntf(m.name||'LAV Batch 2012',m.text||(m.aud?'Voice message':'Photo'))}});unI[r]=1;unD[r]=s.docs.map(d=>{const m=d.data({serverTimestamps:'estimate'});return{uid:m.uid,t:m.createdAt?m.createdAt.toMillis():Date.now()}});unB()},()=>{})})}
-function unStop(){Object.values(unL).forEach(f=>f());unL={};unD={};unI={};const b=$('#cbn');if(b)b.textContent=''}
+function unStop(){Object.values(unL).forEach(f=>f());unL={};unD={};unI={};if(LRU){LRU();LRU=null}clearTimeout(LRT);LR={};LRL=0;const b=$('#cbn');if(b)b.textContent=''}
 const lastSeen=u=>u.lastSeen?'Last seen '+ago(u.lastSeen)+' | '+fdt(u.lastSeen):'Offline';
 let cq='',lmL={},lmD={},rmUn=null;
 const tf=t=>{if(!t)return'';const d=t.toDate?t.toDate():t;return d.toDateString()==new Date().toDateString()?d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):d.toLocaleDateString([],{day:'numeric',month:'short'})};
@@ -889,7 +895,8 @@ function post(id,p){const L=p.likes||{},n=Object.keys(L).length,my=L[me.id];
  ${p.shared?`<div class=sh><b>${esc(p.shared.name)}</b><p>${esc(p.shared.text)}</p>${p.shared.img?`<img class=pi src="${p.shared.img}" alt="">`:''}</div>`:''}
  <small class=ic3 onclick="cm('${id}')">${p.cc?'View all '+p.cc+' comments':'Add a comment'} | ${ago(p.createdAt)}</small>
  <div id="c${id}"></div></article>`}
-function img(f,max=720){return new Promise(r=>{if(!f)return r('');const i=new Image;i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.6))};i.src=URL.createObjectURL(f)})}
+function encJ(c,maxLen,q){let u=c.toDataURL('image/jpeg',q);while(u.length>maxLen&&q>.5){q-=.06;u=c.toDataURL('image/jpeg',q)}return u}
+function img(f,max=720,q=.6,maxLen=0){return new Promise(r=>{if(!f)return r('');const i=new Image;i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);const x=c.getContext('2d');x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';x.drawImage(i,0,0,c.width,c.height);r(maxLen?encJ(c,maxLen,q):c.toDataURL('image/jpeg',q))};i.src=URL.createObjectURL(f)})}
 async function newPost(){const text=$('#pt').value.trim(),im=await img($('#pf').files[0]);if(!text&&!im)return toast('Write something or add a photo');
  await db.collection('posts').add({uid:me.id,name:me.name,photo:me.photo,text,img:im,mood:$('#pm').value,cc:0,likes:{},createdAt:ts()});feed()}
 function lk(id,r){const L=(P[id]||{}).likes||{};if(L[me.id]&&!r)return db.doc('posts/'+id).update({['likes.'+me.id]:FV.delete()});return db.doc('posts/'+id).update({['likes.'+me.id]:r||'❤️'})}
@@ -967,20 +974,23 @@ const rowsOf=(u,self)=>{let h=INF.map(([k,i,l,a])=>{if(k=='edu'){const E=eduL(u,
 // ---------- Profile and cover photo (Facebook style) ----------
 const COV={},DOTS='<svg class=ic viewBox="0 0 24 24"><path stroke-width="3.2" d="M12 5h.01M12 12h.01M12 19h.01"/></svg>';
 const covLoad=async id=>{if(id in COV)return COV[id];let v='';try{const d=await db.doc('covers/'+id).get();if(d.exists)v=d.data().img||''}catch(e){}COV[id]=v;return v};
-const phCov=(id,sel)=>covLoad(id).then(v=>{const e=$(sel);if(e&&v)e.style.backgroundImage='url("'+v+'")'});
+const phCov=(id,sel)=>covLoad(id).then(v=>{const e=$(sel);if(!e||!v)return;const i=new Image;i.onload=()=>{if(!document.body.contains(e))return;e.style.backgroundImage='url("'+v+'")';e.style.backgroundColor='#02030c';e.style.backgroundSize='contain';e.style.height='auto';e.style.maxHeight='75vh';e.style.aspectRatio=i.width+' / '+i.height;e.style.cursor='zoom-in';e.onclick=ev=>{if(ev.target===e)lb(v)}};i.src=v});
+const lbU=id=>{const u=(window.AU||[]).find(x=>x.id==id);if(u&&u.photo)lb(u.photo)};
 const ageOf=u=>{const b=dobN(u.dob);if(!b)return'';const n=new Date();let a=n.getFullYear()-b.y;if(n.getMonth()+1<b.m||(n.getMonth()+1==b.m&&n.getDate()<b.d))a--;return a>=0&&a<120?a:''};
 function pfMenuX(){document.querySelectorAll('.pmn').forEach(x=>x.remove())}
-function pfMenu(){const c=$('#pcv');if(!c)return;if(c.querySelector('.pmn'))return pfMenuX();const m=document.createElement('div');m.className='pmn';m.innerHTML=[['Edit profile',"profile(true)"],['Change profile photo',"phPick('avatar')"],['Change cover photo',"phPick('cover')"],['Sign out',"signOutAsk()"]].map(([l,f])=>`<button onclick="pfMenuX();${f}">${l}</button>`).join('');c.appendChild(m);setTimeout(()=>document.addEventListener('click',pfMenuX,{once:true}),0)}
+function pfMenu(){const c=$('#pcv');if(!c)return;if(c.querySelector('.pmn'))return pfMenuX();const m=document.createElement('div');m.className='pmn';m.innerHTML=[['Edit profile',"profile(true)"],['Change profile photo',"phPick('avatar')"],['Change cover photo',"phPick('cover')"],['Theme',"themeOpen()"],['Sign out',"signOutAsk()"]].map(([l,f])=>`<button onclick="pfMenuX();${f}">${l}</button>`).join('');c.appendChild(m);setTimeout(()=>document.addEventListener('click',pfMenuX,{once:true}),0)}
 function phPick(k){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=()=>{if(i.files[0])phAdj(k,URL.createObjectURL(i.files[0]))};i.click()}
 function phCur(k){const v=k=='cover'?COV[me.id]:me.photo;if(!v)return toast('No '+(k=='cover'?'cover':'profile')+' photo yet');phAdj(k,v)}
 async function covDel(){if(!COV[me.id])return toast('No cover photo yet');if(!await ask('Remove your cover photo?',{ok:'Remove',danger:1}))return;try{await db.doc('covers/'+me.id).delete();COV[me.id]='';profile();toast('Cover photo removed')}catch(e){console.error(e);toast('Could not remove')}}
-function phAdj(k,src){const cov=k=='cover',W=Math.min(320,innerWidth-64),H=cov?Math.round(W*.6):W,OW=cov?800:220,OH=cov?480:220,i0=new Image;
+function phAdj(k,src){const cov=k=='cover',i0=new Image;let W=Math.min(320,innerWidth-64),H=W,OW=640,OH=640;
+ const frame=(a,b)=>{let w=Math.min(320,innerWidth-64),h=w*b/a;if(h>430){w=w*430/h;h=430}W=Math.round(w);H=Math.round(h);const f=(cov?1600:640)/Math.max(W,H);OW=Math.round(W*f);OH=Math.round(H*f)};
  i0.onerror=()=>toast('Could not open this photo');
- i0.onload=()=>{let im=i0;const M=Math.max(i0.width,i0.height);if(M>1800){const f=1800/M,t=document.createElement('canvas');t.width=i0.width*f;t.height=i0.height*f;t.getContext('2d').drawImage(i0,0,0,t.width,t.height);im=t}
+ i0.onload=()=>{let im=i0;const M=Math.max(i0.width,i0.height);if(M>2600){const f=2600/M,t=document.createElement('canvas');t.width=i0.width*f;t.height=i0.height*f;const tg=t.getContext('2d');tg.imageSmoothingQuality='high';tg.drawImage(i0,0,0,t.width,t.height);im=t}frame(im.width,im.height);
   let st={z:1,x:0,y:0,r:0,b:1,c:1,s:1};const P=[['Original',1,1,1],['Bright',1.15,1.05,1.1],['Sparkle',1.1,1.15,1.35],['Drama',.95,1.3,1.1],['Soft',1.05,.88,.9]],w=document.createElement('div');w.className='phw';
-  w.innerHTML=`<div class=phb><h3>${cov?'Adjust cover photo':'Adjust profile photo'}</h3><small>Drag the photo to place it. Pinch or use the slider to zoom.</small><div class="phs${cov?'':' c'}" style="width:${W}px;height:${H}px"><canvas width=${W*2} height=${H*2} style="width:${W}px;height:${H}px"></canvas></div><div class=phr><button data-m="-1,0">◀</button><button data-m="0,-1">▲</button><button data-m="0,1">▼</button><button data-m="1,0">▶</button></div><label class=phl><span>Zoom</span><input type=range id=phz min=1 max=3 step=.01 value=1></label><div class=php>${P.map((p,n)=>`<button data-p=${n}><img src="${src}" style="filter:brightness(${p[1]}) contrast(${p[2]}) saturate(${p[3]})" alt=""><span>${p[0]}</span></button>`).join('')}</div><label class=phl><span>Light</span><input type=range id=phb min=.5 max=1.5 step=.01 value=1></label><label class=phl><span>Contrast</span><input type=range id=phc min=.5 max=1.5 step=.01 value=1></label><label class=phl><span>Color</span><input type=range id=phs2 min=0 max=2 step=.01 value=1></label><div class=pha><button data-a=x>Cancel</button><button data-a=r>Rotate</button><button data-a=z>Reset</button><button data-a=ok class=pri>Save</button></div></div>`;
+  w.innerHTML=`<div class=phb><h3>${cov?'Adjust cover photo':'Adjust profile photo'}</h3><small>Your full photo is kept, nothing is cropped. Zoom only if you want to.</small><div class="phs" style="width:${W}px;height:${H}px"><canvas width=${W*2} height=${H*2} style="width:${W}px;height:${H}px"></canvas></div><div class=phr><button data-m="-1,0">◀</button><button data-m="0,-1">▲</button><button data-m="0,1">▼</button><button data-m="1,0">▶</button></div><label class=phl><span>Zoom</span><input type=range id=phz min=1 max=3 step=.01 value=1></label><div class=php>${P.map((p,n)=>`<button data-p=${n}><img src="${src}" style="filter:brightness(${p[1]}) contrast(${p[2]}) saturate(${p[3]})" alt=""><span>${p[0]}</span></button>`).join('')}</div><label class=phl><span>Light</span><input type=range id=phb min=.5 max=1.5 step=.01 value=1></label><label class=phl><span>Contrast</span><input type=range id=phc min=.5 max=1.5 step=.01 value=1></label><label class=phl><span>Color</span><input type=range id=phs2 min=0 max=2 step=.01 value=1></label><div class=pha><button data-a=x>Cancel</button><button data-a=r>Rotate</button><button data-a=z>Reset</button><button data-a=ok class=pri>Save</button></div></div>`;
   const q=e=>w.querySelector(e),cv=q('canvas'),g=cv.getContext('2d'),stg=q('.phs'),dim=()=>st.r%2?[im.height,im.width]:[im.width,im.height],sc=()=>{const[a,b]=dim();return Math.max(W/a,H/b)*st.z};
   const rd=()=>{const[a,b]=dim(),s=sc(),mx=Math.max(0,(a*s-W)/2),my=Math.max(0,(b*s-H)/2);st.x=Math.max(-mx,Math.min(mx,st.x));st.y=Math.max(-my,Math.min(my,st.y));g.setTransform(2,0,0,2,0,0);g.clearRect(0,0,W,H);g.save();g.translate(W/2+st.x,H/2+st.y);g.rotate(st.r*Math.PI/2);g.scale(s,s);g.drawImage(im,-im.width/2,-im.height/2);g.restore();cv.style.filter=`brightness(${st.b}) contrast(${st.c}) saturate(${st.s})`};
+  const fit=()=>{const[a,b]=dim();frame(a,b);cv.width=W*2;cv.height=H*2;cv.style.width=W+'px';cv.style.height=H+'px';stg.style.width=W+'px';stg.style.height=H+'px'};
   const sync=()=>{q('#phz').value=st.z;q('#phb').value=st.b;q('#phc').value=st.c;q('#phs2').value=st.s;rd()},zm=v=>{st.z=Math.max(1,Math.min(3,v));q('#phz').value=st.z;rd()};
   q('#phz').oninput=e=>zm(+e.target.value);q('#phb').oninput=e=>{st.b=+e.target.value;rd()};q('#phc').oninput=e=>{st.c=+e.target.value;rd()};q('#phs2').oninput=e=>{st.s=+e.target.value;rd()};
   w.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{const[a,c]=b.dataset.m.split(',');st.x+=a*12;st.y+=c*12;rd()});
@@ -992,9 +1002,9 @@ function phAdj(k,src){const cov=k=='cover',W=Math.min(320,innerWidth-64),H=cov?M
   const exp=()=>{const o=document.createElement('canvas');o.width=OW;o.height=OH;const x=o.getContext('2d'),f=OW/W,nf='filter' in x;x.imageSmoothingQuality='high';if(nf)x.filter=`brightness(${st.b}) contrast(${st.c}) saturate(${st.s})`;
    x.translate(OW/2+st.x*f,OH/2+st.y*f);x.rotate(st.r*Math.PI/2);x.scale(sc()*f,sc()*f);x.drawImage(im,-im.width/2,-im.height/2);
    if(!nf){x.setTransform(1,0,0,1,0,0);const d=x.getImageData(0,0,OW,OH),p=d.data;for(let n=0;n<p.length;n+=4){const r=(p[n]*st.b-128)*st.c+128,gg=(p[n+1]*st.b-128)*st.c+128,bb=(p[n+2]*st.b-128)*st.c+128,l=.299*r+.587*gg+.114*bb;p[n]=l+(r-l)*st.s;p[n+1]=l+(gg-l)*st.s;p[n+2]=l+(bb-l)*st.s}x.putImageData(d,0,0)}
-   return o.toDataURL('image/jpeg',cov?.8:.82)};
-  w.querySelectorAll('[data-a]').forEach(b=>b.onclick=async()=>{const a=b.dataset.a;if(a=='x')return w.remove();if(a=='r'){st.r=(st.r+1)%4;st.x=st.y=0;return rd()}
-   if(a=='z'){st={z:1,x:0,y:0,r:0,b:1,c:1,s:1};w.querySelectorAll('[data-p]').forEach(x=>x.classList.remove('on'));return sync()}
+   return encJ(o,cov?900000:170000,.92)};
+  w.querySelectorAll('[data-a]').forEach(b=>b.onclick=async()=>{const a=b.dataset.a;if(a=='x')return w.remove();if(a=='r'){st.r=(st.r+1)%4;st.x=st.y=0;fit();return rd()}
+   if(a=='z'){st={z:1,x:0,y:0,r:0,b:1,c:1,s:1};w.querySelectorAll('[data-p]').forEach(x=>x.classList.remove('on'));fit();return sync()}
    b.disabled=true;b.textContent='Saving...';
    try{const u=exp();if(cov){await db.doc('covers/'+me.id).set({img:u,at:ts()});COV[me.id]=u}else{await db.doc('users/'+me.id).update({photo:u});me.photo=u}w.remove();toast(cov?'Cover photo updated':'Profile photo updated');if(tab=='me')profile()}catch(e){console.error(e);b.disabled=false;b.textContent='Save';toast('Could not save. Check your connection and the Firestore rules.')}});
   w.addEventListener('click',e=>{if(e.target===w)w.remove()});document.body.appendChild(w);rd()};
@@ -1017,19 +1027,21 @@ function profile(ed){
  <div class=pac><button class=pah onclick="profile(true)"><i style="background:linear-gradient(135deg,#6366f1,#3b82f6)">${ic('edit')}</i>Edit profile<span>›</span></button></div>
  <div class=pac><button class=pah onclick="signOutAsk()"><i style="background:linear-gradient(135deg,#fb7185,#e11d48)">${ic('out')}</i>Sign out<span>›</span></button></div>
  <div class=pg><h4>Details</h4>${rowsOf(me,true)}</div>
- <h2>My posts</h2><div class=gal id=mg></div>
- ${themeH()}<h2>All batchmates</h2><div class=pg><input class=srch id=ms2 placeholder="Search name, place, blood group..." oninput="mbF()"><div id=mb></div></div>`;
+ <div class=bmh><h2>Batchmates</h2><button class=bms onclick="bmAll()">See all</button></div><div class=bmr id=bmr><div class=empty>Loading...</div></div>
+ <h2>My posts</h2><div id=mg></div>
+`;
  phCov(me.id,'#pcv');if(window.EDUID!=me.id)loadEdu().then(()=>{if(tab=='me'&&$('#n1'))profile()});
- unsubs.push(db.collection('posts').where('uid','==',me.id).onSnapshot(s=>{const a=s.docs.map(d=>d.data()),n=$('#n1'),g=$('#mg');if(n)n.textContent=a.length;if(g)g.innerHTML=a.filter(p=>p.img).map(p=>`<img src="${p.img}" loading=lazy alt="" onclick="lb(this.src)">`).join('')||'<div class=empty>No photos yet.</div>'},()=>{}));
+ unsubs.push(db.collection('posts').where('uid','==',me.id).onSnapshot(s=>{const ds=s.docs.slice().sort((a,b)=>{const x=a.data({serverTimestamps:'estimate'}).createdAt,y=b.data({serverTimestamps:'estimate'}).createdAt;return (y?y.toMillis():0)-(x?x.toMillis():0)}),n=$('#n1'),g=$('#mg');if(n)n.textContent=ds.length;if(!g)return;ds.forEach(d=>{P[d.id]=d.data()});g.innerHTML=ds.map(d=>post(d.id,d.data({serverTimestamps:'estimate'}))).join('')||'<div class=empty>No posts yet.</div>';open.forEach(oc)},()=>{}));
+ unsubs.push(()=>{const m=$('#bma');m&&m.remove()});
  unsubs.push(db.collection('users').onSnapshot(s=>{const U=s.docs.map(d=>({id:d.id,...d.data()}));
-  window.UL=U;mbF();const mb=$('#mbx');if(mb)mb.innerHTML=U.filter(u=>u.approved).map(u=>`<div class=hd style="cursor:pointer" onclick="viewU('${u.id}')">${avs(u)}<div><b>${esc(u.name)}</b><small>${esc(u.edu||u.bio||'')}</small></div></div>`).join('');
+  window.UL=U;mbF();bmR();const mb=$('#mbx');if(mb)mb.innerHTML=U.filter(u=>u.approved).map(u=>`<div class=hd style="cursor:pointer" onclick="viewU('${u.id}')">${avs(u)}<div><b>${esc(u.name)}</b><small>${esc(u.edu||u.bio||'')}</small></div></div>`).join('');
   admR(U);const pe=$('#pe');if(pe)pe.innerHTML=U.filter(u=>!u.approved).map(u=>`<div class=li><span><b>${esc(u.name)}</b><br><small style="color:var(--mute)">${esc(u.email||'')} ${u.phone?'| '+esc(u.phone):''}</small></span><span><button class="btn g s" onclick="db.doc('users/${u.id}').update({approved:true})">Approve</button> <button class="btn r s" onclick="db.doc('users/${u.id}').delete()">Reject</button></span></div>`).join('')||'<div class=empty>No one is waiting.</div>'}))}
 function pwForm(){$('#pwd').innerHTML=`<small>New password</small><input id=npw type=password minlength=6 placeholder="At least 6 characters" autocomplete=new-password><div class=bt style="margin-top:8px"><button class="btn g s" onclick="setPw()">Save password</button><button class="btn gr s" onclick="profile()">Cancel</button></div>`;$('#npw').focus()}
 async function setPw(){const u=auth.currentUser,pw=$('#npw').value;if(pw.length<6)return toast('Password must be at least 6 characters');
  try{await u.linkWithCredential(firebase.auth.EmailAuthProvider.credential(u.email,pw));toast('Password set. You can now log in with email and password.');profile()}catch(e){console.error(e);toast(msg(e)||'Could not set password')}}
 async function resetPw(){try{await auth.sendPasswordResetEmail(auth.currentUser.email);toast('Password reset link sent to your email')}catch(e){console.error(e);toast(msg(e)||'Could not send the link')}}
 function viewU(id){const u=AU.find(x=>x.id==id);if(!u)return;cpm='user';$('#cp .cpb').classList.remove('rm');
- $('#cp .cpb').innerHTML=`<div class=cph><b>Profile</b><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=cpl><div class=ucv id=ucv></div><div style="padding:0 16px 4px;text-align:center;margin-top:-48px"><span class=pav>${avs(u)}</span><h3>${esc(u.name)}</h3><small style="color:var(--mute)">${onl(u)?'Active now':lastSeen(u)}</small>${u.bio?`<p style="margin-top:4px">${esc(u.bio)}</p>`:''}</div><div style="padding:4px 16px 16px">${rowsOf(u,false)}${u.phone?`<div class=bt><a class="btn gr" href="tel:${esc(u.phone)}">${ic('phone')} Call</a><a class="btn g" target=_blank rel=noopener href="https://wa.me/${esc(u.phone.replace(/^0/,'880').replace(/\D/g,''))}">WhatsApp</a></div>`:''}${u.id!=me.id?`<button class="btn" style="width:100%;margin-top:10px" onclick="chatWith('${u.id}')">${ic('chat')} Message</button>`:''}</div></div>`;
+ $('#cp .cpb').innerHTML=`<div class=cph><b>Profile</b><button class=x onclick="closeCP()">${ic('x')}</button></div><div class=cpl><div class=ucv id=ucv></div><div style="padding:0 16px 4px;text-align:center;margin-top:-48px"><span class=pav onclick="lbU('${u.id}')" style="cursor:zoom-in">${avs(u)}</span><h3>${esc(u.name)}</h3><small style="color:var(--mute)">${onl(u)?'Active now':lastSeen(u)}</small>${u.bio?`<p style="margin-top:4px">${esc(u.bio)}</p>`:''}</div><div style="padding:4px 16px 16px">${rowsOf(u,false)}${u.phone?`<div class=bt><a class="btn gr" href="tel:${esc(u.phone)}">${ic('phone')} Call</a><a class="btn g" target=_blank rel=noopener href="https://wa.me/${esc(u.phone.replace(/^0/,'880').replace(/\D/g,''))}">WhatsApp</a></div>`:''}${u.id!=me.id?`<button class="btn" style="width:100%;margin-top:10px" onclick="chatWith('${u.id}')">${ic('chat')} Message</button>`:''}</div></div>`;
  $('#cp').classList.remove('hide');phCov(u.id,'#ucv')}
 async function saveP(){const f=$('#pp').files[0],u={name:$('#pn').value.trim()||me.name,phone:$('#pph').value.trim(),bio:$('#pb').value.trim()};
  INF.forEach(([k])=>{if(k!='edu')u[k]=$('#f_'+k).value.trim()});
@@ -1038,7 +1050,7 @@ async function saveP(){const f=$('#pp').files[0],u={name:$('#pn').value.trim()||
  if(full.some(e=>e.yr&&!/^\d{4}$/.test(e.yr)))return toast('Passing year must be 4 digits, e.g. 2015');
  const pub=full.filter(e=>!e.pv).map(e=>({deg:e.deg,inst:e.inst,yr:e.hy?'':e.yr}));
  u.edus=pub;u.edu=pub.map(e=>[e.deg,e.inst].filter(Boolean).join(', ')).join('; ');
- try{if(f)u.photo=await img(f,200);await db.doc('users/'+me.id+'/priv/edu').set({list:full});await db.doc('users/'+me.id).update(u);Object.assign(me,u);window.MYEDU=full;window.EDUID=me.id;toast('Saved');profile()}catch(e){console.error(e);toast('Could not save. Try again.')}}
+ try{if(f)u.photo=await img(f,640,.92,200000);await db.doc('users/'+me.id+'/priv/edu').set({list:full});await db.doc('users/'+me.id).update(u);Object.assign(me,u);window.MYEDU=full;window.EDUID=me.id;toast('Saved');profile()}catch(e){console.error(e);toast('Could not save. Try again.')}}
 
 // ---------- Education, admins, jersey fill-in ----------
 async function loadEdu(){let L=null;try{const d=await db.doc('users/'+me.id+'/priv/edu').get();if(d.exists)L=d.data().list||[]}catch(e){console.error(e)}
@@ -1126,6 +1138,14 @@ function mem(){$('#main').innerHTML=`<h2>Photos</h2><div class=gal id=gl></div>`
  unsubs.push(db.collection('posts').orderBy('createdAt','desc').limit(90).onSnapshot(s=>{const a=s.docs.map(d=>d.data()).filter(p=>p.img);
   $('#gl').innerHTML=a.map(p=>`<img src="${p.img}" loading=lazy alt="" onclick="lb(this.src)">`).join('')||'<div class=empty>No photos yet. Share one from Feed.</div>'}))}
 const lb=s=>{const d=document.createElement('div');d.id='lb';d.innerHTML=`<img src="${s}" alt="">`;d.onclick=()=>d.remove();document.body.append(d)};
+function bmR(){const r=$('#bmr');if(!r||!window.UL)return;const o=UL.filter(u=>u.approved&&u.id!=me.id).sort((a,b)=>(onl(b)?1:0)-(onl(a)?1:0)||(a.name||'').localeCompare(b.name||'')).slice(0,12);
+ r.innerHTML=o.map(u=>`<button onclick="viewU('${u.id}')">${avs(u)}<span>${esc(u.name||'')}</span></button>`).join('')||'<div class=empty>No batchmates yet.</div>'}
+function bmAll(){const w=document.createElement('div');w.className='phw';w.id='bma';
+ w.innerHTML=`<div class=phb style="text-align:left"><h3>Batchmates</h3><input class=srch id=ms2 placeholder="Search name, place, blood group..." oninput="mbF()" style="width:100%;box-sizing:border-box;margin-top:10px"><div id=mb></div></div>`;
+ w.addEventListener('click',e=>{if(e.target===w||e.target.closest('.hd'))w.remove()});document.body.appendChild(w);mbF()}
+function themeOpen(){const w=document.createElement('div');w.className='phw';
+ w.innerHTML=`<div class=phb style="text-align:left">${themeH()}<button class=btn style="width:100%;margin-top:14px">Done</button></div>`;
+ w.addEventListener('click',e=>{if(e.target===w||e.target.closest('.btn'))w.remove()});document.body.appendChild(w)}
 function mbF(){const mb=$('#mb');if(!mb||!window.UL)return;const q=(($('#ms2')||{}).value||'').trim().toLowerCase();
  mb.innerHTML=UL.filter(u=>u.approved&&(!q||[u.name,u.edu,u.work,u.addr,u.home,u.blood].join(' ').toLowerCase().includes(q))).map(u=>`<div class=hd style="cursor:pointer" onclick="viewU('${u.id}')">${avs(u)}<div><b>${esc(u.name)}</b><small>${esc([u.work,u.addr].filter(Boolean).join(' | ')||u.bio||'')}</small></div>${u.blood?`<span class=bld>${esc(u.blood)}</span>`:''}</div>`).join('')||'<div class=empty>No match.</div>'}
 
