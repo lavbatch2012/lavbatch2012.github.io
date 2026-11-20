@@ -362,6 +362,27 @@ header h1 small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hpv{height:110px;border-radius:16px;background:rgba(255,255,255,.06) center/cover no-repeat;border:1px solid var(--line);display:grid;place-items:center;color:var(--mute);font-size:13px}
 html header.ph,html[data-theme] header.ph{position:relative;min-height:150px;align-items:flex-end;padding-bottom:14px;border-radius:0 0 24px 24px;border-bottom:0;-webkit-backdrop-filter:none;backdrop-filter:none;background:linear-gradient(180deg,rgba(6,8,24,.3),rgba(6,8,24,.82)),var(--hp) center/cover no-repeat}
 header.ph h1,header.ph h1 small{color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.75)}
+
+/* ===== Day (24h story) + group photo ===== */
+.tray .dyr .av{box-shadow:0 0 0 2px var(--bg),0 0 0 5px #ff4d8d}.tray .dyr.sn .av{box-shadow:0 0 0 2px var(--bg),0 0 0 5px rgba(160,168,200,.55)}
+.gh{display:inline-flex;flex:none}.gpc{position:relative;display:inline-flex;cursor:pointer}.gpc .gcam{position:absolute;right:-4px;bottom:-4px;width:20px;height:20px;border-radius:50%;background:#0095f6;color:#fff;display:grid;place-items:center;border:2px solid var(--panel);font-style:normal}.gpc .gcam .ic{width:11px;height:11px}
+.gbig{display:flex;align-items:center;gap:14px}.gbig .grp{width:72px;height:72px}
+#toast{z-index:60}
+#dc{position:fixed;inset:0;z-index:44;background:rgba(2,3,12,.75);display:flex;align-items:flex-end;justify-content:center;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.dcb{width:100%;max-width:480px;background:var(--panel);border:1px solid rgba(255,255,255,.16);border-radius:22px 22px 0 0;padding:14px 16px calc(18px + env(safe-area-inset-bottom,0px))}
+.dch{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.dch b{font:700 19px var(--disp)}
+.dcp{height:240px;border-radius:16px;background:linear-gradient(135deg,#8b6bff,#ec4899) center/cover no-repeat;display:grid;place-items:center;text-align:center;padding:16px;color:#fff;font-weight:600;overflow:hidden}
+.dcp.h{color:transparent}.dcb textarea{margin-top:10px}.dcn{display:block;color:var(--mute);margin-top:6px}
+#dv{position:fixed;inset:0;z-index:45;background:#000;display:flex;justify-content:center}
+.dvb{position:relative;width:100%;max-width:480px;display:flex;flex-direction:column;background:#0a0a0f}
+.dvp{display:flex;gap:4px;padding:calc(10px + env(safe-area-inset-top,0px)) 10px 6px}.dvp i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.3);overflow:hidden;display:block}.dvp i b{display:block;height:100%;width:0;background:#fff}.dvp i.f b{width:100%}.dvp i.a b{animation:dvg 5s linear forwards}
+@keyframes dvg{to{width:100%}}
+.dvh{display:flex;align-items:center;gap:10px;padding:4px 12px 10px;color:#fff;position:relative;z-index:3}.dvh .av{width:38px;height:38px;font-size:15px}.dvh span{flex:1;min-width:0}.dvh span b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dvh small{color:rgba(255,255,255,.7);font-size:12px}
+.dvh button{border:0;background:rgba(255,255,255,.14);color:#fff;border-radius:12px;padding:7px 11px;font:600 13px var(--disp);display:inline-flex;align-items:center;gap:5px}.dvh button .ic{width:18px;height:18px}
+.dvm{position:relative;flex:1;display:grid;place-items:center;overflow:hidden;background:linear-gradient(135deg,#312e81,#be185d)}
+.dvm img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}.dvt{position:relative;z-index:1;margin:0;padding:18px 22px;max-width:92%;text-align:center;color:#fff;font:700 24px/1.35 var(--disp);text-shadow:0 2px 12px rgba(0,0,0,.6);word-break:break-word}
+.dvm img+.dvt{position:absolute;left:0;right:0;bottom:calc(24px + env(safe-area-inset-bottom,0px));max-width:none;font-size:18px;background:linear-gradient(transparent,rgba(0,0,0,.65))}
+.dvl,.dvr{position:absolute;top:0;bottom:0;border:0;background:none;z-index:2}.dvl{left:0;width:35%}.dvr{right:0;width:65%}
 </style>
 </head>
 <body>
@@ -393,6 +414,7 @@ rules_version='2';service cloud.firestore{match /databases/{d}/documents{
  match /archive/{a}/part/{p}{allow read:if ok();allow write:if can('archive')}
  match /activity/{d}{allow read:if ok()&&me().role in ['admin','sub'];allow create,update:if ok()}
  match /settings/{s}{allow read:if ok();allow write:if adm()}
+ match /days/{d}{allow read,create:if ok();allow delete:if ok()&&(resource.data.uid==request.auth.uid||can('posts'))}
  match /rooms/{r}/m/{x}{allow read,write:if ok()}}}
 -->
 <div id="boot"><img class="lgx bl" alt=""><span class="bf">LAV Batch 2012</span></div>
@@ -572,10 +594,20 @@ auth.onAuthStateChanged(async u=>{clean();if(wu){wu();wu=null}
   }catch(err){console.error(err);show('#auth');er('Sign-in problem: '+msg(err)+' ['+(err.code||err.message||'')+']')}});
  
 // ---------- Presence (online) + chat popup ----------
-let HP='',hpU=null,_md='',aR=7,aSel='',AD={};
+let HP='',hpU=null,_md='',aR=7,aSel='',AD={},GP='',gpU=null,DY=[],dyU=null,dv=null,dvT=null;
 const dk=d=>{d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 function markDay(){if(!me||document.hidden)return;const k=dk();if(_md===k)return;_md=k;db.doc('activity/'+k).set({day:k,users:{[me.id]:Date.now()}},{merge:true}).catch(()=>{_md=''})}
 const fdt=t=>{const d=t.toDate?t.toDate():t,n=new Date(),k=Math.round((new Date(n.getFullYear(),n.getMonth(),n.getDate())-new Date(d.getFullYear(),d.getMonth(),d.getDate()))/864e5);return (k==0?'Today':k==1?'Yesterday':d.toLocaleDateString([],{day:'numeric',month:'short'}))+', '+d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})};
+
+// ---------- Group photo (admin can change) ----------
+const isGA=()=>!!me&&me.role=='admin';
+const grpA=()=>`<span class="grp"${GP?` style="background:url('${GP}') center/cover padding-box,var(--sig) border-box"`:''}>${GP?'':ic('users')}</span>`;
+const grpH=()=>isGA()?`<label class=gpc>${grpA()}<input type=file accept="image/*" hidden onchange="gpSet(this)"><i class=gcam>${ic('camera')}</i></label>`:(GP?`<span class=gpc onclick="lb(GP)">${grpA()}</span>`:grpA());
+function gpR(){if(!/^data:image\//.test(GP))GP='';const g=$('#gpg');
+ if(g)g.innerHTML=`<div class=gbig>${grpA()}<small style="color:var(--mute)">Shown on the Everyone group chat for all members.</small></div><div class=bt style="flex-wrap:wrap"><label class="btn s" style="cursor:pointer">${GP?'Change photo':'Choose photo'}<input type=file accept="image/*" hidden onchange="gpSet(this)"></label>${GP?'<button class="btn r s" onclick="gpDel()">Remove</button>':''}</div>`;
+ const h=document.querySelector('#cp .gh');if(h)h.innerHTML=grpH();listCP()}
+async function gpSet(i){const f=i.files[0];i.value='';if(!f||!isGA())return;try{const im=await img(f,480);await db.doc('settings/group').set({img:im,by:me.id,at:ts()});toast('Group photo updated')}catch(err){console.error(err);toast(eMsg(err))}}
+async function gpDel(){if(!await ask('Remove the group photo?',{ok:'Remove',danger:1}))return;try{await db.doc('settings/group').delete();toast('Group photo removed')}catch(err){console.error(err);toast(eMsg(err))}}
 // ---------- Header photo (admin) ----------
 function applyHP(){if(!/^data:image\//.test(HP))HP='';const h=document.querySelector('#app>header');if(h){h.classList.toggle('ph',!!HP);if(HP)h.style.setProperty('--hp','url('+HP+')');else h.style.removeProperty('--hp')}hpR()}
 function hpR(){const g=$('#hpg');if(!g)return;g.innerHTML=`<div class=hpv style="${HP?'background-image:url('+HP+')':''}">${HP?'':'<span>No photo. Plain header.</span>'}</div><small style="color:var(--mute);display:block;margin:8px 0">Shown at the top of the app for everyone. Wide photos work best.</small><div class=bt style="flex-wrap:wrap"><label class="btn s" style="cursor:pointer">${HP?'Change photo':'Choose photo'}<input type=file accept="image/*" hidden onchange="hpSet(this)"></label>${HP?'<button class="btn r s" onclick="hpDel()">Remove</button>':''}</div>`}
@@ -608,11 +640,21 @@ const ONMS=240000;
 const onl=u=>!!me&&(u.id==me.id||(u.lastSeen&&Date.now()-u.lastSeen.toMillis()<ONMS));
 const avs=u=>`<span class=ava>${av(u.photo,u.name)}${onl(u)?'<i class=dot></i>':''}</span>`;
 function beat(){if(me&&!document.hidden){db.doc('users/'+me.id).update({lastSeen:ts()}).catch(()=>{});markDay()}}
-function startPresence(){stopPresence();hpU=db.doc('settings/header').onSnapshot(d=>{HP=d.exists?(d.data().img||''):'';applyHP()},()=>{});beat();hbT=setInterval(beat,90000);tkT=setInterval(upd,30000);
+function startPresence(){stopPresence();hpU=db.doc('settings/header').onSnapshot(d=>{HP=d.exists?(d.data().img||''):'';applyHP()},()=>{});gpU=db.doc('settings/group').onSnapshot(d=>{GP=d.exists?(d.data().img||''):'';gpR()},()=>{});dyStart();beat();hbT=setInterval(beat,90000);tkT=setInterval(upd,30000);
  document.addEventListener('visibilitychange',beat);
  pu=db.collection('users').onSnapshot(s=>{AU=s.docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.approved);const sm=me&&AU.find(u=>u.id==me.id);if(sm){me.role=sm.role;me.perms=sm.perms||[]}upd()},()=>{})}
-function stopPresence(){if(hpU){hpU();hpU=null}HP='';applyHP();_md='';clearInterval(hbT);clearInterval(tkT);document.removeEventListener('visibilitychange',beat);if(pu)pu();pu=null;AU=[];$('#cbn')&&($('#cbn').textContent='');$('#hoc')&&($('#hoc').textContent='0')}
-function upd(){heroR();const n=AU.filter(onl).length;const b=$('#cbn');if(b)b.textContent=n||'';const hc=$('#hoc');if(hc)hc.textContent=n;const o=$('#ocn');if(o)o.textContent=n+' online';listCP();if(cpm=='act')actR()}
+function stopPresence(){if(hpU){hpU();hpU=null}HP='';applyHP();if(gpU){gpU();gpU=null}GP='';dyStop();unStop();_md='';clearInterval(hbT);clearInterval(tkT);document.removeEventListener('visibilitychange',beat);if(pu)pu();pu=null;AU=[];$('#cbn')&&($('#cbn').textContent='');$('#hoc')&&($('#hoc').textContent='0')}
+function upd(){heroR();unSync();const n=AU.filter(onl).length;const hc=$('#hoc');if(hc)hc.textContent=n;const o=$('#ocn');if(o)o.textContent=n+' online';listCP();if(cpm=='act')actR()}
+
+// ---------- Unread message count (chat button) ----------
+let unL={},unD={};
+const lrK=r=>'lavLR_'+(me?me.id:'')+'_'+r;
+const lrG=r=>{try{return +localStorage.getItem(lrK(r))||0}catch(e){return 0}};
+const lrS=(r,t)=>{try{localStorage.setItem(lrK(r),String(t))}catch(e){}};
+function unB(){let n=0;if(me)Object.keys(unD).forEach(r=>{const l=lrG(r);n+=unD[r].filter(m=>m.uid!=me.id&&m.t>l).length});const b=$('#cbn');if(b)b.textContent=n?(n>99?'99+':n):''}
+function unSync(){if(!me)return;['all',...AU.filter(u=>u.id!=me.id).map(u=>rid(u.id))].forEach(r=>{if(unL[r])return;if(!lrG(r))lrS(r,Date.now());
+ unL[r]=db.collection('rooms/'+r+'/m').where('createdAt','>',firebase.firestore.Timestamp.fromMillis(lrG(r))).orderBy('createdAt').onSnapshot(s=>{unD[r]=s.docs.map(d=>{const m=d.data({serverTimestamps:'estimate'});return{uid:m.uid,t:m.createdAt?m.createdAt.toMillis():Date.now()}});unB()},()=>{})})}
+function unStop(){Object.values(unL).forEach(f=>f());unL={};unD={};const b=$('#cbn');if(b)b.textContent=''}
 const lastSeen=u=>u.lastSeen?'Last seen '+ago(u.lastSeen)+' | '+fdt(u.lastSeen):'Offline';
 let cq='',lmL={},lmD={},rmUn=null;
 const tf=t=>{if(!t)return'';const d=t.toDate?t.toDate():t;return d.toDateString()==new Date().toDateString()?d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):d.toLocaleDateString([],{day:'numeric',month:'short'})};
@@ -627,7 +669,7 @@ function listCP(){const L=$('#cpl');if(cpm!='chat'||!L||$('#cp').classList.conta
   .filter(i=>!q||i.name.toLowerCase().includes(q)).map(i=>({...i,m:lmD[i.r]||null}));
  items.sort((a,b)=>ms(b.m)-ms(a.m)||(b.g?1:0)-(a.g?1:0)||(b.u&&onl(b.u)?1:0)-(a.u&&onl(a.u)?1:0)||a.name.localeCompare(b.name));
  L.innerHTML=items.map(i=>{const m=i.m,pv=m?((m.uid==me.id?'You: ':i.g?esc(m.name)+': ':'')+(m.img&&!m.text?'Photo':esc(m.text||''))):(i.u?(onl(i.u)?'Active now':lastSeen(i.u)):AU.length+' members');
-  return `<button class=cpr onclick="openRoom('${i.id}')">${i.g?`<span class=grp>${ic('users')}</span>`:avs(i.u)}<span class=nm><b>${esc(i.name)}</b><small>${pv}</small></span><span class=tt>${m?tf(m.createdAt):''}</span></button>`}).join('')||'<div class=empty>No chats found.</div>';radar()}
+  return `<button class=cpr onclick="openRoom('${i.id}')">${i.g?grpA():avs(i.u)}<span class=nm><b>${esc(i.name)}</b><small>${pv}</small></span><span class=tt>${m?tf(m.createdAt):''}</span></button>`}).join('')||'<div class=empty>No chats found.</div>';radar()}
 function radar(){const P=$('#pts');if(!P||cpm!='chat')return;
  const oth=AU.filter(u=>u.id!=me.id),on=oth.filter(onl).slice(0,9),rec=oth.filter(u=>!onl(u)&&u.lastSeen&&Date.now()-u.lastSeen.toMillis()<864e5).slice(0,10);
  const put=(arr,r,off)=>arr.map((u,i)=>{const a=i/arr.length*Math.PI*2+off;return `<button class="rn ${onl(u)?'on':''}" style="left:${50+Math.cos(a)*r}%;top:${50+Math.sin(a)*r}%" onclick="openRoom('${u.id}')" aria-label="${esc(u.name)}">${av(u.photo,u.name)}</button>`}).join('');
@@ -639,14 +681,14 @@ function closeCP(){stopRoom();stopLM();cq='';$('#cp').classList.add('hide');$('#
 const chatWith=id=>openRoom(id);
 function openRoom(id){cpm='room';room=id=='all'?'all':rid(id);stopRoom();
  const u=id=='all'?null:AU.find(x=>x.id==id),on=AU.filter(onl).length,bx=$('#cp .cpb');bx.classList.add('rm');
- bx.innerHTML=`<div class=cph><button class=bk onclick="openCP()" aria-label="Back">${ic('back')}</button>${u?avs(u):`<span class=grp>${ic('users')}</span>`}<span class=nm><b>${u?esc(u.name):'Everyone'}</b><small>${u?(onl(u)?'Active now':lastSeen(u)):AU.length+' members | '+on+' online'}</small></span><button class=x onclick="closeCP()">${ic('x')}</button></div>
+ bx.innerHTML=`<div class=cph><button class=bk onclick="openCP()" aria-label="Back">${ic('back')}</button><span class=gh>${u?avs(u):grpH()}</span><span class=nm><b>${u?esc(u.name):'Everyone'}</b><small>${u?(onl(u)?'Active now':lastSeen(u)):AU.length+' members | '+on+' online'}</small></span><button class=x onclick="closeCP()">${ic('x')}</button></div>
  <div class=ms id=ms></div>
  <form class=cin onsubmit="return sm(event)"><label class=ib2>${ic('camera')}<input type=file accept="image/*" hidden onchange="sendImg(this)"></label><input id=mi placeholder="Type a message..." required autocomplete=off><button class=snd aria-label="Send">${ic('send')}</button></form>`;
  $('#cp').classList.remove('hide');
  rmUn=db.collection('rooms/'+room+'/m').orderBy('createdAt').limitToLast(80).onSnapshot(s=>{const b=$('#ms');if(!b)return;
   b.innerHTML=s.docs.map(d=>{const m=d.data({serverTimestamps:'estimate'}),mine=m.uid==me.id,t=m.createdAt?m.createdAt.toDate():null;
    return `<div class="m ${mine?'me':''}">${!mine&&room=='all'?`<small class=sn>${esc(m.name)}</small>`:''}${m.img?`<img class=mimg src="${esc(m.img)}" alt="">`:''}${m.text?esc(m.text):''}<small class=tm>${t?t.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+' | '+t.toLocaleDateString([],{day:'numeric',month:'short'}):''}</small></div>`}).join('')||'<div class=empty>No messages yet. Say hello.</div>';
-  b.scrollTop=b.scrollHeight},()=>{})}
+  b.scrollTop=b.scrollHeight;const ld=s.docs[s.docs.length-1];if(ld){const lm=ld.data({serverTimestamps:'estimate'});if(lm.createdAt){const lt=lm.createdAt.toMillis();if(lt>lrG(room)){lrS(room,lt);unB()}}}},()=>{})}
 async function sm(e){e.preventDefault();const i=$('#mi'),t=i.value.trim();if(!t)return false;i.value='';
  try{await db.collection('rooms/'+room+'/m').add({uid:me.id,name:me.name,text:t,createdAt:ts()})}catch(err){console.error(err);toast('Could not send')}return false}
 async function sendImg(inp){const f=inp.files[0];if(!f)return;
@@ -828,15 +870,50 @@ function admin(){if(!isAdm())return go('feed');
  const PL=me.role=='admin'?PERMS:PERMS.filter(x=>(me.perms||[]).includes(x[0])),
  J=[['events','Events',can('events')],['fund','Funds and PDFs',can('ledger')||can('archive')],['jersey','Jersey',can('jersey')],['feed','Feed (delete posts)',can('posts')]].filter(x=>x[2]);
  $('#main').innerHTML=`<h2>Admin</h2><div class=pg><b>${isMain(me)?'Main Admin':me.role=='admin'?'Admin':'Admin (limited)'}</b><small style="display:block;color:var(--mute);margin:2px 0 10px">${isMain(me)?'You have every power and no one can remove you.':'What the Main Admin allowed you to do:'}</small><div class=chips>${(isMain(me)?[['all','Everything']]:PL).map(x=>`<span>${esc(x[1])}</span>`).join('')||'<span>Nothing yet</span>'}</div>${J.length?`<div class=bt style="margin-top:12px;flex-wrap:wrap">${J.map(([k,l])=>`<button class="btn gr s" onclick="go('${k}')">${l}</button>`).join('')}</div>`:''}</div>
- ${can('approve')?'<h2>Waiting for approval</h2><div class=pg id=pe></div>':''}${isMain(me)?'<h2>Admins</h2><div class=pg id=adl></div>':''}${me.role=='admin'?'<h2>Header photo</h2><div class=pg id=hpg></div>':''}`;hpR();
+ ${can('approve')?'<h2>Waiting for approval</h2><div class=pg id=pe></div>':''}${isMain(me)?'<h2>Admins</h2><div class=pg id=adl></div>':''}${me.role=='admin'?'<h2>Header photo</h2><div class=pg id=hpg></div><h2>Group photo</h2><div class=pg id=gpg></div>':''}`;hpR();gpR();
  unsubs.push(db.collection('users').onSnapshot(s=>{const U=s.docs.map(d=>({id:d.id,...d.data()}));window.UL=U;admR(U);const pe=$('#pe');if(pe)pe.innerHTML=pendH(U)},()=>{}))}
 
+
+// ---------- Day (24-hour story for every batchmate) ----------
+const DYMS=864e5;
+const dyAct=()=>DY.filter(d=>d.createdAt&&Date.now()-d.createdAt.toMillis()<DYMS);
+const dyOf=id=>dyAct().filter(d=>d.uid==id);
+let dvSeen=new Set();try{dvSeen=new Set(JSON.parse(localStorage.getItem('lavDV')||'[]'))}catch(e){}
+const dvSee=id=>{if(dvSeen.has(id))return;dvSeen.add(id);try{localStorage.setItem('lavDV',JSON.stringify([...dvSeen].slice(-300)))}catch(e){}};
+function dyStart(){dyStop();if(!me)return;
+ dyU=db.collection('days').where('createdAt','>',firebase.firestore.Timestamp.fromMillis(Date.now()-DYMS)).orderBy('createdAt').onSnapshot(s=>{DY=s.docs.map(d=>({id:d.id,...d.data({serverTimestamps:'estimate'})}));heroR()},()=>{});
+ db.collection('days').where('uid','==',me.id).get().then(s=>s.docs.forEach(d=>{const c=d.data().createdAt;if(c&&Date.now()-c.toMillis()>=DYMS)d.ref.delete().catch(()=>{})})).catch(()=>{})}
+function dyStop(){if(dyU){dyU();dyU=null}DY=[];dvClose()}
+function dyTap(id){if(dyOf(id).length)dyOpen(id);else if(id==me.id)dyNew();else openRoom(id)}
+let dcImg='';
+function dyNew(){dcImg='';dcClose();const d=document.createElement('div');d.id='dc';
+ d.innerHTML=`<div class=dcb><div class=dch><b>New Day</b><button type=button class=x onclick="dcClose()" aria-label="Close">${ic('x')}</button></div><div class=dcp id=dcp><span>Pick a photo or just write something</span></div><label class="btn gr s" style="cursor:pointer;margin-top:10px">${ic('camera')} Choose photo<input type=file accept="image/*" hidden onchange="dcPick(this)"></label><textarea id=dct rows=2 maxlength=200 placeholder="Write something... (optional)"></textarea><small class=dcn>It disappears after 24 hours. Everyone in the batch can see it.</small><div class=bt><button class=btn id=dcs type=button onclick="dcPost()">Share Day</button></div></div>`;
+ d.onclick=e=>{if(e.target.id=='dc')dcClose()};document.body.append(d)}
+function dcClose(){const d=$('#dc');if(d)d.remove()}
+async function dcPick(i){const f=i.files[0];i.value='';if(!f)return;try{dcImg=await img(f,800);const p=$('#dcp');if(p){p.style.backgroundImage="url('"+dcImg+"')";p.classList.add('h')}}catch(err){console.error(err);toast('Could not read photo')}}
+async function dcPost(){const t=(($('#dct')||{}).value||'').trim();if(!dcImg&&!t)return toast('Add a photo or write something');const b=$('#dcs');b.disabled=true;
+ try{await db.collection('days').add({uid:me.id,text:t,img:dcImg,createdAt:ts()});dcClose();toast('Day shared')}catch(err){console.error(err);b.disabled=false;toast(eMsg(err))}}
+function dyOpen(id){const us=[...new Set(dyAct().map(d=>d.uid))].filter(x=>x!=id);dv={g:[id,...us],gi:0,ii:0};const l=dyOf(id),k=l.findIndex(d=>!dvSeen.has(d.id));dv.ii=k<0?0:k;dvShow()}
+function dvShow(){clearTimeout(dvT);if(!dv)return;const uid=dv.g[dv.gi],list=dyOf(uid);if(!list.length)return dvNext(1);if(dv.ii>=list.length)dv.ii=list.length-1;
+ const d=list[dv.ii],u=AU.find(x=>x.id==uid)||(uid==me.id?me:{name:'',photo:''});dvSee(d.id);
+ let o=$('#dv');if(!o){o=document.createElement('div');o.id='dv';document.body.append(o)}
+ o.innerHTML=`<div class=dvb><div class=dvp>${list.map((x,i)=>`<i class="${i<dv.ii?'f':i==dv.ii?'a':''}"><b></b></i>`).join('')}</div>
+ <div class=dvh>${av(u.photo,u.name)}<span><b>${esc(u.name||'')}</b><small>${ago(d.createdAt)}</small></span>${uid!=me.id?`<button type=button onclick="dvChat('${uid}')">${ic('chat')} Chat</button>`:''}${uid==me.id||can('posts')?`<button type=button onclick="dvDel('${d.id}')">Delete</button>`:''}<button type=button onclick="dvClose()" aria-label="Close">${ic('x')}</button></div>
+ <div class=dvm>${d.img?`<img src="${esc(d.img)}" alt="">`:''}${d.text?`<p class=dvt>${esc(d.text)}</p>`:''}<button class=dvl type=button onclick="dvPrev()" aria-label="Previous"></button><button class=dvr type=button onclick="dvNext()" aria-label="Next"></button></div></div>`;
+ dvT=setTimeout(()=>dvNext(),5000)}
+function dvNext(skip){if(!dv)return;const list=dyOf(dv.g[dv.gi]);if(!skip&&dv.ii<list.length-1)dv.ii++;else if(dv.gi<dv.g.length-1){dv.gi++;const l=dyOf(dv.g[dv.gi]),k=l.findIndex(d=>!dvSeen.has(d.id));dv.ii=k<0?0:k}else return dvClose();dvShow()}
+function dvPrev(){if(!dv)return;if(dv.ii>0)dv.ii--;else if(dv.gi>0){dv.gi--;dv.ii=0}dvShow()}
+function dvClose(){clearTimeout(dvT);dv=null;const o=$('#dv');if(o)o.remove();heroR()}
+function dvChat(id){dvClose();openRoom(id)}
+async function dvDel(id){clearTimeout(dvT);if(!await ask('Delete this Day?',{ok:'Delete',danger:1}))return dvShow();
+ try{await db.collection('days').doc(id).delete();DY=DY.filter(x=>x.id!=id);dvShow()}catch(err){console.error(err);toast(eMsg(err));dvShow()}}
 // ---------- Home hero, photos, directory ----------
 function heroR(){const h=$('#hero');if(!h||!me)return;const t=new Date(),t0=new Date(t.getFullYear(),t.getMonth(),t.getDate()),hr=t.getHours(),
  g=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening',on=AU.filter(onl).length,
  bd=AU.filter(u=>dobN(u.dob)).map(u=>{const{m,d}=dobN(u.dob);let n=new Date(t.getFullYear(),m-1,d);if(n<t0)n=new Date(t.getFullYear()+1,m-1,d);return{u,k:Math.round((n-t0)/864e5)}}).sort((a,b)=>a.k-b.k)[0],
  ev=NE?Math.round((new Date(NE.date)-t0)/864e5):0;
- h.innerHTML=`<div class=tray><button onclick="$('#pt')&&$('#pt').focus()"><span class=ava>${av(me.photo,me.name)}<i class=plus>+</i></span><small>You</small></button>${[...AU].filter(u=>u.id!=me.id).sort((x,y)=>onl(y)-onl(x)).slice(0,14).map(u=>`<button onclick="openRoom('${u.id}')">${avs(u)}<small>${esc((u.name||'').split(' ')[0])}</small></button>`).join('')}</div><small>${g}</small><h3>${esc((me.name||'').split(' ')[0])}</h3><div class=chips><span><b>${AU.length}</b> batchmates</span><span><i class=dot2></i><b>${on}</b> online</span></div>
+ const dc=id=>{const l=dyOf(id);return l.length?'dyr'+(l.every(d=>dvSeen.has(d.id))?' sn':''):''};
+ h.innerHTML=`<div class=tray><button class="${dc(me.id)}" onclick="dyTap('${me.id}')"><span class=ava>${av(me.photo,me.name)}<i class=plus onclick="event.stopPropagation();dyNew()">+</i></span><small>You</small></button>${[...AU].filter(u=>u.id!=me.id).sort((x,y)=>(dyOf(y.id).length>0)-(dyOf(x.id).length>0)||onl(y)-onl(x)).slice(0,14).map(u=>`<button class="${dc(u.id)}" onclick="dyTap('${u.id}')">${avs(u)}<small>${esc((u.name||'').split(' ')[0])}</small></button>`).join('')}</div><small>${g}</small><h3>${esc((me.name||'').split(' ')[0])}</h3><div class=chips><span><b>${AU.length}</b> batchmates</span><span><i class=dot2></i><b>${on}</b> online</span></div>
  ${NE?`<p>${ic('cal','sm')} ${esc(NE.title)}: ${ev<=0?'today':'in '+ev+(ev>1?' days':' day')}</p>`:''}`}
 function mem(){$('#main').innerHTML=`<h2>Photos</h2><div class=gal id=gl></div>`;
  unsubs.push(db.collection('posts').orderBy('createdAt','desc').limit(90).onSnapshot(s=>{const a=s.docs.map(d=>d.data()).filter(p=>p.img);
